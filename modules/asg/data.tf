@@ -9,7 +9,7 @@ data "template_file" "wordpress_script" {
 }
 
 
-data "cloudinit_config" "install-wordpress" {
+data "cloudinit_config" "cloudinit_wordpress" {
   gzip          = false
   base64_encode = false
 

@@ -1,4 +1,4 @@
-resource "aws_vpc" "main" {
+resource "aws_vpc" "vpc" {
   cidr_block           = var.vpc_config.VPC_CIDR_BLOCK
   instance_tenancy     = "default"
   enable_dns_support   = true
@@ -14,7 +14,7 @@ resource "aws_subnet" "public_subnet" {
 
   count = length(var.vpc_config.public_subnets)
 
-  vpc_id                  = aws_vpc.main.id
+  vpc_id                  = aws_vpc.vpc.id
   map_public_ip_on_launch = true
 
   enable_resource_name_dns_a_record_on_launch = true
@@ -36,7 +36,7 @@ resource "aws_subnet" "private_subnet" {
   count = length(var.vpc_config.private_subnets)
 
 
-  vpc_id                  = aws_vpc.main.id
+  vpc_id                  = aws_vpc.vpc.id
   map_public_ip_on_launch = false
 
 
@@ -51,8 +51,8 @@ resource "aws_subnet" "private_subnet" {
 }
 
 
-resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.main.id
+resource "aws_internet_gateway" "internet_gateway" {
+  vpc_id = aws_vpc.vpc.id
 
   tags = merge(var.tags_all, {
   Name = "${terraform.workspace}-${var.identifier}-igw"
@@ -65,11 +65,11 @@ resource "aws_route_table" "public_route_table" {
 
   count = length(aws_subnet.public_subnet)
 
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gw.id
+    gateway_id = aws_internet_gateway.internet_gateway.id
   }
 
 
@@ -114,7 +114,7 @@ resource "aws_nat_gateway" "nat_gateway_for_private_subnets" {
     Name = "${terraform.workspace}-${var.identifier}-nat-gateway"
   })
 
-  depends_on = [aws_internet_gateway.gw]#, aws_eip.example]
+  depends_on = [aws_internet_gateway.internet_gateway]#, aws_eip.example]
 }
 
 
@@ -122,7 +122,7 @@ resource "aws_route_table" "private" {
 
   count = length(aws_subnet.private_subnet)
 
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block     = "0.0.0.0/0"
@@ -144,12 +144,12 @@ resource "aws_route_table_association" "private" {
 
 }
 
-resource "aws_security_group" "vpc_sgs" {
+resource "aws_security_group" "vpc_security_groups" {
 
   for_each    = var.vpc_config.security_groups
   name        = each.key
   description = "Allow TLS inbound traffic and all outbound traffic"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = aws_vpc.vpc.id
 
   dynamic "ingress" {
     for_each = each.value.ingress
@@ -161,6 +161,7 @@ resource "aws_security_group" "vpc_sgs" {
       cidr_blocks     = try(ingress.value.cidr_blocks, null)
       # security_groups = length(ingress.value.cidr_blocks) == 0 && length(ingress.value.security_groups) > 0 ? ingress.value.security_groups : null
       # cidr_blocks = length(ingress.value.cidr_blocks) > 0 && length(ingress.value.security_groups) == 0 ? ingress.value.cidr_blocks : null
+    
     }
   }
   dynamic "egress" {

@@ -4,7 +4,7 @@ resource "aws_lb" "load_balancer" {
   name = "${terraform.workspace}-${var.identifier}-testing-site"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [var.sgs["alb_sg"].id]
+  security_groups    = [var.vpc_security_groups["alb_security_group"].id]
   subnets            = slice([for i in var.public_subnets: i.id],0,length(var.region_azs))
 
 
@@ -37,7 +37,7 @@ resource "aws_lb_target_group" "load_balancer_tg" {
 }
 
 
-resource "aws_lb_listener" "front_end" {
+resource "aws_lb_listener" "load_balancer_listener_HTTP" {
   load_balancer_arn = aws_lb.load_balancer.arn
   port              = "80"
   protocol          = "HTTP"
@@ -117,7 +117,7 @@ resource "aws_autoscaling_policy" "aws_asg_scale_down" {
 }
 
 
-resource "aws_security_group" "ec2_sg" {
+resource "aws_security_group" "webserver_security_group" {
 
   name        = "ec2-sg"
   description = "Allow HTTP inbound traffic and all outbound traffic"
@@ -127,13 +127,13 @@ resource "aws_security_group" "ec2_sg" {
             from_port   = 80
             protocol    = "tcp"
             to_port     = 80
-            security_groups = [ var.sgs["alb_sg"].id ]
+            security_groups = [ var.vpc_security_groups["alb_security_group"].id ]
           }
   ingress {
             from_port   = 22
             protocol    = "tcp"
             to_port     = 22
-            security_groups = [ var.sgs["bastion_sg"].id ]
+            security_groups = [ var.vpc_security_groups["bastion_security_group"].id ]
           }
   
   egress {
@@ -180,7 +180,7 @@ resource "aws_launch_template" "wordpress" {
   network_interfaces {
       
     associate_public_ip_address = false
-    security_groups = [ aws_security_group.ec2_sg.id ]
+    security_groups = [ aws_security_group.webserver_security_group.id ]
     subnet_id = var.public_subnets[0].id
   }
 
@@ -203,7 +203,7 @@ resource "aws_launch_template" "wordpress" {
     }
   }
 
-  user_data = base64encode("${data.cloudinit_config.install-wordpress.rendered}")
+  user_data = base64encode("${data.cloudinit_config.cloudinit_wordpress.rendered}")
 
   depends_on = [ var.mysql_instance ]
 }

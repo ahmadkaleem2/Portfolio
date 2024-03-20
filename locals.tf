@@ -12,10 +12,6 @@ locals {
 }
 
 
-output "vpc_config" {
 
-    value = local.vpc_config
-  
-}
 
 

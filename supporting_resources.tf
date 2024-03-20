@@ -1,4 +1,4 @@
-resource "aws_security_group" "mysql_sg" {
+resource "aws_security_group" "mysql_security_group" {
 
   name        = "mysql-sg"
   description = "Allow TLS inbound traffic and all outbound traffic"
@@ -8,14 +8,14 @@ resource "aws_security_group" "mysql_sg" {
             from_port   = 3306
             protocol    = "tcp"
             to_port     = 3306
-            security_groups = [ module.asg.webserver_sg.id ]
+            security_groups = [ module.asg.webserver_security_group.id ]
           }
 
   ingress {
             from_port   = 22
             protocol    = "tcp"
             to_port     = 22
-            security_groups = [ module.vpc["vpc-prod"].vpc_sgs["bastion_sg"].id ]
+            security_groups = [ module.vpc["vpc-prod"].vpc_security_groups["bastion_security_group"].id ]
           }
   
   egress {
@@ -36,3 +36,16 @@ resource "aws_key_pair" "keypair" {
     public_key = file("./modules/ec2/key.pub")
 #   public_key = file("${path.module}/key.pub")
 }
+
+resource "random_password" "password_for_database" {
+  length = 12
+  special = false
+}
+
+resource "aws_ssm_parameter" "password_parameter" {
+  name  = "/mysql/password"
+  type  = "SecureString"
+  value = contains(keys(var.ec2.mysql_instance.script_args),"DB_PASSWORD") ? var.ec2.mysql_instance.script_args.DB_PASSWORD : random_password.password_for_database.result
+}
+
+

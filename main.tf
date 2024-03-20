@@ -1,5 +1,3 @@
-
-
 module "vpc" {
   source = "./modules/vpc"
 
@@ -16,13 +14,9 @@ module "vpc" {
 
 }
 
-
-
-
-
 module "bastion_host" {
-  source = "./modules/ec2"
 
+  source = "./modules/ec2"
 
   reason = var.ec2.bastion_host.reason
 
@@ -30,7 +24,7 @@ module "bastion_host" {
 
   keypair = aws_key_pair.keypair
 
-  security_groups = [module.vpc["vpc-prod"].vpc_sgs["bastion_sg"]]
+  security_groups = [module.vpc["vpc-prod"].vpc_security_groups["bastion_security_group"]]
 
   script_args = var.ec2.bastion_host.script_args
 
@@ -41,7 +35,6 @@ module "bastion_host" {
   instance_type = var.ec2.bastion_host.instance_type
 
   subnet_for_ec2_instance = module.vpc["vpc-prod"].public_subnets[0]
-
 
   tags_all = {
     Name        = var.identifier
@@ -54,16 +47,16 @@ module "bastion_host" {
 module "mysql_instance" {
   source = "./modules/ec2"
 
-  reason = var.ec2.bastion_host.reason
+  reason = var.ec2.mysql_instance.reason
 
 
   identifier = var.identifier
 
   keypair = aws_key_pair.keypair
 
-  security_groups = [aws_security_group.mysql_sg]
+  security_groups = [ aws_security_group.mysql_security_group ]
 
-  script_args = var.ec2.mysql_instance.script_args
+  script_args = merge(var.ec2.mysql_instance.script_args,{"DB_PASSWORD": aws_ssm_parameter.password_parameter.value})
 
   script_path = var.ec2.mysql_instance.script_path
 
@@ -105,11 +98,11 @@ module "asg" {
 
   region_azs = data.aws_availability_zones.example.names
 
-  sgs = module.vpc["vpc-prod"].vpc_sgs
+  vpc_security_groups = module.vpc["vpc-prod"].vpc_security_groups
 
   key_pair = aws_key_pair.keypair
 
-  DB_SETTINGS = var.ec2.mysql_instance.script_args
+  DB_SETTINGS = merge(var.ec2.mysql_instance.script_args,{"DB_PASSWORD": aws_ssm_parameter.password_parameter.value})
 
   mysql_instance = module.mysql_instance.instance
 

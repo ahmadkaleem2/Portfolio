@@ -33,7 +33,7 @@ variable "instance_type" {
   
 }
 
-variable "sgs" {
+variable "vpc_security_groups" {
   
 }
 
