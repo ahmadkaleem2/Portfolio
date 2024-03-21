@@ -1,0 +1,39 @@
+name: Terraform Apply or Destroy
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform: apply or destroy'
+        required: true
+        default: 'apply'
+
+jobs:
+  terraform:
+    name: Terraform Apply or Destroy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.0
+      
+      - name: Initialize Terraform
+        run: terraform init
+      
+      - name: Terraform Validate
+        run: terraform validate
+      
+      - name: Terraform Plan
+        if: github.ref == 'refs/heads/dev'
+        run: terraform plan -var-file "./Environment/prod.tfvars" -out=tfplan
+
+      - name: Print Terraform Plan
+        if: github.ref == 'refs/heads/dev'
+        run: cat tfplan

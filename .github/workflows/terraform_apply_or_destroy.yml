@@ -8,10 +8,12 @@ on:
       - main
   workflow_dispatch:
     inputs:
-      action:
-        description: 'Action to perform: apply or destroy'
-        required: true
-        default: 'apply'
+      apply_or_destroy:
+        type: choice
+        description: Whether to apply or destroy
+        options: 
+        - apply
+        - destroy
 
 jobs:
   terraform:
@@ -42,8 +44,8 @@ jobs:
       - name: Apply or Destroy Terraform Configuration
         if: github.event_name == 'workflow_dispatch'
         run: |
-          if [ "${{ github.event.inputs.action }}" = "apply" ]; then
+          if [ "${{ github.event.inputs.apply_or_destroy }}" = "apply" ]; then
             terraform apply -auto-approve tfplan
-          elif [ "${{ github.event.inputs.action }}" = "destroy" ]; then
+          elif [ "${{ github.event.inputs.apply_or_destroy }}" = "destroy" ]; then
             terraform destroy -auto-approve
           fi
