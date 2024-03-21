@@ -1,11 +1,9 @@
 name: Terraform Apply or Destroy
 
 on:
-  pull_request:
-    types:
-      - closed
+  push:
     branches:
-      - main
+      - dev
   workflow_dispatch:
     inputs:
       action:
@@ -16,7 +14,6 @@ on:
 jobs:
   terraform:
     name: Terraform Apply or Destroy
-    if: github.event.pull_request.merged && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -30,11 +27,13 @@ jobs:
       - name: Initialize Terraform
         run: terraform init
       
-      - name: Terraform Format
-        run: terraform fmt -check -diff
-      
       - name: Terraform Validate
         run: terraform validate
       
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        if: github.ref == 'refs/heads/dev'
+        run: terraform plan -var-file "./Environment/prod.tfvars" -out=tfplan
+
+      - name: Print Terraform Plan
+        if: github.ref == 'refs/heads/dev'
+        run: cat tfplan
