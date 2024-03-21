@@ -1,0 +1,40 @@
+name: Terraform Apply or Destroy
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform: apply or destroy'
+        required: true
+        default: 'apply'
+
+jobs:
+  terraform:
+    name: Terraform Apply or Destroy
+    if: github.event.pull_request.merged && github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.0
+      
+      - name: Initialize Terraform
+        run: terraform init
+      
+      - name: Terraform Format
+        run: terraform fmt -check -diff
+      
+      - name: Terraform Validate
+        run: terraform validate
+      
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
