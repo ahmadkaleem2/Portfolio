@@ -9,14 +9,15 @@ resource "aws_security_group" "mysql_security_group" {
             protocol    = "tcp"
             to_port     = 3306
             security_groups = [ module.asg.webserver_security_group.id ]
+
           }
 
-  ingress {
-            from_port   = 22
-            protocol    = "tcp"
-            to_port     = 22
-            security_groups = [ module.vpc["vpc-prod"].vpc_security_groups["bastion_security_group"].id ]
-          }
+  # ingress {
+  #           from_port   = 22
+  #           protocol    = "tcp"
+  #           to_port     = 22
+  #           # security_groups = [ module.vpc["vpc-prod"].vpc_security_groups["bastion_security_group"].id ]
+  #         }
   
   egress {
             from_port   = 0
@@ -29,6 +30,21 @@ resource "aws_security_group" "mysql_security_group" {
     Name = "${terraform.workspace}-${var.identifier}-sg-mysql"
   })
 }
+
+
+resource "aws_security_group_rule" "allow_traffic_from_bastion_host" {
+
+  count = length(lookup(module.vpc["vpc-prod"],"private_subnets",[])) > 0 ? 1 : 0
+
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+
+  source_security_group_id = module.vpc["vpc-prod"].vpc_security_groups["bastion_security_group"].id
+  security_group_id = aws_security_group.mysql_security_group.id
+}
+
 
 
 resource "aws_key_pair" "keypair" {

@@ -33,7 +33,7 @@ resource "aws_subnet" "public_subnet" {
 }
 
 resource "aws_subnet" "private_subnet" {
-  count = length(var.vpc_config.private_subnets)
+  count = contains(keys(var.vpc_config),"private_subnets") ? length(var.vpc_config.private_subnets) : 0
 
 
   vpc_id                  = aws_vpc.vpc.id
@@ -95,6 +95,9 @@ resource "aws_route_table_association" "public_route_table_associations" {
 
 resource "aws_eip" "eip_for_nat" {
 
+  # count = contains(keys(var.vpc_config),"private_subnets") && length(var.vpc_config.private_subnets) > 0 ? 1 : 0
+  count = length(lookup(var.vpc_config,"private_subnets",[]))
+
   domain = "vpc"
 
   tags = merge(var.tags_all, {
@@ -104,10 +107,12 @@ resource "aws_eip" "eip_for_nat" {
 
 
 resource "aws_nat_gateway" "nat_gateway_for_private_subnets" {
+
+  count = length(lookup(var.vpc_config,"private_subnets",[])) > 0 ? 1 : 0
+
   subnet_id = aws_subnet.public_subnet[0].id
 
-
-  allocation_id = aws_eip.eip_for_nat.id
+  allocation_id = aws_eip.eip_for_nat[0].id
 
 
   tags = merge(var.tags_all, {
@@ -126,7 +131,7 @@ resource "aws_route_table" "private" {
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat_gateway_for_private_subnets.id
+    nat_gateway_id = aws_nat_gateway.nat_gateway_for_private_subnets[0].id
   }
 
   tags = merge(var.tags_all, {

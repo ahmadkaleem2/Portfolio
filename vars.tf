@@ -18,3 +18,7 @@ variable "ec2" {
 variable "asg" {
   
 }
+
+variable "elb" {
+  
+}

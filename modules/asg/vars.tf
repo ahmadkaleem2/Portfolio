@@ -44,9 +44,6 @@ variable "vpc" {
 variable "key_pair" {
 
 }
-variable "DB_SETTINGS" {
-  
-}
 
 
 variable "tags_all" {
@@ -71,4 +68,24 @@ variable "cpu_alarm_threshold_low" {
 
 variable "cpu_alarm_threshold_high" {
   default = 65
+}
+
+variable "load_balancer" {
+  
+}
+
+variable "load_balancer_tg" {
+  
+}
+
+variable "use_public_subnet_for_asg" {
+
+}
+
+variable "asg_script_path" {
+  
+}
+
+variable "asg_script_args" {
+  
 }

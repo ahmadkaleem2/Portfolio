@@ -1,69 +1,17 @@
 
-
-resource "aws_lb" "load_balancer" {
-  name = "${terraform.workspace}-${var.identifier}-testing-site"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [var.vpc_security_groups["alb_security_group"].id]
-  subnets            = slice([for i in var.public_subnets: i.id],0,length(var.region_azs))
-
-
-
-  enable_deletion_protection = false
-
-
-  tags = {
-    Name = "${terraform.workspace}-${var.identifier}-testing_site"
-  }
-}
-
-
-
-resource "aws_lb_target_group" "load_balancer_tg" {
-  name     = "${terraform.workspace}-${var.identifier}-alb-tg"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = var.vpc.id
-  target_type = "instance"
-
-  health_check {
-    path = "/"
-    healthy_threshold = 5
-    unhealthy_threshold = 2
-    timeout = 2
-    interval = 5
-    matcher = "200-302"
-  }
-}
-
-
-resource "aws_lb_listener" "load_balancer_listener_HTTP" {
-  load_balancer_arn = aws_lb.load_balancer.arn
-  port              = "80"
-  protocol          = "HTTP"
-  
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.load_balancer_tg.arn
-  }
-}
-
-
 resource "aws_autoscaling_group" "asg_launch_template" {
   name                   = "${terraform.workspace}-${var.identifier}-wordpress-asg-policy"
-  # availability_zones = ["us-east-2b"]
-  # desired_capacity   = var.desired_capacity
   max_size           = var.max_capacity
   min_size           = var.min_capacity
-  # vpc_zone_identifier = [var.public_subnets[0].id, var.public_subnets[1].id, var.public_subnets[2].id]
-  vpc_zone_identifier = [for i in var.private_subnets: i.id] # fix this
+  
+  vpc_zone_identifier = var.use_public_subnet_for_asg ? [ for i in var.public_subnets : i.id] : [ for i in var.private_subnets : i.id]
   launch_template {
     id      = aws_launch_template.wordpress.id
     version = "$Latest"
   }
-  # load_balancers = [aws_lb.test.id]
-  target_group_arns = [aws_lb_target_group.load_balancer_tg.arn]
-  depends_on = [ aws_launch_template.wordpress, var.mysql_instance, aws_lb.load_balancer ]
+
+  target_group_arns = [ var.load_balancer_tg.arn ]
+  depends_on = [ aws_launch_template.wordpress, var.mysql_instance, var.load_balancer ]
   
 }
 
@@ -178,16 +126,16 @@ resource "aws_launch_template" "wordpress" {
   }
   
   network_interfaces {
-      
-    associate_public_ip_address = false
+    associate_public_ip_address = var.use_public_subnet_for_asg 
+    
     security_groups = [ aws_security_group.webserver_security_group.id ]
     subnet_id = var.public_subnets[0].id
   }
 
   placement {
-    # availability_zone = ["us-east-2b"]
-    availability_zone = var.private_subnets[0].availability_zone
-    # availability_zone = [for i in var.private_subnets : i.availability_zone]
+  
+    availability_zone = var.use_public_subnet_for_asg ? var.public_subnets[0].availability_zone : var.private_subnets[0].availability_zone
+  
 
   }
 
@@ -203,7 +151,7 @@ resource "aws_launch_template" "wordpress" {
     }
   }
 
-  user_data = base64encode("${data.cloudinit_config.cloudinit_wordpress.rendered}")
+  user_data = base64encode("${data.cloudinit_config.cloudinit_script.rendered}")
 
   depends_on = [ var.mysql_instance ]
 }
