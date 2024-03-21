@@ -291,15 +291,15 @@ elb = {
       target_group_name = "wordpress-tg" 
     },
 
-    https_listener = {
+    # https_listener = {
 
-      port = 443
-      protocol = "HTTPS"
-      target_group_name = "wordpress-tg" 
-      certificate_arn = "dummy_arn"
+    #   port = 443
+    #   protocol = "HTTPS"
+    #   target_group_name = "wordpress-tg" 
+    #   certificate_arn = "dummy_arn"
 
   
-    }
+    # }
 
 
   }
