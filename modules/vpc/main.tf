@@ -96,7 +96,7 @@ resource "aws_route_table_association" "public_route_table_associations" {
 resource "aws_eip" "eip_for_nat" {
 
   # count = contains(keys(var.vpc_config),"private_subnets") && length(var.vpc_config.private_subnets) > 0 ? 1 : 0
-  count = length(lookup(var.vpc_config,"private_subnets",[]))
+  count = length(lookup(var.vpc_config,"private_subnets",[])) > 0 ? 1 : 0
 
   domain = "vpc"
 

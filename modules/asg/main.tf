@@ -10,7 +10,7 @@ resource "aws_autoscaling_group" "asg_launch_template" {
     version = "$Latest"
   }
 
-  target_group_arns = [ var.load_balancer_tg.arn ]
+  target_group_arns = [ var.load_balancer_tg["wordpress-tg"].arn ]
   depends_on = [ aws_launch_template.wordpress, var.mysql_instance, var.load_balancer ]
   
 }

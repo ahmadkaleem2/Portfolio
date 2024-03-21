@@ -47,9 +47,8 @@ resource "aws_lb_target_group" "load_balancer_tg" {
   name     = "${terraform.workspace}-${var.identifier}-${each.key}"
   port     = each.value.port
   protocol = each.value.protocol
-  # protocol = "HTTP"
   vpc_id   = var.vpc.id
-  # target_type = "instance"
+
 
   health_check {
     path = each.value.health_check_path
@@ -70,6 +69,7 @@ resource "aws_lb_listener" "load_balancer_listener_HTTP" {
   port              = each.value.port
   protocol          = each.value.protocol
 
+  certificate_arn = lookup(each.value,"certificate_arn",null)
   
   default_action {
     type             = "forward"

@@ -75,7 +75,7 @@ vpcs = {
     VPC_CIDR_BLOCK     = "10.0.0.0/16"
     public_subnets     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 
-    # private_subnets    = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+    private_subnets    = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
 
     security_groups = {
       bastion_security_group = {
@@ -254,7 +254,7 @@ asg = {
 
 elb = {
   domain = "ahmadkaleem2.link"
-  elb_type = "network"
+  elb_type = "application"
 
   protocol_types_for_elb_type_for_http = {
     "network" = "TCP"
@@ -267,6 +267,23 @@ elb = {
 
   listeners = {
   
+    # http_listener = {
+
+    #   port = 80
+    #   protocol = "TCP"
+    #   target_group_name = "wordpress-tg" 
+    # },
+
+    # https_listener = {
+
+    #   port = 443
+    #   protocol = "TLS"
+    #   target_group_name = "wordpress-tg" 
+    #   certificate_arn = "dummy_arn"
+
+  
+    # }
+
     http_listener = {
 
       port = 80
@@ -276,12 +293,15 @@ elb = {
 
     https_listener = {
 
-      port = 80
+      port = 443
       protocol = "HTTPS"
       target_group_name = "wordpress-tg" 
+      certificate_arn = "dummy_arn"
 
   
     }
+
+
   }
     target_groups = {
       "wordpress-tg" = {
@@ -290,7 +310,7 @@ elb = {
         health_check_path = "/"
         health_check_threshold = 5
         unhealthy_threshold = 2
-        timeout = 5
+        timeout = 2
         interval = 5
         matcher = "200-302"
       }

@@ -74,9 +74,9 @@ vpcs = {
     enabled = true
     VPC_CIDR_BLOCK     = "10.0.0.0/16"
     public_subnets     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-    # public_subnet_azs  = ["us-east-2a", "us-east-2b", "us-east-2c"]
+
     private_subnets    = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
-    # private_subnet_azs = ["us-east-2a", "us-east-2b", "us-east-2c"]
+
     security_groups = {
       bastion_security_group = {
         ingress = [
@@ -199,7 +199,7 @@ ec2 = {
       DB_NAME = "wordpress"
     }
 
-    script_path = "./modules/ec2/install-mysql.sh"
+    script_path = "./scripts/install-mysql.sh"
 
     instance_type = "t2.micro"
 
@@ -209,8 +209,10 @@ ec2 = {
 
 }
 
-
 asg = {
+
+  user_data_path = "./scripts/install-wordpress.sh"
+
   instance_type = "t2.micro"
   min_capacity = 2
   max_capacity = 5
@@ -249,5 +251,72 @@ asg = {
   ]
 }
 
+
+elb = {
+  domain = "ahmadkaleem2.link"
+  elb_type = "application"
+
+  protocol_types_for_elb_type_for_http = {
+    "network" = "TCP"
+    "application" = "HTTP"
+  }
+  protocol_types_for_elb_type_for_https = {
+    "network" = "TLS"
+    "application" = "HTTPS"
+  }
+
+  listeners = {
+  
+    # http_listener = {
+
+    #   port = 80
+    #   protocol = "TCP"
+    #   target_group_name = "wordpress-tg" 
+    # },
+
+    # https_listener = {
+
+    #   port = 443
+    #   protocol = "TLS"
+    #   target_group_name = "wordpress-tg" 
+    #   certificate_arn = "dummy_arn"
+
+  
+    # }
+
+    http_listener = {
+
+      port = 80
+      protocol = "HTTP"
+      target_group_name = "wordpress-tg" 
+    },
+
+    https_listener = {
+
+      port = 443
+      protocol = "HTTPS"
+      target_group_name = "wordpress-tg" 
+      certificate_arn = "dummy_arn"
+
+  
+    }
+
+
+  }
+    target_groups = {
+      "wordpress-tg" = {
+        port = 80
+        protocol = "HTTP"
+        health_check_path = "/"
+        health_check_threshold = 5
+        unhealthy_threshold = 2
+        timeout = 2
+        interval = 5
+        matcher = "200-302"
+      }
+    }
+
+  
+}
 
 
