@@ -104,7 +104,7 @@ resource "aws_launch_template" "wordpress" {
   
 
 #   key_name = aws_key_pair.mykeypair.key_name
-  key_name = var.key_pair.key_name
+  key_name = var.key_pair_name
 
   
   image_id = var.ami

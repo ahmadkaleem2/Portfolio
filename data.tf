@@ -16,6 +16,6 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-data "aws_key_pair" "existing_keypair" {
-  key_name = "ahmad-terraform-key"
-}
+# data "aws_key_pair" "existing_keypair" {
+#   key_name = "ahmad-terraform-key"
+# }

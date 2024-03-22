@@ -47,15 +47,15 @@ resource "aws_security_group_rule" "allow_traffic_from_bastion_host" {
 
 
 
-resource "aws_key_pair" "keypair" {
+# resource "aws_key_pair" "keypair" {
 
-    key_name   = "${terraform.workspace}-${var.identifier}-key"
+#     key_name   = "ahmad-terraform-key"
 
-    public_key = data.aws_key_pair.existing_keypair.public_key
 
-    # public_key = file("./modules/ec2/key.pub")
-#   public_key = file("${path.module}/key.pub")
-}
+
+#   # public_key = file("./modules/ec2/key.pub")
+#   # public_key = file("${path.module}/key.pub")
+# }
 
 resource "random_password" "password_for_database" {
   length = 12

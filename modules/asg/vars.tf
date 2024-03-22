@@ -41,7 +41,7 @@ variable "vpc" {
   
 }
 
-variable "key_pair" {
+variable "key_pair_name" {
 
 }
 

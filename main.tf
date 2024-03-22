@@ -24,7 +24,7 @@ module "bastion_host" {
 
   identifier = var.identifier
 
-  keypair = aws_key_pair.keypair
+  keypair = var.ec2.bastion_host.key_pair_name
 
   security_groups = [module.vpc["vpc-prod"].vpc_security_groups["bastion_security_group"]]
 
@@ -54,7 +54,7 @@ module "mysql_instance" {
 
   identifier = var.identifier
 
-  keypair = aws_key_pair.keypair
+  keypair = var.ec2.mysql_instance.key_pair_name
 
   security_groups = [ aws_security_group.mysql_security_group ]
 
@@ -103,6 +103,8 @@ module "alb" {
 
   target_groups = var.elb.target_groups
 
+
+
 }
 
 
@@ -135,8 +137,8 @@ module "asg" {
 
   vpc_security_groups = module.vpc["vpc-prod"].vpc_security_groups
 
-  key_pair = aws_key_pair.keypair
 
+  key_pair_name = var.asg.key_pair_name
 
   mysql_instance = module.mysql_instance.instance
 

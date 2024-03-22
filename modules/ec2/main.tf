@@ -8,7 +8,7 @@ resource "aws_instance" "instance" {
 
   user_data = length(data.cloudinit_config.cloudinit-example) > 0 ? data.cloudinit_config.cloudinit-example[0].rendered : ""
 
-  key_name = var.keypair.key_name
+  key_name = "ahmad-terraform-key"
 
   vpc_security_group_ids = [for i in var.security_groups: i.id]
   # vpc_security_group_ids = [ aws_security_group.mysql_sg.id ]

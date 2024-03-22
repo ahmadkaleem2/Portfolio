@@ -180,6 +180,7 @@ ec2 = {
 
   bastion_host = {
 
+  key_pair_name = "ahmad-terraform-key"
 
   reason = "bastion_host"
 
@@ -191,6 +192,8 @@ ec2 = {
   }
   
   mysql_instance = {
+
+    key_pair_name = "ahmad-terraform-key"
 
     reason = "mysql_instance"
 
@@ -210,6 +213,8 @@ ec2 = {
 }
 
 asg = {
+
+  key_pair_name = "ahmad-terraform-key"
 
   user_data_path = "./scripts/install-wordpress.sh"
 
