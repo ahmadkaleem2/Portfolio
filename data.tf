@@ -16,3 +16,8 @@ data "aws_ami" "ubuntu" {
     values = ["hvm"]
   }
 }
+
+
+data "aws_key_pair" "existing_keypair" {
+  key_name = "ahmad-terraform-key"
+}
