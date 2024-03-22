@@ -1,3 +1,4 @@
+name : terraform apply or destroy
 on:
   workflow_dispatch:
     inputs:
