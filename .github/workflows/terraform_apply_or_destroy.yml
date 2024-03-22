@@ -1,15 +1,4 @@
 name: Terraform Apply or Destroy
-
-
-
-
-
-
-
-  
-  # pull_request:
-  #   types:
-  #     - closed
 on:
   workflow_dispatch:
     inputs:
@@ -23,8 +12,6 @@ on:
   push:
     branches:
       - main
-  
-
 jobs:
   terraform:
     name: Terraform Apply or Destroy
@@ -60,7 +47,6 @@ jobs:
         run: terraform plan -var-file "./Environment/prod.tfvars" -out=tfplan
       
       - name: Apply or Destroy Terraform Configuration
-        if: github.event_name == 'workflow_dispatch'
         run: |
           if [ "${{ github.event.inputs.apply_or_destroy }}" = "apply" ]; then
             terraform apply -var-file "./Environment/prod.tfvars" -auto-approve tfplan
