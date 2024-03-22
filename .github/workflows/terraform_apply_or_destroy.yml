@@ -2,14 +2,14 @@
 name: Terraform Apply or Destroy
 on:
   workflow_dispatch:
-    # inputs:
-    #   terraform:
-    #     type: choice
-    #     description: Whether to apply or destroy
-    #     options: 
-    #     - apply
-    #     - destroy
-    #     required: true
+    inputs:
+      terraform:
+        type: choice
+        description: Whether to apply or destroy
+        options: 
+        - apply
+        - destroy
+        required: true
 jobs:
   terraform:
     name: Terraform Apply or Destroy
