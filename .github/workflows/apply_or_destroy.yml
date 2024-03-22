@@ -45,8 +45,8 @@ jobs:
       - name: Apply or Destroy Terraform Configuration
         if: ${{ github.event.inputs.apply_or_destroy == 'apply' || github.event.inputs.apply_or_destroy == 'destroy' }}
         run: |
-          if [ "${{ github.event.inputs.terraform }}" = "apply" ]; then
+          if [ "${{ github.event.inputs.apply_or_destroy }}" = "apply" ]; then
             terraform apply -auto-approve tfplan
-          elif [ "${{ github.event.inputs.terraform }}" = "destroy" ]; then
+          elif [ "${{ github.event.inputs.apply_or_destroy }}" = "destroy" ]; then
             terraform destroy -auto-approve
           fi
