@@ -3,21 +3,6 @@ resource "aws_security_group" "mysql_security_group" {
   name        = "mysql-sg"
   description = "Allow TLS inbound traffic and all outbound traffic"
   vpc_id      = module.vpc["vpc-prod"].vpc_id
-
-  ingress {
-            from_port   = 3306
-            protocol    = "tcp"
-            to_port     = 3306
-            security_groups = [ module.asg.webserver_security_group.id ]
-
-          }
-
-  # ingress {
-  #           from_port   = 22
-  #           protocol    = "tcp"
-  #           to_port     = 22
-  #           # security_groups = [ module.vpc["vpc-prod"].vpc_security_groups["bastion_security_group"].id ]
-  #         }
   
   egress {
             from_port   = 0
@@ -27,10 +12,23 @@ resource "aws_security_group" "mysql_security_group" {
           }
 
   tags = merge(local.tags_all, {
-    Name = "${terraform.workspace}-${var.identifier}-sg-mysql"
+    Name = "${terraform.workspace}-${var.identifier}-sg-mysql"  
   })
 }
 
+
+
+resource "aws_security_group_rule" "rds_sg" {
+
+  type              = "ingress"
+  from_port         = 3306
+  to_port           = 3306
+  protocol          = "tcp"
+
+  source_security_group_id = module.asg.webserver_security_group.id
+  security_group_id = aws_security_group.mysql_security_group.id
+
+}
 
 resource "aws_security_group_rule" "allow_traffic_from_bastion_host" {
 
@@ -41,21 +39,13 @@ resource "aws_security_group_rule" "allow_traffic_from_bastion_host" {
   to_port           = 22
   protocol          = "tcp"
 
+
+
   source_security_group_id = module.vpc["vpc-prod"].vpc_security_groups["bastion_security_group"].id
   security_group_id = aws_security_group.mysql_security_group.id
+
+
 }
-
-
-
-# resource "aws_key_pair" "keypair" {
-
-#     key_name   = "ahmad-terraform-key"
-
-
-
-#   # public_key = file("./modules/ec2/key.pub")
-#   # public_key = file("${path.module}/key.pub")
-# }
 
 resource "random_password" "password_for_database" {
   length = 12
