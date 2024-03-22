@@ -4,19 +4,16 @@ name: Terraform Apply or Destroy
 
 
 
-on:
-  push:
-    branches:
-      - main
+
 
   
   # pull_request:
   #   types:
   #     - closed
-
+on:
   workflow_dispatch:
     inputs:
-      apply_or_destroy:
+      terraform:
         type: choice
         description: Whether to apply or destroy
         options: 
@@ -24,6 +21,8 @@ on:
         - destroy
       message:
         required: true
+
+  
 
 jobs:
   terraform:
