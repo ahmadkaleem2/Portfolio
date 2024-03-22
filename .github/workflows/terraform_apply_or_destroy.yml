@@ -48,7 +48,7 @@ jobs:
         if: ${{ github.event.inputs.terraform == 'apply' || github.event.inputs.terraform == 'destroy' }}
         run: |
           if [ "${{ github.event.inputs.terraform }}" = "apply" ]; then
-            terraform apply -var-file "./Environment/prod.tfvars" -auto-approve tfplan
+            terraform apply -auto-approve tfplan
           elif [ "${{ github.event.inputs.terraform }}" = "destroy" ]; then
-            terraform destroy -var-file "./Environment/prod.tfvars" -auto-approve
+            terraform destroy -auto-approve
           fi
