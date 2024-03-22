@@ -7,7 +7,6 @@ on:
         options: 
         - apply
         - destroy
-        required: true
 jobs:
   terraform:
     name: Terraform Apply or Destroy
