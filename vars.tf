@@ -15,6 +15,7 @@ variable "ec2" {
   
 }
 
+
 variable "asg" {
   
 }
