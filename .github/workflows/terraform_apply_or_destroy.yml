@@ -47,9 +47,10 @@ jobs:
         run: terraform plan -var-file "./Environment/prod.tfvars" -out=tfplan
       
       - name: Apply or Destroy Terraform Configuration
+        if: ${{ github.event.inputs.terraform == 'apply' || github.event.inputs.terraform == 'destroy' }}
         run: |
-          if [ "${{ github.event.inputs.apply_or_destroy }}" = "apply" ]; then
+          if [ "${{ github.event.inputs.terraform }}" = "apply" ]; then
             terraform apply -var-file "./Environment/prod.tfvars" -auto-approve tfplan
-          elif [ "${{ github.event.inputs.apply_or_destroy }}" = "destroy" ]; then
+          elif [ "${{ github.event.inputs.terraform }}" = "destroy" ]; then
             terraform destroy -var-file "./Environment/prod.tfvars" -auto-approve
           fi
