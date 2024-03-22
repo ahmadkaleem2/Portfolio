@@ -10,9 +10,6 @@ on:
         - apply
         - destroy
         required: true
-  push:
-    branches:
-      - main
 jobs:
   terraform:
     name: Terraform Apply or Destroy
