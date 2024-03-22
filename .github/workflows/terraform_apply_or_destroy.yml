@@ -19,15 +19,15 @@ on:
         options: 
         - apply
         - destroy
-      message:
         required: true
-
+  push:
+    branches:
+      - main
   
 
 jobs:
   terraform:
     name: Terraform Apply or Destroy
-    # if: github.event.pull_request.merged && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
     permissions:
       id-token: write
