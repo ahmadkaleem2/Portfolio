@@ -5,7 +5,6 @@ data "aws_availability_zones" "example" {
 
 data "aws_ami" "ubuntu" {
 
-
   filter {
     name   = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20240207.1"]
@@ -16,7 +15,6 @@ data "aws_ami" "ubuntu" {
     values = ["hvm"]
   }
 }
-
 
 data "aws_key_pair" "existing_keypair" {
   key_name = "ahmad-terraform-key"
