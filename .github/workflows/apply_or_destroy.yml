@@ -8,6 +8,7 @@ on:
         options: 
         - apply
         - destroy
+concurrency: single
 jobs:
   terraform:
     name: Terraform Apply or Destroy
