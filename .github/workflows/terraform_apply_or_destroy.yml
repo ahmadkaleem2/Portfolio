@@ -1,11 +1,19 @@
 name: Terraform Apply or Destroy
 
+
+
+
+
 on:
-  pull_request:
-    types:
-      - closed
+  push:
     branches:
       - main
+
+  
+  # pull_request:
+  #   types:
+  #     - closed
+
   workflow_dispatch:
     inputs:
       apply_or_destroy:
