@@ -36,8 +36,5 @@ jobs:
       
       - name: Terraform Plan
         if: github.ref == 'refs/heads/dev'
-        run: terraform plan -var-file "./Environment/prod.tfvars" -out=tfplan
+        run: terraform plan -var-file "./Environment/prod.tfvars"
 
-      - name: Print Terraform Plan
-        if: github.ref == 'refs/heads/dev'
-        run: cat tfplan
