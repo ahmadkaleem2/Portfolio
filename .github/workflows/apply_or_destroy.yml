@@ -1,5 +1,3 @@
-
-name: Terraform Apply or Destroy 
 on:
   workflow_dispatch:
     inputs:
