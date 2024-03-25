@@ -53,7 +53,7 @@ resource "random_password" "password_for_database" {
 }
 
 resource "aws_ssm_parameter" "password_parameter" {
-  name  = "/mysql/password"
+  name  = "/${terraform.workspace}/mysql/password"
   type  = "SecureString"
   value = contains(keys(var.ec2.mysql_instance.script_args),"DB_PASSWORD") ? var.ec2.mysql_instance.script_args.DB_PASSWORD : random_password.password_for_database.result
 }
