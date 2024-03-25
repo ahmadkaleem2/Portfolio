@@ -180,6 +180,7 @@ ec2 = {
 
   bastion_host = {
 
+  key_pair_name = "ahmad-terraform-key"
 
   reason = "bastion_host"
 
@@ -191,6 +192,8 @@ ec2 = {
   }
   
   mysql_instance = {
+
+    key_pair_name = "ahmad-terraform-key"
 
     reason = "mysql_instance"
 
@@ -210,6 +213,8 @@ ec2 = {
 }
 
 asg = {
+
+  key_pair_name = "ahmad-terraform-key"
 
   user_data_path = "./scripts/install-wordpress.sh"
 
@@ -253,20 +258,15 @@ asg = {
 
 
 elb = {
-  domain = "ahmadkaleem2.link"
   elb_type = "application"
 
-  protocol_types_for_elb_type_for_http = {
-    "network" = "TCP"
-    "application" = "HTTP"
-  }
-  protocol_types_for_elb_type_for_https = {
-    "network" = "TLS"
-    "application" = "HTTPS"
-  }
 
   listeners = {
-  
+    ######
+#   LISTENERS TLS AND TCP are only applicable to elb_type = "network" and 
+#   LISTENERS HTTP AND HTTPS are only applicable to elb_type = "application"
+    ######
+
     # http_listener = {
 
     #   port = 80
