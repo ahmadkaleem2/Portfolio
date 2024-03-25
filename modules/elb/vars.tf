@@ -31,14 +31,6 @@ variable "lb_type" {
 }
 
 
-variable "protocol_types_for_elb_type_for_http" {
-  
-}
-
-variable "protocol_types_for_elb_type_for_https" {
-  
-}
-
 variable "listeners" {
   
 }

@@ -95,10 +95,6 @@ module "alb" {
 
   lb_type = var.elb.elb_type
 
-  protocol_types_for_elb_type_for_http = var.elb.protocol_types_for_elb_type_for_http
-
-  protocol_types_for_elb_type_for_https = var.elb.protocol_types_for_elb_type_for_https
-
   listeners = var.elb.listeners
 
   target_groups = var.elb.target_groups
