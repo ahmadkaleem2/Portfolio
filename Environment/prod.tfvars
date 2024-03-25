@@ -311,7 +311,7 @@ elb = {
         health_check_threshold = 2
         unhealthy_threshold = 5
         timeout = 45
-        interval = 45
+        interval = 60
         matcher = "200-302"
       }
     }
