@@ -54,7 +54,6 @@ jobs:
         run: terraform validate
 
       - name: Plan or Apply or Destroy Terraform Configuration
-        if: ${{ github.event.inputs.apply_or_destroy == 'apply' || github.event.inputs.apply_or_destroy == 'destroy' || github.event.inputs.apply_or_destroy == 'plan' }}
         run: |
           if [ "${{ github.event.inputs.apply_or_destroy }}" = "apply" ]; then
             terraform apply -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars" -auto-approve
