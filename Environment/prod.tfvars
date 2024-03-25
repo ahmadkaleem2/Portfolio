@@ -308,10 +308,10 @@ elb = {
         port = 80
         protocol = "HTTP"
         health_check_path = "/"
-        health_check_threshold = 5
-        unhealthy_threshold = 2
-        timeout = 2
-        interval = 5
+        health_check_threshold = 2
+        unhealthy_threshold = 5
+        timeout = 45
+        interval = 45
         matcher = "200-302"
       }
     }
