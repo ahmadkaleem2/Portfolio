@@ -1,4 +1,4 @@
-name: Terraform Plan
+name: Terraform Apply configuration on merge
 
 on:
     pull_request:
@@ -9,7 +9,7 @@ concurrency: single
 
 jobs:
   terraform:
-    name: Terraform Plan
+    name: Terraform Apply configuration on merge
     if: github.event.pull_request.merged && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
     permissions:
@@ -43,4 +43,4 @@ jobs:
 
       - name: Plan or Apply or Destroy Terraform Configuration
         run: |
-            terraform plan -var-file "./Environment/prod.tfvars"
+            terraform apply -var-file "./Environment/prod.tfvars"
