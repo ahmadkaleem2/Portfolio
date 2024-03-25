@@ -1,28 +1,16 @@
-name: Terraform Plan, Apply, or Destroy
+name: Terraform Plan
 
 on:
-  workflow_dispatch:
-    inputs:
-      apply_or_destroy:
-        type: choice
-        description: 'Select the action: plan, apply, or destroy'
-        options:
-          - plan
-          - apply
-          - destroy
-      environment:
-        type: choice
-        description: 'Select the environment: dev, staging, or prod'
-        options:
-          - dev
-          - staging
-          - prod
+    pull_request:
+      types:
+        - opened  
 
 concurrency: single
 
 jobs:
   terraform:
-    name: Terraform Apply, Plan, or Destroy
+    name: Terraform Plan
+    if: github.event.pull_request.base.ref == 'dev'
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -48,13 +36,17 @@ jobs:
         run: terraform init
 
       - name: Set Terraform Workspace
-        run: terraform workspace select -or-create prod
+        run: terraform workspace select -or-create ${{ github.event.inputs.environment }}
 
       - name: Terraform Validate
         run: terraform validate
 
       - name: Plan or Apply or Destroy Terraform Configuration
         run: |
-
-            terraform plan -var-file "./Environment/prod.tfvars"
-
+          if [ "${{ github.event.inputs.apply_or_destroy }}" = "apply" ]; then
+            terraform apply -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars" -auto-approve
+          elif [ "${{ github.event.inputs.apply_or_destroy }}" = "destroy" ]; then
+            terraform destroy -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars" -auto-approve
+          elif [ "${{ github.event.inputs.apply_or_destroy }}" = "plan" ]; then
+            terraform plan -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars"
+          fi
