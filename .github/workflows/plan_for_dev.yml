@@ -36,17 +36,11 @@ jobs:
         run: terraform init
 
       - name: Set Terraform Workspace
-        run: terraform workspace select -or-create ${{ github.event.inputs.environment }}
+        run: terraform workspace select -or-create prod
 
       - name: Terraform Validate
         run: terraform validate
 
       - name: Plan or Apply or Destroy Terraform Configuration
         run: |
-          if [ "${{ github.event.inputs.apply_or_destroy }}" = "apply" ]; then
-            terraform apply -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars" -auto-approve
-          elif [ "${{ github.event.inputs.apply_or_destroy }}" = "destroy" ]; then
-            terraform destroy -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars" -auto-approve
-          elif [ "${{ github.event.inputs.apply_or_destroy }}" = "plan" ]; then
-            terraform plan -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars"
-          fi
+            terraform plan -var-file "./Environment/prod.tfvars"
