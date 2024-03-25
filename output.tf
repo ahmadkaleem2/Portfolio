@@ -20,3 +20,7 @@ output "vpc_config" {
     value = local.vpc_config
   
 }
+
+output "alb_dns_name" {
+  value = module.alb.load_balancer.dns_name
+}
