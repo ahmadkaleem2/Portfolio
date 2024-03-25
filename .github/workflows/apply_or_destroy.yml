@@ -4,10 +4,11 @@ on:
     inputs:
       apply_or_destroy:
         type: choice
-        description: Whether to apply or destroy
+        description: Whether to apply or destroy or plan
         options: 
         - apply
         - destroy
+        - plan
 concurrency: single
 jobs:
   terraform:
@@ -44,10 +45,12 @@ jobs:
         run: terraform plan -var-file "./Environment/prod.tfvars"
       
       - name: Apply or Destroy Terraform Configuration
-        if: ${{ github.event.inputs.apply_or_destroy == 'apply' || github.event.inputs.apply_or_destroy == 'destroy' }}
+        if: ${{ github.event.inputs.apply_or_destroy == 'apply' || github.event.inputs.apply_or_destroy == 'destroy' || github.event.inputs.apply_or_destroy == 'plan' }}
         run: |
           if [ "${{ github.event.inputs.apply_or_destroy }}" = "apply" ]; then
             terraform apply -var-file "./Environment/prod.tfvars" -auto-approve
           elif [ "${{ github.event.inputs.apply_or_destroy }}" = "destroy" ]; then
             terraform destroy -var-file "./Environment/prod.tfvars" -auto-approve
+          elif [ "${{ github.event.inputs.apply_or_destroy }}" = "plan" ]; then
+            terraform plan -var-file "./Environment/prod.tfvars"
           fi
