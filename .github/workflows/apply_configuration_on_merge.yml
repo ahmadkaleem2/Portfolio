@@ -43,4 +43,4 @@ jobs:
 
       - name: Plan or Apply or Destroy Terraform Configuration
         run: |
-            terraform apply -var-file "./Environment/prod.tfvars"
+            terraform apply -var-file "./Environment/prod.tfvars" -auto-approve
