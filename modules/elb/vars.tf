@@ -20,12 +20,6 @@ variable "vpc" {
 }
 
 
-variable "domain" {
-  
-
-
-}
-
 variable "lb_type" {
   
 }

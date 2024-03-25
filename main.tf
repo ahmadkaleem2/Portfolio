@@ -91,14 +91,11 @@ module "alb" {
 
   vpc = module.vpc["vpc-prod"].vpc
 
-  domain = var.elb.domain
-
   lb_type = var.elb.elb_type
 
   listeners = var.elb.listeners
 
   target_groups = var.elb.target_groups
-
 
 
 }
