@@ -10,6 +10,8 @@ resource "aws_autoscaling_group" "asg_launch_template" {
     version = "$Latest"
   }
 
+  health_check_grace_period = var.health_check_grace_period
+
   target_group_arns = [ var.load_balancer_tg["wordpress-tg"].arn ]
   depends_on = [ aws_launch_template.wordpress, var.mysql_instance, var.load_balancer ]
   

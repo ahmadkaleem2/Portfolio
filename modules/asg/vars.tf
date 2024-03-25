@@ -89,3 +89,7 @@ variable "asg_script_path" {
 variable "asg_script_args" {
   
 }
+
+variable "health_check_grace_period" {
+  default = 450
+}
