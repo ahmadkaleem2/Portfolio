@@ -214,8 +214,8 @@ asg = {
   user_data_path = "./scripts/install-wordpress.sh"
 
   instance_type = "t2.micro"
-  min_capacity = 2
-  max_capacity = 5
+  min_capacity = 1
+  max_capacity = 4
   step_adjustment_scale_up = [
     {
     metric_interval_upper_bound = null

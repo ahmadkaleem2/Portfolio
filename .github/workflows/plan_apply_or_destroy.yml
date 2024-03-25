@@ -1,56 +1,65 @@
-name : terraform apply or destroy
+name: Terraform Plan, Apply, or Destroy
+
 on:
   workflow_dispatch:
     inputs:
       apply_or_destroy:
         type: choice
-        description: Whether to apply or destroy or plan
-        options: 
-        - apply
-        - destroy
-        - plan
+        description: 'Select the action: plan, apply, or destroy'
+        options:
+          - plan
+          - apply
+          - destroy
+      environment:
+        type: choice
+        description: 'Select the environment: dev, staging, or prod'
+        options:
+          - dev
+          - staging
+          - prod
+
 concurrency: single
+
 jobs:
   terraform:
-    name: Terraform Apply or Destroy
+    name: Terraform Apply, Plan, or Destroy
     runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      
-      - name: configure aws credentials
+
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: ${{ secrets.IAM_ROLE_ARN }}  #change to reflect your IAM role’s ARN
+          role-to-assume: ${{ secrets.IAM_ROLE_ARN }} # Change to reflect your IAM role’s ARN
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ secrets.AWS_REGION }}
-
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.1.0
-      
+
       - name: Initialize Terraform
         run: terraform init
-      
-      
+
+      - name: Set Terraform Workspace
+        run: terraform workspace select -or-create ${{ github.event.inputs.environment }}
+
       - name: Terraform Validate
         run: terraform validate
-      
-      - name: Terraform Plan
-        run: terraform plan -var-file "./Environment/prod.tfvars"
-      
-      - name: Apply or Destroy Terraform Configuration
+
+      - name: Plan or Apply or Destroy Terraform Configuration
         if: ${{ github.event.inputs.apply_or_destroy == 'apply' || github.event.inputs.apply_or_destroy == 'destroy' || github.event.inputs.apply_or_destroy == 'plan' }}
         run: |
           if [ "${{ github.event.inputs.apply_or_destroy }}" = "apply" ]; then
-            terraform apply -var-file "./Environment/prod.tfvars" -auto-approve
+            terraform apply -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars" -auto-approve
           elif [ "${{ github.event.inputs.apply_or_destroy }}" = "destroy" ]; then
-            terraform destroy -var-file "./Environment/prod.tfvars" -auto-approve
+            terraform destroy -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars" -auto-approve
           elif [ "${{ github.event.inputs.apply_or_destroy }}" = "plan" ]; then
-            terraform plan -var-file "./Environment/prod.tfvars"
+            terraform plan -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars"
           fi
