@@ -2,15 +2,15 @@ name: Terraform Apply configuration on merge
 
 on:
     pull_request:
-      types:
-        - closed
+        branches:
+            - main
   
 concurrency: single
 
 jobs:
   terraform:
     name: Terraform Apply configuration on merge
-    if: github.event.pull_request.merged && github.event.pull_request.base.ref == 'main'
+    
     runs-on: ubuntu-latest
     permissions:
       id-token: write
