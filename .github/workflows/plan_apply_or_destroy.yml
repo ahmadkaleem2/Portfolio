@@ -59,6 +59,7 @@ jobs:
             terraform apply -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars" -auto-approve
           elif [ "${{ github.event.inputs.apply_or_destroy }}" = "destroy" ]; then
             terraform destroy -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars" -auto-approve
-          elif [ "${{ github.event.inputs.apply_or_destroy }}" = "plan" ]; then
+          # elif [ "${{ github.event.inputs.apply_or_destroy }}" = "plan" ]; then
+          else
             terraform plan -var-file "./Environment/${{ github.event.inputs.environment }}.tfvars"
           fi
