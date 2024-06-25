@@ -1,0 +1,62 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx-example
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: test
+            port:
+              number: 80
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: testing 
+  name: testing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: testing
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: testing
+    spec:
+      containers:
+      - image: nginx:alpine
+        name: simple-web
+        ports:
+          - containerPort: 80
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: test
+  name: test
+spec:
+  ports:
+  - name: "80"
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: testing
+  type: ClusterIP
+status:
+  loadBalancer: {}
