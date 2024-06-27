@@ -2,10 +2,16 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: minimal-ingress
+
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx-example
+  defaultBackend:
+    service:
+      name: test
+      port:
+        number: 80
   rules:
   - http:
       paths:
@@ -16,47 +22,43 @@ spec:
             name: test
             port:
               number: 80
+
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: testing 
   name: testing
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: testing
-  strategy: {}
+      app: testing  # This should match the selector in your Service
   template:
     metadata:
       labels:
-        app: testing
+        app: testing  # Labels for pod should match the selector
     spec:
       containers:
-      - image: nginx:alpine
-        name: simple-web
+      - name: simple-web
+        image: nginx:alpine
         ports:
-          - containerPort: 80
-status: {}
+        - containerPort: 80  # Port that the container exposes
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: null
+  name: test
   labels:
     app: test
-  name: test
 spec:
   ports:
-  - name: "80"
+  - name: "http"
     port: 80
-    protocol: TCP
     targetPort: 80
+    protocol: TCP
   selector:
     app: testing
   type: ClusterIP
-status:
-  loadBalancer: {}
+

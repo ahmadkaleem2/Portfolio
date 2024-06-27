@@ -18,9 +18,9 @@ output "vpc_id" {
   
 # }
 
-output "alb_dns_name" {
-  value = module.alb.load_balancer.dns_name
-}
+# output "alb_dns_name" {
+#   value = module.alb.load_balancer.dns_name
+# }
 
 output "list_of_azs" {
   value = data.aws_availability_zones.example.names
