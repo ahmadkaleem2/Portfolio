@@ -22,9 +22,7 @@ inputs:
   
 runs:
   using: 'composite'
-  permissions:
-      id-token: write
-      contents: read
+  
   steps:
 
     - name: Configure AWS credentials
