@@ -30,6 +30,16 @@ module "eks" {
 }
 
 
+module "ecr" {
+
+  source = "./modules/ecr"
+
+  identifier = var.identifier
+
+}
+
+
+
 # module "bastion_host" {
 
 #   source = "./modules/ec2"

@@ -17,6 +17,9 @@ jobs:
         K8S_SERVICE_ACCOUNT_TOKEN: ${{ secrets.K8S_SERVICE_ACCOUNT_TOKEN }}
         KUBERNETES_SERVER: ${{ secrets.KUBERNETES_SERVER }}
 
+    - name: Configure and set up helm
+      uses: ./.github/actions/configure-helm
+
     - name: Apply Kubernetes Manifests
       run: |
         kubectl apply -f ./kubernetes/k.yaml
