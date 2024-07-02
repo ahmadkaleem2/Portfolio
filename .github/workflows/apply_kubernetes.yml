@@ -20,6 +20,15 @@ jobs:
     - name: Configure and set up helm
       uses: ./.github/actions/configure-helm
 
+    - name: docker build and push image
+      uses: ./.github/actions/build_docker_image
+      with:
+        dockerfile: ./fastapi/Dockerfile
+        context: .fastapi/
+        aws-region: ${{ secrets.AWS_REGION }}
+        aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+        ecr-repository: ${{ secrets.ECR_REPOSITORY }}
+
     - name: Apply Kubernetes Manifests
       run: |
-        kubectl apply -f ./kubernetes/k.yaml
+        helm upgrade fastapi-hello-world ./kubernetes/charts/fastapi-hello-world --values ./kubernetes/charts/fastapi-hello-world/values.yaml

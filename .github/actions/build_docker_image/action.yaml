@@ -1,0 +1,41 @@
+name: 'Build and Push Docker Image to AWS ECR'
+description: 'Build and push Docker image to AWS ECR'
+inputs:
+  dockerfile:
+    description: 'Path to the Dockerfile'
+    required: true
+  context:
+    description: 'Path to the Docker build context'
+    required: true
+  aws-region:
+    description: 'AWS region for the ECR repository'
+    required: true
+  aws-account-id:
+    description: 'AWS account ID for the ECR repository'
+    required: true
+  ecr-repository:
+    description: 'ECR repository name'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: ${{ secrets.IAM_ROLE_ARN }} # Change to reflect your IAM role’s ARN
+        role-session-name: GitHub_to_AWS_via_FederatedOIDC
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Log in to Amazon ECR
+      id: login-ecr
+      run: |
+        aws ecr get-login-password --region ${{ inputs.aws-region }} | docker login --username AWS --password-stdin ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com
+
+    - name: Build the Docker image
+      run: |
+        docker build -t ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:${{ github.sha }} -f ${{ inputs.dockerfile }} ${{ inputs.context }}
+
+    - name: Push the Docker image
+      run: |
+        docker push ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:${{ github.sha }}
