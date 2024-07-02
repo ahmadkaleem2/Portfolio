@@ -32,14 +32,17 @@ runs:
         aws-region: ${{ inputs.AWS_REGION }}
 
     - name: Log in to Amazon ECR
+      shell: bash
       id: login-ecr
       run: |
         aws ecr get-login-password --region ${{ inputs.aws-region }} | docker login --username AWS --password-stdin ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com
 
     - name: Build the Docker image
+      shell: bash
       run: |
         docker build -t ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:${{ github.sha }} -f ${{ inputs.dockerfile }} ${{ inputs.context }}
 
     - name: Push the Docker image
+      shell: bash
       run: |
         docker push ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:${{ github.sha }}
