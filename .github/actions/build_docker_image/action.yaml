@@ -16,6 +16,10 @@ inputs:
   ecr-repository:
     description: 'ECR repository name'
     required: true
+  role-to-assume:
+    description: "Role to be assumed"
+    required: true
+  
 runs:
   using: 'composite'
   steps:
@@ -23,9 +27,9 @@ runs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
-        role-to-assume: ${{ secrets.IAM_ROLE_ARN }} # Change to reflect your IAM role’s ARN
+        role-to-assume: ${{ inputs.IAM_ROLE_ARN }} # Change to reflect your IAM role’s ARN
         role-session-name: GitHub_to_AWS_via_FederatedOIDC
-        aws-region: ${{ secrets.AWS_REGION }}
+        aws-region: ${{ inputs.AWS_REGION }}
 
     - name: Log in to Amazon ECR
       id: login-ecr

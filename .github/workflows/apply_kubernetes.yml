@@ -28,6 +28,9 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
         aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
         ecr-repository: ${{ secrets.ECR_REPOSITORY }}
+        role-to-assume: ${{ secrets.IAM_ROLE_ARN }} # Change to reflect your IAM role’s ARN
+        role-session-name: GitHub_to_AWS_via_FederatedOIDC
+
 
     - name: Apply Kubernetes Manifests
       run: |
