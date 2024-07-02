@@ -1,0 +1,22 @@
+name: Deploy to Kubernetes
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure and set up kubectl
+      uses: ./.github/actions/configure-kubectl
+      with:
+        K8S_SERVICE_ACCOUNT_TOKEN: ${{ secrets.K8S_SERVICE_ACCOUNT_TOKEN }}
+        KUBERNETES_SERVER: ${{ secrets.KUBERNETES_SERVER }}
+
+    - name: Apply Kubernetes Manifests
+      run: |
+        kubectl apply -f ./kubernetes/k.yaml
