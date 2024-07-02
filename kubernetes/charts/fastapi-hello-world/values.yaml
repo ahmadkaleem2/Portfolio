@@ -1,0 +1,24 @@
+
+replicaCount: 1
+
+image:
+  repository: 489994096722.dkr.ecr.us-west-1.amazonaws.com/fastapi-helloworld-project
+  tag: latest
+  pullPolicy: IfNotPresent
+
+
+
+
+
+service:
+  enabled: true  # Enable service
+  port: 80
+  targetPort: 80
+
+
+ingress:
+  enabled: true  # Enable ingress
+  annotations: {}
+  paths:
+    - path: /asdc
+      pathType: Prefix
