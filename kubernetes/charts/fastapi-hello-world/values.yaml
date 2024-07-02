@@ -19,6 +19,7 @@ service:
 ingress:
   enabled: true  # Enable ingress
   annotations: {}
+  ingressClass: nginx-example
   paths:
-    - path: /asdc
+    - path: /
       pathType: Prefix

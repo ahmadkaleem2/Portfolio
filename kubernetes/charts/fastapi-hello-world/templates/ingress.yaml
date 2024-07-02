@@ -2,10 +2,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-fastapi-hello-world-ingress
+  name: minimal-ingress1
   annotations:
-{{ toYaml .Values.ingress.annotations | indent 4 }}
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx-example
   rules:
 {{- range $index, $path := .Values.ingress.paths }}
     - http:
@@ -19,3 +20,25 @@ spec:
                   number: {{ $.Values.service.port }}
 {{- end }}
 {{- end }}
+
+
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: minimal-ingress1
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+# spec:
+#   ingressClassName: nginx-example
+#   rules:
+#   - http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: fastapi-hello-world-fastapi-hello-world-svc
+#             port:
+#               number: 80
+
+
