@@ -24,3 +24,4 @@ runs:
         kubectl config set-credentials github-actions-sa --token=${{ inputs.K8S_SERVICE_ACCOUNT_TOKEN }}
         kubectl config set-context my-context --cluster=my-cluster --user=github-actions-sa
         kubectl config use-context my-context
+        kubectl get pod
