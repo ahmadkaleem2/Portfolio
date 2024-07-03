@@ -39,7 +39,7 @@ pipeline {
                 script {
 
                     
-                    sh "docker build -t 489994096722.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/fastapi-helloworld-project:asd1 -f ./fastapi/Dockerfile ./fastapi/"
+                    sh "docker build -t 489994096722.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/fastapi-helloworld-project:${env.BUILD_ID} -f ./fastapi/Dockerfile ./fastapi/"
                     sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin 489994096722.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
                     sh "docker push 489994096722.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/fastapi-helloworld-project:${env.BUILD_ID}"
                 }
