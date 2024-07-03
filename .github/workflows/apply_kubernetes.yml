@@ -14,14 +14,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # - name: Configure and set up kubectl
-    #   uses: ./.github/actions/configure-kubectl
-    #   with:
-    #     K8S_SERVICE_ACCOUNT_TOKEN: ${{ secrets.K8S_SERVICE_ACCOUNT_TOKEN }}
-    #     KUBERNETES_SERVER: ${{ secrets.KUBERNETES_SERVER }}
+    - name: Configure and set up kubectl
+      uses: ./.github/actions/configure-kubectl
+      with:
+        K8S_SERVICE_ACCOUNT_TOKEN: ${{ secrets.K8S_SERVICE_ACCOUNT_TOKEN }}
+        KUBERNETES_SERVER: ${{ secrets.KUBERNETES_SERVER }}
 
-    # - name: Configure and set up helm
-    #   uses: ./.github/actions/configure-helm
+    - name: Configure and set up helm
+      uses: ./.github/actions/configure-helm
 
     - name: docker build and push image
       uses: ./.github/actions/build_docker_image

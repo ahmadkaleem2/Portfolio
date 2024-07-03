@@ -25,26 +25,28 @@ runs:
   
   steps:
 
-    # - name: Configure AWS credentials
-    #   uses: aws-actions/configure-aws-credentials@v3
-    #   with:
-    #     role-to-assume: ${{ inputs.role-to-assume }} # Change to reflect your IAM role’s ARN
-    #     role-session-name: GitHub_to_AWS_via_FederatedOIDC
-    #     aws-region: ${{ inputs.aws-region }}
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: ${{ inputs.role-to-assume }} # Change to reflect your IAM role’s ARN
+        role-session-name: GitHub_to_AWS_via_FederatedOIDC
+        aws-region: ${{ inputs.aws-region }}
 
-    # - name: Log in to Amazon ECR
-    #   shell: bash
-    #   id: login-ecr
-    #   run: |
-    #     echo "asdasdasd"
-    #     aws ecr get-login-password --region ${{ inputs.aws-region }} | docker login --username AWS --password-stdin ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com
+    - name: Log in to Amazon ECR
+      shell: bash
+      id: login-ecr
+      run: |
+        echo "asdasdasd"
+        aws ecr get-login-password --region ${{ inputs.aws-region }} | docker login --username AWS --password-stdin ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com
 
     - name: Build the Docker image
       shell: bash
       run: |
-        docker build -t ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:${{ github.sha }} -f ${{ inputs.dockerfile }} ${{ inputs.context }}
+        docker build -t ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:latest -f ${{ inputs.dockerfile }} ${{ inputs.context }}
+#        docker build -t ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:${{ github.sha }} -f ${{ inputs.dockerfile }} ${{ inputs.context }}
 
     - name: Push the Docker image
       shell: bash
       run: |
-        docker push ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:${{ github.sha }}
+        docker push ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:latest
+#        docker push ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:${{ github.sha }}
