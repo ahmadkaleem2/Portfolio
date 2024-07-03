@@ -6,10 +6,8 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                script {
-                    // Use kubectl commands directly
-                    sh 'kubectl'
-                    // Replace 'pod-name' with your actual pod name
+                withKubeConfig([credentialsId: 'github-sa-token', serverUrl: 'https://3AE5127E3A8CA56D9ED6A6BCEBC630F6.yl4.us-west-1.eks.amazonaws.com']) {
+                sh 'kubectl get pod'
                 }
             }
         }
