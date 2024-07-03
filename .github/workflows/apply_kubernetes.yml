@@ -27,7 +27,7 @@ jobs:
       uses: ./.github/actions/build_docker_image
       with:
         dockerfile: ./fastapi/Dockerfile
-        context: .fastapi/
+        context: ./fastapi/
         aws-region: ${{ secrets.AWS_REGION }}
         aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
         ecr-repository: ${{ secrets.ECR_REPOSITORY }}
