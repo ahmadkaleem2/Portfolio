@@ -41,7 +41,7 @@ pipeline {
                     
                     sh "docker build -t 489994096722.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/fastapi-helloworld-project:asd1 -f ./fastapi/Dockerfile ./fastapi/"
                     sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin 489994096722.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-                    sh "docker push 489994096722.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/fastapi-helloworld-project:d12345"
+                    sh "docker push 489994096722.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/fastapi-helloworld-project:${env.BUILD_ID}"
                 }
             }
         }
@@ -51,7 +51,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 withKubeConfig([credentialsId: 'github-sa-token', serverUrl: 'https://3AE5127E3A8CA56D9ED6A6BCEBC630F6.yl4.us-west-1.eks.amazonaws.com']) {
-                sh "helm upgrade fastapi-hello-world ./kubernetes/charts/fastapi-hello-world --values ./kubernetes/charts/fastapi-hello-world/values.yaml --set image.tag=d12345"
+                sh "helm upgrade fastapi-hello-world ./kubernetes/charts/fastapi-hello-world --values ./kubernetes/charts/fastapi-hello-world/values.yaml --set image.tag=${env.BUILD_ID}"
 
                 }
             }
