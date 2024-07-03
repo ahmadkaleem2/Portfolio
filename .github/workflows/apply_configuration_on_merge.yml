@@ -1,5 +1,4 @@
 # name: Terraform Apply configuration on merge
-
 # on:
 #     push:
 #         branches:
