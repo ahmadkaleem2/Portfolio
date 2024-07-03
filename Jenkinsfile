@@ -1,6 +1,14 @@
 pipeline {
     agent any
 
+    environment {
+        AWS_DEFAULT_REGION = 'us-east-1'  // Specify your AWS region
+        AWS_CREDENTIALS = credentials('your-aws-credentials-id')  // Replace with your AWS credentials ID
+        AWS_SESSION_TOKEN = withCredentials([credentials('AWS_SESSION_TOKEN')]) {
+            return env.AWS_SESSION_TOKEN
+        }
+    }
+
     stages {
 
 
@@ -15,14 +23,17 @@ pipeline {
         }
 
 
-        // stage('Install helm') {
-        //     steps {
-        //         // Install kubectl (if not already installed)
-        //         sh 'curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash'
-        //         sh 'helm version --client'
-        //     }
-        // }
-
+        stage('Configure AWS') {
+            steps {
+                script {
+                    sh "aws configure set aws_access_key_id ${AWS_CREDENTIALS_USR}"
+                    sh "aws configure set aws_secret_access_key ${AWS_CREDENTIALS_PSW}"
+                    sh "aws configure set aws_session_token ${AWS_SESSION_TOKEN}"
+                    sh "aws configure set region ${AWS_DEFAULT_REGION}"
+                    sh "aws sts get-caller-identity"
+                }
+            }
+        }
 
         stage('Deploy to Kubernetes') {
             steps {
