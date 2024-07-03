@@ -42,11 +42,9 @@ runs:
     - name: Build the Docker image
       shell: bash
       run: |
-#        docker build -t ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:latest -f ${{ inputs.dockerfile }} ${{ inputs.context }}
         docker build -t ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:${{ github.sha }} -f ${{ inputs.dockerfile }} ${{ inputs.context }}
 
     - name: Push the Docker image
       shell: bash
       run: |
-#        docker push ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:latest
         docker push ${{ inputs.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.ecr-repository }}:${{ github.sha }}
