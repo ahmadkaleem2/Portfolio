@@ -10,23 +10,25 @@ pipeline {
                 sh 'curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.23.6/bin/linux/amd64/kubectl'
                 sh 'chmod +x ./kubectl'
                 sh './kubectl'
+
             }
         }
 
 
-        stage('Install helm') {
-            steps {
-                // Install kubectl (if not already installed)
-                sh 'curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash'
-                sh 'helm version --client'
-            }
-        }
+        // stage('Install helm') {
+        //     steps {
+        //         // Install kubectl (if not already installed)
+        //         sh 'curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash'
+        //         sh 'helm version --client'
+        //     }
+        // }
 
 
         stage('Deploy to Kubernetes') {
             steps {
                 withKubeConfig([credentialsId: 'github-sa-token', serverUrl: 'https://3AE5127E3A8CA56D9ED6A6BCEBC630F6.yl4.us-west-1.eks.amazonaws.com']) {
                 sh './kubectl get pod'
+                sh 'helm version --client'
                 }
             }
         }
