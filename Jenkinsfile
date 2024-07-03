@@ -3,10 +3,9 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'  // Specify your AWS region
-        AWS_CREDENTIALS = credentials('AWS_ROLE')  // Replace with your AWS credentials ID
-        AWS_SESSION_TOKEN = withCredentials([credentials('AWS_SESSION_TOKEN')]) {
-            return env.AWS_SESSION_TOKEN
-        }
+        AWS_CREDENTIALS_USR = credentials('access_key_id')
+        AWS_CREDENTIALS_PSW = credentials('secret_access_key')
+        AWS_SESSION_TOKEN = credentials('AWS_SESSION_TOKEN')
     }
 
     stages {
