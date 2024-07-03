@@ -34,6 +34,20 @@ pipeline {
             }
         }
 
+        stage('Configure AWS1') {
+            steps {
+                script {
+
+                    
+                    sh "docker build -t 489994096722.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/fastapi-helloworld-project:asd1 -f ./fastapi/Dockerfile ./fastapi/"
+                    sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin 489994096722.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+                    sh "docker push docker build -t 489994096722.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/fastapi-helloworld-project:asd1"
+                }
+            }
+        }
+
+
+
         stage('Deploy to Kubernetes') {
             steps {
                 withKubeConfig([credentialsId: 'github-sa-token', serverUrl: 'https://3AE5127E3A8CA56D9ED6A6BCEBC630F6.yl4.us-west-1.eks.amazonaws.com']) {
