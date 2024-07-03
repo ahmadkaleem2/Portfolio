@@ -12,6 +12,17 @@ pipeline {
                 sh './kubectl'
             }
         }
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        helm version --client
+
+
+        stage('Install helm') {
+            steps {
+                // Install kubectl (if not already installed)
+                sh 'curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash'
+                sh 'helm version --client'
+            }
+        }
 
 
         stage('Deploy to Kubernetes') {
