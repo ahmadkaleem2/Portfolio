@@ -11,6 +11,7 @@ pipeline {
                     sh 'kubectl'
                     // Replace 'pod-name' with your actual pod name
                 }
+            }
         }
 
 
