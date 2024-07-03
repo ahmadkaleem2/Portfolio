@@ -4,6 +4,16 @@ pipeline {
     stages {
 
 
+        stage('Install kubectl') {
+            steps {
+                // Install kubectl (if not already installed)
+                sh 'curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.23./bin/linux/amd64/kubectl'
+                sh 'chmod +x ./kubectl'
+                sh 'sudo mv ./kubectl /usr/local/bin/kubectl'
+            }
+        }
+
+
         stage('Deploy to Kubernetes') {
             steps {
                 withKubeConfig([credentialsId: 'github-sa-token', serverUrl: 'https://3AE5127E3A8CA56D9ED6A6BCEBC630F6.yl4.us-west-1.eks.amazonaws.com']) {
