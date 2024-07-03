@@ -37,4 +37,4 @@ jobs:
 
     - name: Apply Kubernetes Manifests
       run: |
-        helm upgrade fastapi-hello-world ./kubernetes/charts/fastapi-hello-world --values ./kubernetes/charts/fastapi-hello-world/values.yaml
+        helm upgrade fastapi-hello-world ./kubernetes/charts/fastapi-hello-world --values ./kubernetes/charts/fastapi-hello-world/values.yaml --set image.tag=${{ github.sha }}
