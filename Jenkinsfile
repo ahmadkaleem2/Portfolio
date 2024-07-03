@@ -51,31 +51,12 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 withKubeConfig([credentialsId: 'github-sa-token', serverUrl: 'https://3AE5127E3A8CA56D9ED6A6BCEBC630F6.yl4.us-west-1.eks.amazonaws.com']) {
-                sh './kubectl get pod'
-                sh 'helm version --client'
-                sh 'docker ps'
+                sh 'helm upgrade fastapi-hello-world ./kubernetes/charts/fastapi-hello-world --values ./kubernetes/charts/fastapi-hello-world/values.yaml --set image.tag=d12345'
+
                 }
             }
         }
 
 
-        stage('Build') {
-            steps {
-                echo 'Building...'
-                // Your build steps here
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing...'
-                // Your test steps here
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-                // Your deployment steps here
-            }
-        }
     }
 }
