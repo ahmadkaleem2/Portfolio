@@ -16,7 +16,6 @@ def configureAWS() {
         aws configure set aws_secret_access_key ${AWS_CREDENTIALS_PSW}
         aws configure set aws_session_token ${AWS_SESSION_TOKEN}
         aws configure set region ${AWS_DEFAULT_REGION}
-        // aws sts get-caller-identity
     '''
 }
 
