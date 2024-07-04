@@ -5,9 +5,8 @@ def installKubectl() {
         if ! command -v kubectl &> /dev/null; then
             curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.23.6/bin/linux/amd64/kubectl
             chmod +x ./kubectl
-            mv ./kubectl /usr/local/bin/kubectl
         fi
-        kubectl version --client
+        ./kubectl version --client
     '''
 }
 
@@ -17,7 +16,7 @@ def configureAWS() {
         aws configure set aws_secret_access_key ${AWS_CREDENTIALS_PSW}
         aws configure set aws_session_token ${AWS_SESSION_TOKEN}
         aws configure set region ${AWS_DEFAULT_REGION}
-        aws sts get-caller-identity
+        // aws sts get-caller-identity
     '''
 }
 
