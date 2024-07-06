@@ -14,20 +14,30 @@ module "vpc" {
 
 }
 
-module "eks" {
+# module "eks" {
 
-  source = "./modules/eks"
+#   source = "./modules/eks"
+
+#   identifier = var.identifier
+
+#   subnets = module.vpc["vpc-prod"].subnets
+
+#   tags_all = {
+#     Created_by        = var.identifier
+#     Environment = "${terraform.workspace}"
+#   }
+
+# }
+
+
+module "ecr" {
+
+  source = "./modules/ecr"
 
   identifier = var.identifier
 
-  subnets = module.vpc["vpc-prod"].subnets
-
-  tags_all = {
-    Created_by        = var.identifier
-    Environment = "${terraform.workspace}"
-  }
-
 }
+
 
 
 # module "bastion_host" {

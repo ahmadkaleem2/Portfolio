@@ -1,0 +1,12 @@
+name: 'Configure kubectl'
+description: 'Set up and configure kubectl with a service account token'
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Helm
+      shell: bash
+      run: |
+        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        helm version --client
+
+

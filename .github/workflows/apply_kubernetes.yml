@@ -1,0 +1,40 @@
+name: Deploy to Kubernetes
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure and set up kubectl
+      uses: ./.github/actions/configure-kubectl
+      with:
+        K8S_SERVICE_ACCOUNT_TOKEN: ${{ secrets.K8S_SERVICE_ACCOUNT_TOKEN }}
+        KUBERNETES_SERVER: ${{ secrets.KUBERNETES_SERVER }}
+
+    - name: Configure and set up helm
+      uses: ./.github/actions/configure-helm
+
+    - name: docker build and push image
+      uses: ./.github/actions/build_docker_image
+      with:
+        dockerfile: ./fastapi/Dockerfile
+        context: ./fastapi/
+        aws-region: ${{ secrets.AWS_REGION }}
+        aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+        ecr-repository: ${{ secrets.ECR_REPOSITORY }}
+        role-to-assume: ${{ secrets.IAM_ROLE_ARN }} # Change to reflect your IAM role’s ARN
+        role-session-name: GitHub_to_AWS_via_FederatedOIDC
+
+
+    - name: Apply Kubernetes Manifests
+      run: |
+        helm upgrade fastapi-hello-world ./kubernetes/charts/fastapi-hello-world --values ./kubernetes/charts/fastapi-hello-world/values.yaml --set image.tag=${{ github.sha }}
