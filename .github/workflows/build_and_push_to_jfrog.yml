@@ -56,4 +56,4 @@ jobs:
 
           
           
-          jf rt upload "./java_projects/spring-boot-tutorial-course/student-management-system/target/student-management-system-${{ github.sha}}.jar" student/ --build-name $BUILD_NAME --build-number $BUILD_NUMBER 
+          jf rt u "./java_projects/spring-boot-tutorial-course/student-management-system/target/student-management-system-${{ github.sha}}.jar" student/ 
