@@ -20,8 +20,8 @@ jobs:
         run: |
           # SHA=$(git rev-parse HEAD)
           sed "s|\${revision}|${{ github.sha }}|" ./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml > ./java_projects/spring-boot-tutorial-course/student-management-system/pom_temp.xml
-          cat 
-          mvn -f ./java_projects/spring-boot-tutorial-course/student-management-system/pom_temp.xml package
+          cd ./java_projects/spring-boot-tutorial-course/student-management-system/
+          mvn -f ./pom_temp.xml package
       - name: Publish to JFrog Artifactory
         env:
           USERNAME: ${{ secrets.username }}
