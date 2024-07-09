@@ -49,8 +49,8 @@ jobs:
         run: |
 
           if [[ "${{ env.BRANCH_NAME }}" == "main" || "${{ env.BRANCH_NAME }}" == "release" ]]; then
-            artifact_name=$(ls target | grep RELEASE.jar$)
+            artifact_name=$(ls ./java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep RELEASE.jar$)
             jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/student-management-system-$artifact_name.jar" student/student-$artifact_name.jar
           else
-            artifact_name=$(ls target | grep SNAPSHOT.jar$)
+            artifact_name=$(ls ./java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep SNAPSHOT.jar$)
             jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/student-management-system-$artifact_name.jar" student/student-$artifact_name.jar
