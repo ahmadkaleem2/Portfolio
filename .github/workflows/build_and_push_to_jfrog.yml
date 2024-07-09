@@ -29,7 +29,7 @@ jobs:
           sed "s|\${revision}|${{ github.sha }}|" ./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml > ./java_projects/spring-boot-tutorial-course/student-management-system/pom_temp.xml
           cd ./java_projects/spring-boot-tutorial-course/student-management-system/
           mvn clean install
-          if [[ "${{ env.BRANCH_NAME }}" == "main" || "${{ env.BRANCH_NAME }}" == "release" ]]; then
+          if [[ "${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/release" ]]; then
             mvn -f ./pom_temp.xml package -P production
           else
             mvn -f ./pom_temp.xml package -P develop
