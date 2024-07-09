@@ -56,4 +56,4 @@ jobs:
 
           
           
-          jf rt u "./java_projects/spring-boot-tutorial-course/student-management-system/target/student-management-system-${{ github.sha}}.jar" student/ 
+          jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/student-management-system-${{ github.sha}}.jar" student/ 
