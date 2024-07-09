@@ -21,6 +21,7 @@ jobs:
           # SHA=$(git rev-parse HEAD)
           sed "s|\${revision}|${{ github.sha }}|" ./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml > ./java_projects/spring-boot-tutorial-course/student-management-system/pom_temp.xml
           cd ./java_projects/spring-boot-tutorial-course/student-management-system/
+          mvn clean install
           mvn -f ./pom_temp.xml package
       - name: Publish to JFrog Artifactory
         env:
