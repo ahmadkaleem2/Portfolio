@@ -24,7 +24,6 @@ jobs:
 
       - name: Get Last commit and build maven project with this tag
         run: |
-          # SHA=$(git rev-parse HEAD)
           sed "s|\${revision}|${{ github.sha }}|" ./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml > ./java_projects/spring-boot-tutorial-course/student-management-system/pom_temp.xml
           cd ./java_projects/spring-boot-tutorial-course/student-management-system/
           mvn clean install
