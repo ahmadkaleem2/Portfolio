@@ -47,7 +47,7 @@ jobs:
 
       - name: Push Build to Artifactory
         run: |
-          if [[ "${{ env.BRANCH_NAME }}" == "main" || "${{ env.BRANCH_NAME }}" == "release"* ]]; then
+          if [[ "${{ env.BRANCH_NAME }}" == "main" || "${{ env.BRANCH_NAME }}" == "release" ]]; then
             echo "publishing release"
             artifact_name=$(ls ./java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep RELEASE.jar$)
             echo $artifact_name
