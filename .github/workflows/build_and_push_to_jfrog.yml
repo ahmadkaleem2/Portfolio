@@ -29,9 +29,32 @@ jobs:
           cd ./java_projects/spring-boot-tutorial-course/student-management-system/
           mvn clean install
           mvn -f ./pom_temp.xml package
-      - name: Publish to JFrog Artifactory
+      # - name: Publish to JFrog Artifactory
+      #   env:
+      #     USERNAME: ${{ secrets.username }}
+      #     PASSWORD: ${{ secrets.password }}
+      #   run: |
+      #     curl -u $USERNAME:$PASSWORD -T ./java_projects/spring-boot-tutorial-course/student-management-system/target/student-management-system-${{ github.sha}}.jar "$ARTIFACTORY_URL/student-management-system-${{ github.sha}}.jar"
+      
+      
+      - name: setup jfrog and push to Artifactory
+        uses: jfrog/setup-jfrog-cli@v4
+        with:
+          version: latest
         env:
-          USERNAME: ${{ secrets.username }}
-          PASSWORD: ${{ secrets.password }}
+          JF_PROJECT: "student"
+          JF_USER: ${{ secrets.username }}
+          JF_PASSWORD: ${{ secrets.password }}
+          JF_URL: ${{ secrets.ARTIFACTORY_URL}}
+
+      - name: Push Build to Artifactory
         run: |
-          curl -u $USERNAME:$PASSWORD -T ./java_projects/spring-boot-tutorial-course/student-management-system/target/student-management-system-${{ github.sha}}.jar "$ARTIFACTORY_URL/student-management-system-${{ github.sha}}.jar"
+
+          export BUILD_NAME="student-management-"
+          # export BUILD_MODULE="my-module"
+          export BUILD_NUMBER=${{ github.sha}}
+
+
+          
+          
+          jf rt upload "test.txt" student/ --build-name $BUILD_NAME --build-number $BUILD_NUMBER --module $BUILD_MODULE
