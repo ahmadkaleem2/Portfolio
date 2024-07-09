@@ -20,6 +20,7 @@ jobs:
         with:
           java-version: '19'
           maven-version: '3.6.3'
+          distribution: 'temurin'
 
       - name: Get Last commit and build maven project with this tag
         run: |
