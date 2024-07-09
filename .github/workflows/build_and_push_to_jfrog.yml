@@ -50,7 +50,7 @@ jobs:
       - name: Push Build to Artifactory
         run: |
 
-          export BUILD_NAME="student-management-"
+          export BUILD_NAME="student-management"
           # export BUILD_MODULE="my-module"
           export BUILD_NUMBER=${{ github.sha}}
 
