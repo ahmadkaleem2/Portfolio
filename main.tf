@@ -30,13 +30,13 @@ module "vpc" {
 # }
 
 
-module "ecr" {
+# module "ecr" {
 
-  source = "./modules/ecr"
+#   source = "./modules/ecr"
 
-  identifier = var.identifier
+#   identifier = var.identifier
 
-}
+# }
 
 
 

@@ -1,0 +1,29 @@
+name: Maven Build and Push to JFrog
+
+on:
+  push:
+    branches:
+      - main  # adjust as needed
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    env:
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}  # Replace with your Artifactory URL
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get Last commit and build maven project with this tag
+        run: |
+          SHA=$(git rev-parse HEAD)
+          sed "s|\${revision}|$(git rev-parse HEAD)|" ./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml > pom_temp.xml
+
+      - name: Publish to JFrog Artifactory
+        env:
+          USERNAME: ${{ secrets.username }}
+          PASSWORD: ${{ secrets.password }}
+        run: |
+          curl -u $USERNAME:$PASSWORD -T ./java_projects/spring-boot-tutorial-course/student-management-system/target/student-management-system-${SHA}.jar "$ARTIFACTORY_URL/student-${SHA}.jar"

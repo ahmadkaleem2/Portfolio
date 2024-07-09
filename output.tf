@@ -26,6 +26,6 @@ output "list_of_azs" {
   value = data.aws_availability_zones.example.names
 }
 
-output "ecr_object" {
-  value = module.ecr
-}
+# output "ecr_object" {
+#   value = module.ecr
+# }
