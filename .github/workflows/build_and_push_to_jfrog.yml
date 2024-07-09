@@ -34,6 +34,7 @@ jobs:
           else
             mvn -f ./pom_temp.xml package -P develop
           fi
+          ls target
 
       - name: Setup JFrog CLI and Push to Artifactory
         uses: jfrog/setup-jfrog-cli@v4
