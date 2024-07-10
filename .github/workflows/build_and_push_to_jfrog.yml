@@ -40,10 +40,10 @@ jobs:
           echo "Creating build"
           cd ./java_projects/spring-boot-tutorial-course/student-management-system/
 
-          mvn --no-transfer-progress external.atlassian.jgitflow:jgitflow-maven-plugin:1.0-m5.1:release-start -DallowSnapshots=true -DreleaseVersion="1.3.13" -DdevelopmentVersion="1.3.13-SNAPSHOT" -Dsquash=true -Doffline=true -DnoReleaseBuild=true -s .mvn/local-settings.xml
+          mvn --no-transfer-progress external.atlassian.jgitflow:jgitflow-maven-plugin:1.0-m5.1:release-start -DallowSnapshots=true -DreleaseVersion="1.3.13" -DdevelopmentVersion="1.3.13-SNAPSHOT" -Dsquash=true -Doffline=true -DnoReleaseBuild=true -s .mvn/settings.xml
 
           mvn --no-transfer-progress external.atlassian.jgitflow:jgitflow-maven-plugin:1.0-m5.1:release-finish -Dsquash=true -DnoReleaseBuild=true -DkeepBranch=true -Doffline=true -DallowSnapshots=true -s .mvn/settings.xml
-          
+
       - name: Setup JFrog CLI and Push to Artifactory
         uses: jfrog/setup-jfrog-cli@v4
         with:
