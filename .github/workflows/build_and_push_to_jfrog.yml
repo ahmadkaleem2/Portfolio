@@ -2,10 +2,11 @@ name: Maven Build and Push to JFrog
 
 on:
   workflow_dispatch:
-      inputs:
-        version:
-          description: 'Version to release'
-          required: true
+    inputs:
+      version:
+        description: 'Version to release'
+        required: true
+        default: '1.0.0'
 jobs:
   build-and-push:
     if: github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release' || github.ref == 'refs/heads/develop')
