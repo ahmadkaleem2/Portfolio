@@ -1,0 +1,15 @@
+<settings>
+    <servers>
+        <server>
+            <!-- <id>git@github.com:ahmad-eurustechnologies/terraform-assessment.git</id>
+            <username>ahmad-eurustechnologies</username>
+            <password>asdsad</password> -->
+            <!-- <privateKey>/home/ahmad/.ssh/id_rsa</privateKey> -->
+            <!-- Optionally, configure algorithms -->
+
+        </server>
+    </servers>
+    
+
+    
+</settings>
