@@ -50,7 +50,7 @@ jobs:
       - name: Store artifact name
         id: store_artifact_name
         run: |
-          echo "::set-output name=artifact_name::./vars.tf"
+          echo "::set-output name=artifact_name::/vars.tf"
 
 
       
