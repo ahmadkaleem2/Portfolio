@@ -9,7 +9,7 @@ on:
         default: '1.0.0'
         
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -45,20 +45,27 @@ jobs:
 
       #     mvn clean package
       #     ls target
-      - name: Setup JFrog CLI and Push to Artifactory
-        uses: jfrog/setup-jfrog-cli@v4
-        with:
-          version: '2.59.1'
-        env:
-        
-          JF_URL: ${{ secrets.ARTIFACTORY_URL }}
-          JF_ACCESS_TOKEN: ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }} 
-          
-      - name: Push Build to Artifactory
+      - name: Store artifact name
+        id: store_artifact_name
         run: |
+          echo "::set-output name=artifact_name::$(ls ./java_projects/spring-boot-tutorial-course/student-management-system/ | grep pom.xml$)"
+
+
+      
+      # - name: Setup JFrog CLI and Push to Artifactory
+      #   uses: jfrog/setup-jfrog-cli@v4
+      #   with:
+      #     version: '2.59.1'
+      #   env:
+        
+      #     JF_URL: ${{ secrets.ARTIFACTORY_URL }}
+      #     JF_ACCESS_TOKEN: ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }} 
+          
+      # - name: Push Build to Artifactory
+      #   run: |
             # artifact_name=$(ls ./java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep .jar$)
-            echo $artifact_name
-            jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml" "student/pom-${{ github.sha }}.xml"
+            # echo $artifact_name
+            # jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml" "student/pom-${{ github.sha }}.xml"
             # jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
 
 
@@ -75,3 +82,26 @@ jobs:
           #   ls "./java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name"
           #   jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
           # fi
+
+
+  push-to-artifactory:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+
+
+      - name: Setup JFrog CLI and Push to Artifactory
+        uses: jfrog/setup-jfrog-cli@v4
+        with:
+          version: '2.59.1'
+        env:
+        
+          JF_URL: ${{ secrets.ARTIFACTORY_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }} 
+    
+      - name: Push Build to Artifactory
+        run: |
+          artifact_name="${{ needs.build.outputs.artifact_name }}"
+          echo $artifact_name
+          jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
