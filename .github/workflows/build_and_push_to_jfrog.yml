@@ -97,11 +97,11 @@ jobs:
         with:
           version: '2.59.1'
         env:
-        
+          name: ${{ needs.build.outputs.artifact_name }}
           JF_URL: ${{ secrets.ARTIFACTORY_URL }}
           JF_ACCESS_TOKEN: ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }} 
     
       - name: Push Build to Artifactory
         run: |
           # cat vars.tf
-          jf rt u --flat "${{ needs.build.outputs.artifact_name }}" "student/student-${artifact_name}"
+          jf rt u --flat "$name/pom.xml" "student/student-${artifact_name}"
