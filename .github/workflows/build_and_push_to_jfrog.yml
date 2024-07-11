@@ -5,12 +5,7 @@ on:
   
 jobs:
   build-and-push:
-    if: github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release' || github.ref == 'refs/heads/develop')
     runs-on: ubuntu-latest
-
-    env:
-      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}  # Replace with your Artifactory URL
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
