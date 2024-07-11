@@ -36,7 +36,7 @@ jobs:
       - name: Get Last commit and build maven project with this tag
         run: |
           echo "Creating build"
-          cd ./java_projects/spring-boot-tutorial-course/student-management-system/
+          cd java_projects/spring-boot-tutorial-course/student-management-system/
           if [[ "${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/release" ]]; then
           mvn --no-transfer-progress external.atlassian.jgitflow:jgitflow-maven-plugin:1.0-m5.1:release-start -DallowSnapshots=true -DreleaseVersion="${{ inputs.version  }}" -DdevelopmentVersion="${{ inputs.version  }}-SNAPSHOT" -Dsquash=true -Doffline=true -DnoReleaseBuild=true -s .mvn/settings.xml
           mvn --no-transfer-progress external.atlassian.jgitflow:jgitflow-maven-plugin:1.0-m5.1:release-finish -Dsquash=true -DnoReleaseBuild=true -DkeepBranch=true -Doffline=true -DallowSnapshots=true -s .mvn/settings.xml -X
@@ -106,6 +106,6 @@ jobs:
       - name: Push Build to Artifactory
         run: |
 
-          artifact_name=$(ls ./java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep .jar$)
+          artifact_name=$(ls java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep .jar$)
           
-          jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
+          jf rt u --flat "/java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
