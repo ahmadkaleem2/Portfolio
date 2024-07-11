@@ -50,12 +50,8 @@ jobs:
       - name: Store artifact name
         id: store_artifact_name
         run: |
-          echo "::set-output name=artifact_name::java_projects/spring-boot-tutorial-course/student-management-system/"
+          echo "java_projects/spring-boot-tutorial-course/student-management-system/=$artifact_name" >> $GITHUB_OUTPUT
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: my-artifact
-          path: java_projects/spring-boot-tutorial-course/student-management-system/
 
       
       # - name: Setup JFrog CLI and Push to Artifactory
@@ -114,4 +110,4 @@ jobs:
           
           ls -l java_projects/spring-boot-tutorial-course/student-management-system/
           # cat vars.tf
-          jf rt u --flat "java_projects/spring-boot-tutorial-course/student-management-system/pom.xml" "student/student-${artifact_name}"
+          jf rt u --flat "${{ needs.build.outputs.artifact_name }}" "student/student-${artifact_name}"
