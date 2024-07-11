@@ -55,7 +55,7 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: my-artifact
-          path: /var.tf
+          path: var.tf
 
       
       # - name: Setup JFrog CLI and Push to Artifactory
@@ -98,7 +98,7 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: my-artifact
-          path: /var.tf
+          path: var.tf
 
       - name: Setup JFrog CLI and Push to Artifactory
         uses: jfrog/setup-jfrog-cli@v4
