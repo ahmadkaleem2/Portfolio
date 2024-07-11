@@ -50,7 +50,7 @@ jobs:
       - name: Store artifact name
         id: store_artifact_name
         run: |
-          echo "java_projects/spring-boot-tutorial-course/student-management-system/=$artifact_name" >> $GITHUB_OUTPUT
+          echo "artifact_name=java_projects/spring-boot-tutorial-course/student-management-system" >> $GITHUB_OUTPUT
 
 
       
