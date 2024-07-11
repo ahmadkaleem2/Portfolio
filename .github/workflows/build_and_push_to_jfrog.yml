@@ -54,7 +54,6 @@ jobs:
         with:
           version: latest
         env:
-          JF_PROJECT: "student"
           JF_USER: ${{ secrets.username }}
           JF_PASSWORD: ${{ secrets.password }}
           JF_URL: ${{ secrets.ARTIFACTORY_URL }}
