@@ -91,10 +91,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: my-artifact
-          path: java_projects/spring-boot-tutorial-course/student-management-system/
 
       - name: Setup JFrog CLI and Push to Artifactory
         uses: jfrog/setup-jfrog-cli@v4
@@ -107,7 +103,5 @@ jobs:
     
       - name: Push Build to Artifactory
         run: |
-          
-          ls -l java_projects/spring-boot-tutorial-course/student-management-system/
           # cat vars.tf
           jf rt u --flat "${{ needs.build.outputs.artifact_name }}" "student/student-${artifact_name}"
