@@ -48,7 +48,7 @@ jobs:
       - name: Setup JFrog CLI and Push to Artifactory
         uses: jfrog/setup-jfrog-cli@v4
         with:
-          version: latest
+          version: '2.59.1'
         env:
         
           JF_URL: ${{ secrets.ARTIFACTORY_URL }}
