@@ -48,7 +48,7 @@ jobs:
       - name: Store artifact name
         id: store_artifact_name
         run: |
-          echo "::set-output name=artifact_name::./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml"
+          echo "::set-output name=artifact_name::/vars.tf"
 
 
       
