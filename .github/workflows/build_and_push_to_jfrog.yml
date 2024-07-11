@@ -58,7 +58,7 @@ jobs:
         run: |
             # artifact_name=$(ls ./java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep .jar$)
             echo $artifact_name
-            jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/pom.xml" "student/pom-${{ github.sha }}.xml"
+            jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml" "student/pom-${{ github.sha }}.xml"
             # jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
 
 
