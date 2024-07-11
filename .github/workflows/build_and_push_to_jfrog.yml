@@ -92,7 +92,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: my-artifact
-          path: java_projects/spring-boot-tutorial-course/student-management-system/
+          path: java_projects/spring-boot-tutorial-course/student-management-system/target/
 
       - name: Setup JFrog CLI and Push to Artifactory
         uses: jfrog/setup-jfrog-cli@v4
