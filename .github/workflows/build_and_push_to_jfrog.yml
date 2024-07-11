@@ -105,5 +105,7 @@ jobs:
       - name: Push Build to Artifactory
         run: |
           artifact_name="${{ needs.build.outputs.artifact_name }}"
-          echo $artifact_name
+          
+          echo "Artifact Path: $artifact_name"
+          ls -l $artifact_name
           jf rt u --flat "$artifact_name" "student/student-${artifact_name}"
