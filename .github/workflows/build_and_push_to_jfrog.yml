@@ -115,4 +115,5 @@ jobs:
           echo "${{ needs.build.outputs.artifact_name }}"
           echo "Artifact Path: $artifact_name"
           ls -l $artifact_name
+          cat vars.tf
           jf rt u --flat "$artifact_name" "student/student-${artifact_name}"
