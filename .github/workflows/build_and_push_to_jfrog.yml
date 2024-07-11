@@ -48,7 +48,7 @@ jobs:
       - name: Store artifact name
         id: store_artifact_name
         run: |
-          echo "::set-output name=artifact_name::$(ls ./java_projects/spring-boot-tutorial-course/student-management-system/ | grep pom.xml$)"
+          echo "::set-output name=artifact_name::./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml
 
 
       
@@ -104,4 +104,4 @@ jobs:
         run: |
           artifact_name="${{ needs.build.outputs.artifact_name }}"
           echo $artifact_name
-          jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
+          jf rt u --flat "$artifact_name" "student/student-${artifact_name}"
