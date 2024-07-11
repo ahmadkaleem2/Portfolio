@@ -105,7 +105,7 @@ jobs:
     
       - name: Push Build to Artifactory
         run: |
-
+          ls java_projects/spring-boot-tutorial-course/student-management-system/target/
           artifact_name=$(ls java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep .jar$)
           
           jf rt u --flat "/java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
