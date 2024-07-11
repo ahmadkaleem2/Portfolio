@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      artifact_name: ${{ steps.store_artifact_name.outputs.artifact_name }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
