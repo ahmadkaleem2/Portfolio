@@ -58,7 +58,7 @@ jobs:
         run: |
             # artifact_name=$(ls ./java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep .jar$)
             echo $artifact_name
-            jf rt u --access-token "eyJ2ZXIiOiIyIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYiLCJraWQiOiI5WDk5ZFRmcHQtcDZVWXllcjgwc1NoQ0dJN3dnT0xNTFR1MkMtTmEyczc4In0.eyJzdWIiOiJqZmFjQDAxajJna2ZjZjY2NHc3MDgwMDM2ZmQxMW41L3VzZXJzL3B1c2hqYXIiLCJzY3AiOiJhcHBsaWVkLXBlcm1pc3Npb25zL3VzZXIiLCJhdWQiOlsiamZydEAqIiwiamZhY0AqIiwiamZldnRAKiIsImpmbWRAKiIsImpmY29uQCoiLCJqZmludEAqIiwiamZ3a3NAKiJdLCJpc3MiOiJqZmZlQDAxajJna2ZjZjY2NHc3MDgwMDM2ZmQxMW41IiwiZXhwIjoxNzIwOTY1NDI1LCJpYXQiOjE3MjA3MDYyMjUsImp0aSI6IjYzNmE0NGM4LWU3YjMtNDI5Ni1iMDc1LTQxN2M4Njg0MmQwOCJ9.buc0LpdWN1uVca-qBGAXvpfc0aBswmwqn_7E4-et9dCnewlN8rBVjW2XSu9FLfxFW5MFMTA8ZeOUvhEyAaYkG5RI97uPYseKHP9diMq1S7Ki_lKLZqNogeuETQZtcNzIl4rg_H3vQmDasW2CqaYGjDrdAeIcKL4V4uZ-FRchts7cX3djW0d5Pe0kl9vGUiL0lmf0j6KthFM3kRwoJ5BF76L8FV9oaY_pHgnm9Cpk32YEn9xqjypVVBHaV6m6tY3mhkAoyUXSwCdERsQrV7yLsRRYxThDj-dIyz55oc2393YKsbLTDohHoH-Z6SX5q2H_66q0zvb9Y59FTsLmm5FiTA" --url "http://3.101.117.3:8081/artifactory" --flat "./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml" "student/pom-${{ github.sha }}.xml"
+            jf rt u --access-token "${{ secrets.ARTIFACTORY_ACCESS_TOKEN }}" --url "http://3.101.117.3:8081/artifactory" --flat "./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml" "student/pom-${{ github.sha }}.xml"
             # jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
 
 
