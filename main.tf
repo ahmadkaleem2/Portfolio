@@ -14,29 +14,32 @@ module "vpc" {
 
 }
 
-# module "eks" {
+module "eks" {
 
-#   source = "./modules/eks"
+  source = "./modules/eks"
 
-#   identifier = var.identifier
+  identifier = var.identifier
 
-#   subnets = module.vpc["vpc-prod"].subnets
+  subnets = module.vpc["vpc-prod"].subnets
 
-#   tags_all = {
-#     Created_by        = var.identifier
-#     Environment = "${terraform.workspace}"
-#   }
+  tags_all = {
+    Created_by        = var.identifier
+    Environment = "${terraform.workspace}"
+  }
 
-# }
+}
 
+module "eks-terraform" {
 
-# module "ecr" {
+  source = "./modules/eks-terraform/hello-world"
+}
+module "ecr" {
 
-#   source = "./modules/ecr"
+  source = "./modules/ecr"
 
-#   identifier = var.identifier
+  identifier = var.identifier
 
-# }
+}
 
 
 
