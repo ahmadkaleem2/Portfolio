@@ -23,3 +23,7 @@ variable "asg" {
 variable "elb" {
   
 }
+
+variable "eks_configuration" {
+  
+}

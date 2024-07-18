@@ -22,6 +22,8 @@ module "eks" {
 
   subnets = module.vpc["vpc-prod"].subnets
 
+  eks_configuration = var.eks_configuration
+
   tags_all = {
     Created_by        = var.identifier
     Environment = "${terraform.workspace}"
@@ -30,9 +32,9 @@ module "eks" {
 }
 
 module "eks-terraform" {
-
   source = "./modules/eks-terraform/hello-world"
 }
+
 module "ecr" {
 
   source = "./modules/ecr"

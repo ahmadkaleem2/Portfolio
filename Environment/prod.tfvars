@@ -319,8 +319,12 @@ elb = {
   
 }
 
-eks = {
+eks_configuration = {
+
+  eks_cluster_iam_role_arn = null
+
   access_config = {
+    # possible value ["CONFIG_MAP", "API_AND_CONFIG_MAP", "API"]
     authentication_mode = "API_AND_CONFIG_MAP"
     bootstrap_cluster_creator_admin_permissions = true
   }
@@ -331,6 +335,19 @@ eks = {
       node_role_arn = null
       capacity_type = "SPOT"
       instance_types = ["t3.medium"]
+      disk_size = 20
+      
+      labels = {
+        "node": "ng1"
+        "arch": "amd64"
+      }
+      taints = {
+        "mospel" = {
+          value = "mosquito"
+          effect = "PREFER_NO_SCHEDULE"
+        }
+      }
+
       scaling_config = {
         desired_size = 1
         max_size = 1

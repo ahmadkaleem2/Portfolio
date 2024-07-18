@@ -1,23 +1,15 @@
 
-
-
-
-
-
-
 resource "aws_eks_cluster" "eks-cluster" {
-  name     = var.cluster_name == null? "${terraform.workspace}-${var.identifier}-EKS" : var.cluster_name 
-  role_arn = aws_iam_role.eks-role.arn
+  name     = lookup(var.eks_configuration, "cluster_name", "${terraform.workspace}-${var.identifier}-EKS")
+  role_arn = var.eks_configuration.eks_cluster_iam_role_arn == null ? aws_iam_role.eks-role.arn : aws_iam_role.eks-role.arn
   access_config {
-    authentication_mode                         = "API_AND_CONFIG_MAP"
-    bootstrap_cluster_creator_admin_permissions = true
+    authentication_mode                         = local.access_config.authentication_mode
+    bootstrap_cluster_creator_admin_permissions = local.access_config.bootstrap_cluster_creator_admin_permissions
   }
   vpc_config {
     subnet_ids = local.subnet_ids
   }
 
-  # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
-  # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
   depends_on = [
     aws_iam_role_policy_attachment.AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.AmazonEKSVPCResourceController,
@@ -25,29 +17,45 @@ resource "aws_eks_cluster" "eks-cluster" {
 }
 
 
+resource "aws_eks_node_group" "eks_node_groups" {
 
+  for_each = local.nodegroups
 
-
-
-resource "aws_eks_node_group" "example" {
   cluster_name    = aws_eks_cluster.eks-cluster.name
-  node_group_name = "node_group1"
-  node_role_arn   = aws_iam_role.ahmad-eks-node-role.arn
+  node_group_name = each.key
+  node_role_arn   = each.value.node_role_arn == null ? aws_iam_role.ahmad-eks-node-role.arn : each.value.node_role_arn
   subnet_ids      = local.subnet_ids
-  capacity_type = "SPOT"
-  instance_types = ["t3.large"]
+  capacity_type = each.value.capacity_type
+  instance_types = each.value.instance_types
+
+  disk_size = each.value.disk_size
+
+  labels = each.value.labels
+
+
+
+
+  dynamic "taint" {
+    for_each = each.value.taints
+
+    content {
+      key = taint.key
+      effect = taint.value.effect
+      value = taint.value.value  
+    }      
+  }
+
+
   scaling_config {
-    desired_size = 1
-    max_size     = 1
-    min_size     = 1
+    desired_size = each.value.scaling_config.desired_size
+    max_size     = each.value.scaling_config.max_size
+    min_size     = each.value.scaling_config.min_size
   }
 
   update_config {
-    max_unavailable = 1
+    max_unavailable = each.value.update_config.max_unavailable
   }
 
-  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
-  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
   depends_on = [
     aws_iam_role_policy_attachment.example-AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.example-AmazonEKS_CNI_Policy,
