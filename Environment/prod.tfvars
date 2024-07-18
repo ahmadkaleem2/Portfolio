@@ -319,4 +319,30 @@ elb = {
   
 }
 
+eks = {
+  access_config = {
+    authentication_mode = "API_AND_CONFIG_MAP"
+    bootstrap_cluster_creator_admin_permissions = true
+  }
+
+  node_groups = {
+    "ng1" = {
+      node_group_name = "ng1"
+      node_role_arn = null
+      capacity_type = "SPOT"
+      instance_types = ["t3.medium"]
+      scaling_config = {
+        desired_size = 1
+        max_size = 1
+        min_size = 1
+
+      }
+      update_config = {
+        max_unavailable = 1
+      }
+    }
+  }
+}
+
+
 

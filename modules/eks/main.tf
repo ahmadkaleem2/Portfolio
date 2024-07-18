@@ -1,8 +1,13 @@
 
 
+
+
+
+
+
 resource "aws_eks_cluster" "eks-cluster" {
-  name     = "${terraform.workspace}-${var.identifier}-EKS"
-  role_arn = aws_iam_role.ahmad-eks-role.arn
+  name     = var.cluster_name == null? "${terraform.workspace}-${var.identifier}-EKS" : var.cluster_name 
+  role_arn = aws_iam_role.eks-role.arn
   access_config {
     authentication_mode                         = "API_AND_CONFIG_MAP"
     bootstrap_cluster_creator_admin_permissions = true
@@ -14,8 +19,8 @@ resource "aws_eks_cluster" "eks-cluster" {
   # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
   # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
   depends_on = [
-    aws_iam_role_policy_attachment.example-AmazonEKSClusterPolicy,
-    aws_iam_role_policy_attachment.example-AmazonEKSVPCResourceController,
+    aws_iam_role_policy_attachment.AmazonEKSClusterPolicy,
+    aws_iam_role_policy_attachment.AmazonEKSVPCResourceController,
   ]
 }
 
