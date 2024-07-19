@@ -24,7 +24,7 @@ resource "kubernetes_deployment" "deploy_fastapi" {
 
 
         dynamic "volume" {
-          for_each = var.deployment_value.template.spec.volume
+          for_each = lookup(var.deployment_value.template.spec,"volume",{})
           content {
             name = volume.value.name
             config_map {
@@ -51,7 +51,8 @@ resource "kubernetes_deployment" "deploy_fastapi" {
               requests = container.value.resources.requests
             }
             dynamic "volume_mount" {
-              for_each = container.value.volume_mounts
+              for_each = lookup(container.value,"volume_mounts",{})
+              # for_each = container.value.volume_mounts
               content {
                 name = volume_mount.value.name
                 mount_path = volume_mount.value.mount_path

@@ -11,7 +11,12 @@ locals {
 
     ]
   ])
+
+
+
+
 }
+
 
 output "deployments" {
   value = local.deployments
