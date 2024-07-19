@@ -27,3 +27,7 @@ variable "elb" {
 variable "eks_configuration" {
   
 }
+
+variable "manifests" {
+  
+}

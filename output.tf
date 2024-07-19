@@ -29,3 +29,7 @@ output "list_of_azs" {
 # output "ecr_object" {
 #   value = module.ecr
 # }
+
+output "deployments" {
+  value = module.eks-terraform.deployments
+}

@@ -358,7 +358,201 @@ eks_configuration = {
         max_unavailable = 1
       }
     }
+    "ng2" = {
+      node_group_name = "ng1"
+      node_role_arn = null
+      capacity_type = "SPOT"
+      instance_types = ["t3.medium"]
+      disk_size = 20
+      
+      labels = {
+        "node": "ng2"
+        "arch": "amd64"
+      }
+      taints = {
+        "mospel" = {
+          value = "mosquito"
+          effect = "PREFER_NO_SCHEDULE"
+        }
+      }
+
+      scaling_config = {
+        desired_size = 1
+        max_size = 1
+        min_size = 1
+
+      }
+      update_config = {
+        max_unavailable = 1
+      }
+    }
   }
+}
+
+manifests = {
+
+  hello-world = {
+
+    Deployments = {
+      fastapi-helloworld-deployment = {
+        
+        labels = {
+          test = "fastapi-helloworld"
+        }
+        replicas = 2
+        selector = {
+          match_labels = {
+            test = "fastapi-helloworld"
+            }
+        }
+        template = {
+
+          metadata = {
+            labels = {
+              test = "fastapi-helloworld"
+            }
+          }
+          spec = {
+            volume = [
+              # {
+              # name = "app-data"
+              # config_map = {
+              #   name = "data-for-app"
+              # }
+              # }
+            ]
+          container = [
+            {
+              image = "489994096722.dkr.ecr.us-west-1.amazonaws.com/fastapi-helloworld-project"
+              name  = "fastapi-helloworld"
+              volume_mounts = [
+                # {
+                #   name = "app-data"
+                #   mount_path = "/etc/data123"
+                # }
+              ]
+              resources = {
+                limits = {
+                  cpu    = "0.5"
+                  memory = "512Mi"
+                }
+                requests = {
+                  cpu    = "250m"
+                  memory = "50Mi"
+                }
+              }
+              liveness_probe = {
+                http_get = {
+                  path = "/"
+                  port = "80"
+                }
+                initial_delay_seconds = 5
+                period_seconds = 3
+              }
+            },
+            {
+              image = "redis"
+              name  = "fastapi-helloworld1"
+              volume_mounts = [
+                # {
+                #   name = "app-data"
+                #   mount_path = "/etc/data123"
+                # }
+              ]
+              resources = {
+                limits = {
+                  cpu    = "0.5"
+                  memory = "512Mi"
+                }
+                requests = {
+                  cpu    = "250m"
+                  memory = "50Mi"
+                }
+              }
+
+            }
+
+
+
+          ]
+          }
+
+        }
+      }
+      # fastapi-helloworld-2 = {
+        
+      #   labels = {
+      #     test = "fastapi-helloworld"
+      #   }
+      #   replicas = 2
+      #   selector = {
+      #     match_labels = {
+      #       test = "fastapi-helloworld"
+      #       }
+      #   }
+      #   template = {
+
+      #     metadata = {
+      #       labels = {
+      #         test = "fastapi-helloworld"
+      #       }
+      #     }
+      #     spec = {
+      #       volume = {
+      #         name = "app-data"
+      #         config_map = {
+      #           name = "data-for-app"
+      #         }
+      #       }
+      #     container = [
+      #       {
+      #         image = "489994096722.dkr.ecr.us-west-1.amazonaws.com/fastapi-helloworld-project"
+      #         name  = "fastapi-helloworld"
+      #         volume_mounts = [
+      #           {
+      #             name = "app-data"
+      #             mount_path = "/etc/data123"
+      #           }
+      #         ]
+      #         resources = {
+      #           limits = {
+      #             cpu    = "0.5"
+      #             memory = "512Mi"
+      #           }
+      #           requests = {
+      #             cpu    = "250m"
+      #             memory = "50Mi"
+      #           }
+      #         }
+      #         liveness_probe = {
+      #           http_get = {
+      #             path = "/"
+      #             port = "80"
+      #           }
+      #           initial_delay_seconds = 5
+      #           period_seconds = 3
+      #         }
+      #       }
+
+
+      #     ]
+      #     }
+
+      #   }
+      # }
+
+
+
+
+
+
+
+    }
+
+
+  }
+
+
 }
 
 

@@ -32,7 +32,11 @@ module "eks" {
 }
 
 module "eks-terraform" {
-  source = "./modules/eks-terraform/hello-world"
+  source = "./modules/eks-terraform/"
+
+  manifests = var.manifests
+
+  depends_on = [ module.eks ]
 }
 
 module "ecr" {
