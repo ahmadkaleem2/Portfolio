@@ -29,9 +29,21 @@ resource "kubernetes_deployment" "deploy_fastapi" {
           for_each = lookup(var.deployment_value.template.spec, "volume", {})
           content {
             name = volume.value.name
-            config_map {
-              name = volume.value.config_map.name
+            dynamic "config_map" {
+              for_each = lookup(volume.value,"config_map",{})
+              
+              content {
+                name = config_map.value
+                  
+              }
+              
             }
+            
+            
+            # name = volume.value.name
+            # config_map {
+            #   name = volume.value.config_map.name
+            # }
           }
         }
 

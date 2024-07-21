@@ -496,7 +496,7 @@ manifests = {
           }
         ]
 
-        type = "LoadBalancer"
+        type = "ClusterIP"
 
 
       }
@@ -545,12 +545,12 @@ manifests = {
                 ]
                 resources = {
                   limits = {
-                    cpu    = "0.5"
-                    memory = "512Mi"
+                    cpu    = "100"
+                    memory = "100Mi"
                   }
                   requests = {
-                    cpu    = "250m"
-                    memory = "50Mi"
+                    cpu    = "50m"
+                    memory = "25Mi"
                   }
                 }
                 liveness_probe = {
@@ -562,22 +562,22 @@ manifests = {
                   period_seconds        = 3
                 }
               },
-              {
-                image = "redis"
-                name  = "fastapi-helloworld1"
+              # {
+              #   image = "redis"
+              #   name  = "fastapi-helloworld1"
 
-                resources = {
-                  limits = {
-                    cpu    = "0.25"
-                    memory = "256Mi"
-                  }
-                  requests = {
-                    cpu    = "125m"
-                    memory = "50Mi"
-                  }
-                }
+              #   resources = {
+              #     limits = {
+              #       cpu    = "0.25"
+              #       memory = "256Mi"
+              #     }
+              #     requests = {
+              #       cpu    = "125m"
+              #       memory = "50Mi"
+              #     }
+              #   }
 
-              }
+              # }
 
 
 
@@ -614,11 +614,11 @@ manifests = {
 
               resources = {
                 limits = {
-                  cpu    = "0.25"
-                  memory = "150Mi"
+                  cpu    = "0.125"
+                  memory = "50Mi"
                 }
                 requests = {
-                  cpu    = "125m"
+                  cpu    = "100m"
                   memory = "50Mi"
                 }
               }
@@ -638,11 +638,8 @@ manifests = {
     }
   }
 
-
-
   #### Project 2
-
-
+  
   hello-world-2 = {
 
       services = {
@@ -718,7 +715,6 @@ manifests = {
         }
       }
     }
-
 }
 
 

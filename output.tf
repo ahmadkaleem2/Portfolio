@@ -30,6 +30,10 @@ output "list_of_azs" {
 #   value = module.ecr
 # }
 
-output "deployments" {
-  value = module.eks-terraform.deployments
-}
+# output "deployments" {
+#   value = module.eks-terraform.deployments
+# }
+
+# output "va" {
+#   value = module.eks-terraform.va
+# }

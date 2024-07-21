@@ -34,11 +34,18 @@ module "eks" {
 }
 
 module "eks-terraform" {
+
+  providers = {
+    kubectl = kubectl.gavinbunney_kubectl
+  }
+
   source = "./modules/eks-terraform/"
 
   manifests = var.manifests
 
-  depends_on = [ module.eks ]
+  eks_module = module.eks
+
+  depends_on = [ module.eks, module.vpc ]
 }
 
 module "ecr" {

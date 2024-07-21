@@ -74,6 +74,6 @@ locals {
 }
 
 
-output "deployments" {
-  value = local.deployments
-}
+# output "deployments" {
+#   value = data.kubectl_file_documents.cert_manager_crds.manifests
+# }

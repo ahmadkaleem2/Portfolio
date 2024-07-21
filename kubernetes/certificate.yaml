@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: example-com-tls
+spec:
+  issuerRef:
+    name: letsencrypt-staging
+    kind: Issuer
+    group: cert-manager.io
+  dnsNames:
+    - dev.ahmadkaleem2.link # ✅ Copied from the `hostname` field.
+  secretName: letsencrypt-prod-certificates

@@ -95,3 +95,22 @@ module "secrets" {
 
 
 }
+
+
+
+
+# # We use the for_each or else this kubectl_manifest will only import the first manifest in the file.
+# resource "kubectl_manifest" "cert_manager_crds" {
+#   for_each  = data.kubectl_file_documents.cert_manager_crds.manifests
+#   yaml_body = each.value
+# }
+
+
+
+
+# # We use the for_each or else this kubectl_manifest will only import the first manifest in the file.
+# resource "kubectl_manifest" "gateway_api_crds" {
+#   for_each  = data.kubectl_file_documents.gateway_api_crds.manifests
+#   yaml_body = each.value
+  
+# }
