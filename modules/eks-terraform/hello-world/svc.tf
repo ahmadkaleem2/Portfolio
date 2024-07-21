@@ -6,7 +6,7 @@ resource "kubernetes_service" "example" {
     selector = {
       test = "fastapi-helloworld"
     }
-    
+
     port {
       port        = 80
       target_port = 80

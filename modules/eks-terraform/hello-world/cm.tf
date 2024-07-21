@@ -4,7 +4,7 @@ resource "kubernetes_config_map" "data_for_app" {
   }
 
   data = {
-    whatIsThis             = "thisisterraform"
-    
+    whatIsThis = "thisisterraform"
+
   }
 }

@@ -25,5 +25,5 @@ resource "kubernetes_cluster_role_binding" "example" {
     name      = "deploy-sa"
     namespace = "kube-system"
   }
-  
+
 }

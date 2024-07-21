@@ -3,7 +3,7 @@
 #   name        = "mysql-sg"
 #   description = "Allow TLS inbound traffic and all outbound traffic"
 #   vpc_id      = module.vpc["vpc-prod"].vpc_id
-  
+
 #   egress {
 #             from_port   = 0
 #             to_port     = 0

@@ -4,15 +4,15 @@ resource "aws_instance" "instance" {
   instance_type = var.instance_type
 
   # subnet_id     = var.private_subnets[0].id
-  subnet_id     = var.subnet_for_ec2_instance.id
+  subnet_id = var.subnet_for_ec2_instance.id
 
   user_data = length(data.cloudinit_config.cloudinit-example) > 0 ? data.cloudinit_config.cloudinit-example[0].rendered : ""
 
   key_name = "ahmad-terraform-key"
 
-  vpc_security_group_ids = [for i in var.security_groups: i.id]
+  vpc_security_group_ids = [for i in var.security_groups : i.id]
   # vpc_security_group_ids = [ aws_security_group.mysql_sg.id ]
-  tags = merge(var.tags_all,{
+  tags = merge(var.tags_all, {
     Name = "${terraform.workspace}-${var.identifier}-${var.reason}"
 
   })
@@ -49,7 +49,7 @@ resource "aws_instance" "instance" {
 # resource "aws_instance" "bastion_host" {
 #   ami           = var.ami
 #   instance_type = var.instance_type
-  
+
 #   vpc_security_group_ids = [ var.sgs["bastion_sg"].id  ]
 #   subnet_id = var.public_subnets[0].id
 #   key_name = aws_key_pair.mykeypair.key_name
@@ -70,7 +70,7 @@ resource "aws_instance" "instance" {
 
 #   key_name = aws_key_pair.mykeypair.key_name
 
-  
+
 #   vpc_security_group_ids = [ aws_security_group.mysql_sg.id ]
 #   tags = merge(var.tags_all,{
 #     Name = "${terraform.workspace}-${var.identifier}-mysql"
@@ -79,7 +79,7 @@ resource "aws_instance" "instance" {
 
 
 #   depends_on = [ var.vpc_nat_gateway ]
-  
+
 # }
 
 # resource "aws_key_pair" "mykeypair" {
@@ -108,7 +108,7 @@ resource "aws_instance" "instance" {
 #             to_port     = 22
 #             security_groups = [ var.sgs["bastion_sg"].id ]
 #           }
-  
+
 #   egress {
 #             from_port   = 0
 #             to_port     = 0

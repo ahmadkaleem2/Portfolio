@@ -1,9 +1,9 @@
 variable "tags_all" {
-  
+
 }
 
 variable "identifier" {
-  
+
 }
 
 variable "subnets" {
@@ -15,5 +15,5 @@ locals {
 }
 
 variable "eks_configuration" {
-  
+
 }

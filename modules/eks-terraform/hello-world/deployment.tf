@@ -33,10 +33,10 @@ resource "kubernetes_deployment" "deploy_fastapi" {
           image = "489994096722.dkr.ecr.us-west-1.amazonaws.com/fastapi-helloworld-project"
           name  = "fastapi-helloworld"
           volume_mount {
-            name = "app-data"
+            name       = "app-data"
             mount_path = "/etc/data123"
           }
-          
+
           resources {
             limits = {
               cpu    = "0.5"

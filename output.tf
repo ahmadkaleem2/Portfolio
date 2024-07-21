@@ -15,7 +15,7 @@ output "vpc_id" {
 # output "vpc_config" {
 
 #     value = local.vpc_config
-  
+
 # }
 
 # output "alb_dns_name" {

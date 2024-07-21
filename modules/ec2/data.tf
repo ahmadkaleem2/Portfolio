@@ -35,15 +35,15 @@ data "template_file" "script" {
   # template = file("${path.module}/install-mysql.sh")
   count    = var.script_path != "" ? 1 : 0
   template = file(var.script_path)
-  vars = var.script_args
+  vars     = var.script_args
 
   # vars = var.DB_SETTINGS
 }
 
 data "cloudinit_config" "cloudinit-example" {
-  
-  count    = var.script_path != "" ? 1 : 0
-  
+
+  count = var.script_path != "" ? 1 : 0
+
   gzip          = false
   base64_encode = false
 
@@ -52,5 +52,5 @@ data "cloudinit_config" "cloudinit-example" {
     content_type = "text/x-shellscript"
     content      = data.template_file.script[0].rendered
   }
-} 
+}
 

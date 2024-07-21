@@ -5,7 +5,7 @@ provider "aws" {
 }
 
 provider "random" {
-  
+
 }
 
 provider "kubernetes" {

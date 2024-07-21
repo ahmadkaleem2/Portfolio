@@ -1,14 +1,16 @@
 resource "kubernetes_service" "example" {
   metadata {
-    name = var.service_name
+    name      = var.service_name
+    namespace = lookup(var.service_value, "namespace", "default")
+
   }
   spec {
     selector = var.service_value.selector
-    
+
     dynamic "port" {
       for_each = var.service_value.ports
       content {
-        port = port.value.port
+        port        = port.value.port
         target_port = port.value.port
       }
     }

@@ -8,7 +8,7 @@ module "vpc" {
   identifier = var.identifier
 
   tags_all = {
-    Created_by        = var.identifier
+    Created_by  = var.identifier
     Environment = "${terraform.workspace}"
   }
 
@@ -25,9 +25,11 @@ module "eks" {
   eks_configuration = var.eks_configuration
 
   tags_all = {
-    Created_by        = var.identifier
+    Created_by  = var.identifier
     Environment = "${terraform.workspace}"
   }
+
+  depends_on = [ module.vpc ]
 
 }
 
@@ -77,7 +79,7 @@ module "ecr" {
 #     Name        = var.identifier
 #     Environment = "${terraform.workspace}"
 #   }
-  
+
 #   depends_on = [ module.vpc ]
 # }
 
@@ -107,7 +109,7 @@ module "ecr" {
 #     Name        = var.identifier
 #     Environment = "${terraform.workspace}"
 #   }
-  
+
 #   depends_on = [ module.vpc ]
 # }
 

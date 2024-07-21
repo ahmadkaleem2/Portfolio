@@ -25,8 +25,8 @@ resource "aws_eks_node_group" "eks_node_groups" {
   node_group_name = each.key
   node_role_arn   = each.value.node_role_arn == null ? aws_iam_role.ahmad-eks-node-role.arn : each.value.node_role_arn
   subnet_ids      = local.subnet_ids
-  capacity_type = each.value.capacity_type
-  instance_types = each.value.instance_types
+  capacity_type   = each.value.capacity_type
+  instance_types  = each.value.instance_types
 
   disk_size = each.value.disk_size
 
@@ -39,10 +39,10 @@ resource "aws_eks_node_group" "eks_node_groups" {
     for_each = each.value.taints
 
     content {
-      key = taint.key
+      key    = taint.key
       effect = taint.value.effect
-      value = taint.value.value  
-    }      
+      value  = taint.value.value
+    }
   }
 
 

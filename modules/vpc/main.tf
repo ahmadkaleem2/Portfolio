@@ -21,8 +21,8 @@ resource "aws_subnet" "public_subnet" {
   # availability_zone                           = var.vpc_config.public_subnet_azs[count.index]
   # cidr_block                                  = var.vpc_config.public_subnets[count.index]
 
-  availability_zone                           = element(var.vpc_config.public_subnet_azs, count.index)
-  cidr_block                                  = element(var.vpc_config.public_subnets, count.index)
+  availability_zone = element(var.vpc_config.public_subnet_azs, count.index)
+  cidr_block        = element(var.vpc_config.public_subnets, count.index)
 
 
 
@@ -33,7 +33,7 @@ resource "aws_subnet" "public_subnet" {
 }
 
 resource "aws_subnet" "private_subnet" {
-  count = contains(keys(var.vpc_config),"private_subnets") ? length(var.vpc_config.private_subnets) : 0
+  count = contains(keys(var.vpc_config), "private_subnets") ? length(var.vpc_config.private_subnets) : 0
 
 
   vpc_id                  = aws_vpc.vpc.id
@@ -55,7 +55,7 @@ resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.vpc.id
 
   tags = merge(var.tags_all, {
-  Name = "${terraform.workspace}-${var.identifier}-igw"
+    Name = "${terraform.workspace}-${var.identifier}-igw"
   })
 }
 
@@ -96,7 +96,7 @@ resource "aws_route_table_association" "public_route_table_associations" {
 resource "aws_eip" "eip_for_nat" {
 
   # count = contains(keys(var.vpc_config),"private_subnets") && length(var.vpc_config.private_subnets) > 0 ? 1 : 0
-  count = length(lookup(var.vpc_config,"private_subnets",[])) > 0 ? 1 : 0
+  count = length(lookup(var.vpc_config, "private_subnets", [])) > 0 ? 1 : 0
 
   domain = "vpc"
 
@@ -108,7 +108,7 @@ resource "aws_eip" "eip_for_nat" {
 
 resource "aws_nat_gateway" "nat_gateway_for_private_subnets" {
 
-  count = length(lookup(var.vpc_config,"private_subnets",[])) > 0 ? 1 : 0
+  count = length(lookup(var.vpc_config, "private_subnets", [])) > 0 ? 1 : 0
 
   subnet_id = aws_subnet.public_subnet[0].id
 
@@ -119,7 +119,7 @@ resource "aws_nat_gateway" "nat_gateway_for_private_subnets" {
     Name = "${terraform.workspace}-${var.identifier}-nat-gateway"
   })
 
-  depends_on = [aws_internet_gateway.internet_gateway]#, aws_eip.example]
+  depends_on = [aws_internet_gateway.internet_gateway] #, aws_eip.example]
 }
 
 
@@ -166,7 +166,7 @@ resource "aws_security_group" "vpc_security_groups" {
       cidr_blocks     = try(ingress.value.cidr_blocks, null)
       # security_groups = length(ingress.value.cidr_blocks) == 0 && length(ingress.value.security_groups) > 0 ? ingress.value.security_groups : null
       # cidr_blocks = length(ingress.value.cidr_blocks) > 0 && length(ingress.value.security_groups) == 0 ? ingress.value.cidr_blocks : null
-    
+
     }
   }
   dynamic "egress" {
