@@ -534,9 +534,17 @@ manifests = {
             ]
             container = [
               {
-                image = "680688655542.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project"
-                # image = "489994096722.dkr.ecr.us-west-1.amazonaws.com/fastapi-helloworld-project"
+                # image = "680688655542.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project"
+                image = "489994096722.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project:latest"
                 name  = "fastapi-helloworld"
+
+                ports = [
+                  {
+                    container_port = 80
+                    name = "http"
+                  }
+                ]
+
                 volume_mounts = [
                   {
                     name = "app-data"
@@ -553,14 +561,14 @@ manifests = {
                     memory = "25Mi"
                   }
                 }
-                liveness_probe = {
-                  http_get = {
-                    path = "/"
-                    port = "80"
-                  }
-                  initial_delay_seconds = 5
-                  period_seconds        = 3
-                }
+                # liveness_probe = {
+                #   http_get = {
+                #     path = "/"
+                #     port = "80"
+                #   }
+                #   initial_delay_seconds = 5
+                #   period_seconds        = 3
+                # }
               },
               # {
               #   image = "redis"
@@ -622,14 +630,14 @@ manifests = {
                   memory = "50Mi"
                 }
               }
-              liveness_probe = {
-                http_get = {
-                  path = "/"
-                  port = "80"
-                }
-                initial_delay_seconds = 5
-                period_seconds = 3
-              }
+              # liveness_probe = {
+              #   http_get = {
+              #     path = "/"
+              #     port = "80"
+              #   }
+              #   initial_delay_seconds = 5
+              #   period_seconds = 3
+              # }
             }
           ]
           }
@@ -687,7 +695,7 @@ manifests = {
 
             container = [
               {
-                image = "680688655542.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project"
+                image = "489994096722.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project:latest"
                 name  = "fastapi-helloworld"
 
                 resources = {
@@ -700,14 +708,14 @@ manifests = {
                     memory = "50Mi"
                   }
                 }
-                liveness_probe = {
-                  http_get = {
-                    path = "/"
-                    port = "80"
-                  }
-                  initial_delay_seconds = 5
-                  period_seconds = 3
-                }
+                # liveness_probe = {
+                #   http_get = {
+                #     path = "/"
+                #     port = "80"
+                #   }
+                #   initial_delay_seconds = 5
+                #   period_seconds = 3
+                # }
               }
             ]
             }
