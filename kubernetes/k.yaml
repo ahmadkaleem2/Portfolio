@@ -2,6 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: IngressClass
 metadata:
   name: nginx-example
+  annotations:
+
 spec:
   controller: k8s.io/ingress-nginx
 
@@ -10,21 +12,50 @@ spec:
 
 ---
 
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: minimal-ingress
+#   annotations:
+#     cert-manager.io/issuer: "letsencrypt-staging"
+#     # nginx.ingress.kubernetes.io/rewrite-target: /
+#     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+#     service.beta.kubernetes.io/aws-load-balancer-type: nlb
+# spec:
+#   ingressClassName: nginx-example
+  
+#   rules:
+#   - host: dev.ahmadkaleem2.link
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: fastapi-helloworld
+#             port:
+#               number: 80
+
+
+
+---
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: minimal-ingress
   annotations:
-    cert-manager.io/issuer: letsencrypt-staging
+    cert-manager.io/issuer: "letsencrypt-prod"
     # nginx.ingress.kubernetes.io/rewrite-target: /
-    # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    kubernetes.io/ingress.class: nginx-example
 spec:
   ingressClassName: nginx-example
   tls:
   - hosts:
     - dev.ahmadkaleem2.link
-    secretName: letsencrypt-prod-certificates
+    secretName: letsencrypt-prod-ingress-certificates
   rules:
   - host: dev.ahmadkaleem2.link
     http:
