@@ -362,7 +362,7 @@ eks_configuration = {
     #   node_group_name = "ng2"
     #   node_role_arn = null
     #   capacity_type = "SPOT"
-    #   instance_types = ["t3.medium"]
+    #   instance_types = ["t3.small"]
     #   disk_size = 20
 
     #   labels = {
@@ -370,10 +370,7 @@ eks_configuration = {
     #     "arch": "amd64"
     #   }
     #   taints = {
-    #     "mospel" = {
-    #       value = "mosquito"
-    #       effect = "PREFER_NO_SCHEDULE"
-    #     }
+        
     #   }
 
     #   scaling_config = {

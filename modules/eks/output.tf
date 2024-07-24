@@ -13,3 +13,7 @@ data "aws_eks_cluster_auth" "eks_cluster_auth" {
 output "eks_token" {
   value = data.aws_eks_cluster_auth.eks_cluster_auth.token
 }
+
+output "cluster_name" {
+  value = aws_eks_cluster.eks-cluster.name
+}

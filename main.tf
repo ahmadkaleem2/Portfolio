@@ -14,39 +14,52 @@ module "vpc" {
 
 }
 
-# module "eks" {
+module "eks" {
 
-#   source = "./modules/eks"
+  source = "./modules/eks"
 
-#   identifier = var.identifier
+  identifier = var.identifier
 
-#   subnets = module.vpc["vpc-prod"].subnets
+  subnets = module.vpc["vpc-prod"].subnets
 
-#   eks_configuration = var.eks_configuration
+  eks_configuration = var.eks_configuration
 
-#   tags_all = {
-#     Created_by  = var.identifier
-#     Environment = "${terraform.workspace}"
-#   }
+  tags_all = {
+    Created_by  = var.identifier
+    Environment = "${terraform.workspace}"
+  }
 
-#   depends_on = [ module.vpc ]
+  depends_on = [ module.vpc ]
 
-# }
+}
 
-# module "eks-terraform" {
+resource "null_resource" "readcontentfile" {
+  
+  provisioner "local-exec" {
+   command = "aws eks update-kubeconfig --name ${ module.eks.cluster_name } --region ${ var.AWS_REGION }"
 
-#   providers = {
-#     kubectl = kubectl.gavinbunney_kubectl
-#   }
+  }
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+}
 
-#   source = "./modules/eks-terraform/"
 
-#   manifests = var.manifests
 
-#   eks_module = module.eks
+module "eks-terraform" {
 
-#   depends_on = [ module.eks, module.vpc ]
-# }
+  providers = {
+    kubectl = kubectl.gavinbunney_kubectl
+  }
+
+  source = "./modules/eks-terraform/"
+
+  manifests = var.manifests
+
+  eks_module = module.eks
+
+  depends_on = [ module.eks, module.vpc ]
+}
 
 module "ecr" {
 
