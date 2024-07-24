@@ -14,39 +14,39 @@ module "vpc" {
 
 }
 
-module "eks" {
+# module "eks" {
 
-  source = "./modules/eks"
+#   source = "./modules/eks"
 
-  identifier = var.identifier
+#   identifier = var.identifier
 
-  subnets = module.vpc["vpc-prod"].subnets
+#   subnets = module.vpc["vpc-prod"].subnets
 
-  eks_configuration = var.eks_configuration
+#   eks_configuration = var.eks_configuration
 
-  tags_all = {
-    Created_by  = var.identifier
-    Environment = "${terraform.workspace}"
-  }
+#   tags_all = {
+#     Created_by  = var.identifier
+#     Environment = "${terraform.workspace}"
+#   }
 
-  depends_on = [ module.vpc ]
+#   depends_on = [ module.vpc ]
 
-}
+# }
 
-module "eks-terraform" {
+# module "eks-terraform" {
 
-  providers = {
-    kubectl = kubectl.gavinbunney_kubectl
-  }
+#   providers = {
+#     kubectl = kubectl.gavinbunney_kubectl
+#   }
 
-  source = "./modules/eks-terraform/"
+#   source = "./modules/eks-terraform/"
 
-  manifests = var.manifests
+#   manifests = var.manifests
 
-  eks_module = module.eks
+#   eks_module = module.eks
 
-  depends_on = [ module.eks, module.vpc ]
-}
+#   depends_on = [ module.eks, module.vpc ]
+# }
 
 module "ecr" {
 

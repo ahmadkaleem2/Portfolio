@@ -72,6 +72,15 @@ resource "kubernetes_deployment" "deploy_fastapi" {
                 mount_path = volume_mount.value.mount_path
               }
             }
+
+            dynamic "port" {
+              for_each = lookup(container.value, "ports", {})
+              content {
+                name = port.value.name
+                container_port = port.value.container_port
+              }
+              
+            }
           }
         }
       }
