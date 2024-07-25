@@ -55,7 +55,7 @@ jobs:
         env:
           JF_USER: ${{ secrets.username }}
           JF_PASSWORD: ${{ secrets.password }}
-          JF_URL: ${{ secrets.ARTIFACTORY_URL }}
+          JF_URL: "https://${{ vars.ARTIFACTORY_HOST }}"
 
       - name: Push Build to Artifactory
         run: |
