@@ -7,10 +7,14 @@ on:
         description: 'Version to release'
         required: true
         default: '1.0.0'
-        
 jobs:
-  build:
+  build-and-push:
+    if: github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release' || github.ref == 'refs/heads/develop')
     runs-on: ubuntu-latest
+
+    env:
+      ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}  # Replace with your Artifactory URL
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,43 +36,32 @@ jobs:
       #     else
       #       mvn -f ./pom_temp.xml package -P develop
       #     fi
-          # ls target
+      #     ls target
       - name: Get Last commit and build maven project with this tag
         run: |
           echo "Creating build"
-          cd java_projects/spring-boot-tutorial-course/student-management-system/
+          cd ./java_projects/spring-boot-tutorial-course/student-management-system/
           if [[ "${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/release" ]]; then
           mvn --no-transfer-progress external.atlassian.jgitflow:jgitflow-maven-plugin:1.0-m5.1:release-start -DallowSnapshots=true -DreleaseVersion="${{ inputs.version  }}" -DdevelopmentVersion="${{ inputs.version  }}-SNAPSHOT" -Dsquash=true -Doffline=true -DnoReleaseBuild=true -s .mvn/settings.xml
           mvn --no-transfer-progress external.atlassian.jgitflow:jgitflow-maven-plugin:1.0-m5.1:release-finish -Dsquash=true -DnoReleaseBuild=true -DkeepBranch=true -Doffline=true -DallowSnapshots=true -s .mvn/settings.xml -X
           git checkout release/${{ inputs.version  }}
           fi
-
           mvn clean package
           ls target
-
-      - uses: actions/upload-artifact@v4
+      - name: Setup JFrog CLI and Push to Artifactory
+        uses: jfrog/setup-jfrog-cli@v4
         with:
-          name: my-artifact
-          path: java_projects/spring-boot-tutorial-course/student-management-system/target
+          version: latest
+        env:
+          JF_USER: ${{ secrets.username }}
+          JF_PASSWORD: ${{ secrets.password }}
+          JF_URL: "https://${{ vars.ARTIFACTORY_HOST }}"
 
-      
-      # - name: Setup JFrog CLI and Push to Artifactory
-      #   uses: jfrog/setup-jfrog-cli@v4
-      #   with:
-      #     version: '2.59.1'
-      #   env:
-        
-      #     JF_URL: ${{ secrets.ARTIFACTORY_URL }}
-      #     JF_ACCESS_TOKEN: ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }} 
-          
-      # - name: Push Build to Artifactory
-      #   run: |
-            # artifact_name=$(ls ./java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep .jar$)
-            # echo $artifact_name
-            # jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/pom.xml" "student/pom-${{ github.sha }}.xml"
-            # jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
-
-
+      - name: Push Build to Artifactory
+        run: |
+            artifact_name=$(ls ./java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep .jar$)
+            echo $artifact_name
+            jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
           # if [[ "${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/release" ]]; then
           #   echo "publishing release"
           #   artifact_name=$(ls ./java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep RELEASE.jar$)
@@ -82,30 +75,3 @@ jobs:
           #   ls "./java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name"
           #   jf rt u --flat "./java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
           # fi
-
-
-  push-to-artifactory:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: my-artifact
-          path: java_projects/spring-boot-tutorial-course/student-management-system/target/
-
-      - name: Setup JFrog CLI and Push to Artifactory
-        uses: jfrog/setup-jfrog-cli@v4
-        with:
-          version: '2.59.1'
-        env:
-        
-          JF_URL: ${{ secrets.ARTIFACTORY_URL }}
-          JF_ACCESS_TOKEN: ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }} 
-    
-      - name: Push Build to Artifactory
-        run: |
-          ls java_projects/spring-boot-tutorial-course/student-management-system/target/
-          artifact_name=$(ls java_projects/spring-boot-tutorial-course/student-management-system/target/ | grep .jar$)
-          
-          jf rt u --flat "java_projects/spring-boot-tutorial-course/student-management-system/target/$artifact_name" "student/student-${artifact_name}"
