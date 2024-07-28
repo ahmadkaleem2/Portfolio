@@ -1,11 +1,11 @@
-apiVersion: networking.k8s.io/v1
-kind: IngressClass
-metadata:
-  name: nginx-example
-  annotations:
+# apiVersion: networking.k8s.io/v1
+# kind: IngressClass
+# metadata:
+#   name: nginx-example
+#   annotations:
 
-spec:
-  controller: k8s.io/ingress-nginx
+# spec:
+#   controller: k8s.io/ingress-nginx
 
 # Must Apply
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/aws/deploy.yaml
@@ -19,7 +19,7 @@ spec:
 #   annotations:
 #     cert-manager.io/issuer: "letsencrypt-staging"
 #     # nginx.ingress.kubernetes.io/rewrite-target: /
-#     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+#     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 #     service.beta.kubernetes.io/aws-load-balancer-type: nlb
 # spec:
 #   ingressClassName: nginx-example
@@ -54,10 +54,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - dev.ahmadkaleem2.link
+    - prod.ahmadkaleem2.link
     secretName: letsencrypt-prod-ingress-certificates
   rules:
-  - host: dev.ahmadkaleem2.link
+  - host: prod.ahmadkaleem2.link
     http:
       paths:
       - path: /
