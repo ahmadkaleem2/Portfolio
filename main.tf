@@ -33,17 +33,6 @@ module "eks" {
 
 }
 
-resource "null_resource" "readcontentfile" {
-  
-  provisioner "local-exec" {
-   command = "aws eks update-kubeconfig --name ${ module.eks.cluster_name } --region ${ var.AWS_REGION }"
-
-  }
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-}
-
 
 
 module "eks-terraform" {
@@ -56,18 +45,10 @@ module "eks-terraform" {
 
   manifests = var.manifests
 
-  eks_module = module.eks
 
   depends_on = [ module.eks, module.vpc ]
 }
 
-module "ecr" {
-
-  source = "./modules/ecr"
-
-  identifier = var.identifier
-
-}
 
 
 
