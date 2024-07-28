@@ -49,9 +49,9 @@ metadata:
     # nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     service.beta.kubernetes.io/aws-load-balancer-type: nlb
-    kubernetes.io/ingress.class: nginx-example
+    kubernetes.io/ingress.class: nginx
 spec:
-  ingressClassName: nginx-example
+  ingressClassName: nginx
   tls:
   - hosts:
     - dev.ahmadkaleem2.link

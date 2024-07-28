@@ -58,4 +58,14 @@
 #   value = contains(keys(var.ec2.mysql_instance.script_args),"DB_PASSWORD") ? var.ec2.mysql_instance.script_args.DB_PASSWORD : random_password.password_for_database.result
 # }
 
+resource "null_resource" "update_kubeconfig" {
+  provisioner "local-exec" {
+    command = "aws eks update-kubeconfig --name ${module.eks.eks_cluster_name} --region ${var.AWS_REGION}"
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+}
+
 

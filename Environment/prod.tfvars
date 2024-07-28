@@ -334,7 +334,7 @@ eks_configuration = {
       node_group_name = "ng1"
       node_role_arn   = null
       capacity_type   = "SPOT"
-      instance_types  = ["t3.medium"]
+      instance_types  = ["t3.small"]
       disk_size       = 20
 
       labels = {
@@ -358,34 +358,34 @@ eks_configuration = {
         max_unavailable = 1
       }
     }
-    # "ng2" = {
-    #   node_group_name = "ng2"
-    #   node_role_arn = null
-    #   capacity_type = "SPOT"
-    #   instance_types = ["t3.medium"]
-    #   disk_size = 20
+    "ng2" = {
+      node_group_name = "ng2"
+      node_role_arn = null
+      capacity_type = "SPOT"
+      instance_types = ["t3.small"]
+      disk_size = 20
 
-    #   labels = {
-    #     "node": "ng2"
-    #     "arch": "amd64"
-    #   }
-    #   taints = {
-    #     "mospel" = {
-    #       value = "mosquito"
-    #       effect = "PREFER_NO_SCHEDULE"
-    #     }
-    #   }
+      labels = {
+        "node": "ng2"
+        "arch": "amd64"
+      }
+      taints = {
+        "mospel" = {
+          value = "mosquito"
+          effect = "PREFER_NO_SCHEDULE"
+        }
+      }
 
-    #   scaling_config = {
-    #     desired_size = 1
-    #     max_size = 1
-    #     min_size = 1
+      scaling_config = {
+        desired_size = 1
+        max_size = 1
+        min_size = 1
 
-    #   }
-    #   update_config = {
-    #     max_unavailable = 1
-    #   }
-    # }
+      }
+      update_config = {
+        max_unavailable = 1
+      }
+    }
   }
 }
 
