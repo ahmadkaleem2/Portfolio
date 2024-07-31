@@ -7,18 +7,18 @@ resource "kubernetes_cluster_role_binding" "example" {
   dynamic "role_ref" {
     for_each = var.cluster_role_binding_value.role_ref
     content {
-        # only possible value
+      # only possible value
       api_group = "rbac.authorization.k8s.io"
-      kind = role_ref.value.kind
-      name = role_ref.value.name
+      kind      = role_ref.value.kind
+      name      = role_ref.value.name
     }
   }
 
   dynamic "subject" {
     for_each = var.cluster_role_binding_value.subject
     content {
-      kind = subject.value.kind
-      name = subject.value.name
+      kind      = subject.value.kind
+      name      = subject.value.name
       namespace = subject.value.namespace
     }
   }

@@ -2,7 +2,7 @@ locals {
 
   deployments = flatten([
     for manifest_key, manifest_value in var.manifests : [
-      for deployment_key, deployment_value in lookup(manifest_value,"Deployments",{}) : {
+      for deployment_key, deployment_value in lookup(manifest_value, "Deployments", {}) : {
         project_name     = manifest_key,
         deployment_key   = deployment_key
         deployment_value = deployment_value
@@ -12,7 +12,7 @@ locals {
 
   services = flatten([
     for manifest_key, manifest_value in var.manifests : [
-      for service_key, service_value in lookup(manifest_value,"services",{}) : {
+      for service_key, service_value in lookup(manifest_value, "services", {}) : {
         project_name  = manifest_key,
         service_key   = service_key
         service_value = service_value
@@ -22,7 +22,7 @@ locals {
 
   config_maps = flatten([
     for manifest_key, manifest_value in var.manifests : [
-      for configmap_key, configmap_value in lookup(manifest_value,"config_maps",{}) : {
+      for configmap_key, configmap_value in lookup(manifest_value, "config_maps", {}) : {
         project_name    = manifest_key,
         configmap_key   = configmap_key
         configmap_value = configmap_value
@@ -32,8 +32,8 @@ locals {
 
   cluster_roles = flatten([
     for manifest_key, manifest_value in var.manifests : [
-      for cluster_role_key, cluster_role_value in lookup(manifest_value,"cluster_roles",{}) : {
-        project_name    = manifest_key,
+      for cluster_role_key, cluster_role_value in lookup(manifest_value, "cluster_roles", {}) : {
+        project_name       = manifest_key,
         cluster_role_key   = cluster_role_key
         cluster_role_value = cluster_role_value
       }
@@ -42,8 +42,8 @@ locals {
 
   cluster_role_bindings = flatten([
     for manifest_key, manifest_value in var.manifests : [
-      for cluster_role_binding_key, cluster_role_binding_value in lookup(manifest_value,"cluster_role_bindings",{}) : {
-        project_name    = manifest_key,
+      for cluster_role_binding_key, cluster_role_binding_value in lookup(manifest_value, "cluster_role_bindings", {}) : {
+        project_name               = manifest_key,
         cluster_role_binding_key   = cluster_role_binding_key
         cluster_role_binding_value = cluster_role_binding_value
       }
@@ -52,8 +52,8 @@ locals {
 
   service_accounts = flatten([
     for manifest_key, manifest_value in var.manifests : [
-      for service_account_key, service_account_value in lookup(manifest_value,"service_accounts",{}) : {
-        project_name    = manifest_key,
+      for service_account_key, service_account_value in lookup(manifest_value, "service_accounts", {}) : {
+        project_name          = manifest_key,
         service_account_key   = service_account_key
         service_account_value = service_account_value
       }
@@ -62,8 +62,8 @@ locals {
   # lookup(var.manifests,"secrets",{})
   secrets = flatten([
     for manifest_key, manifest_value in var.manifests : [
-      for secret_key, secret_value in lookup(manifest_value,"secrets",{}) : {
-        project_name    = manifest_key,
+      for secret_key, secret_value in lookup(manifest_value, "secrets", {}) : {
+        project_name = manifest_key,
         secret_key   = secret_key
         secret_value = secret_value
       }
@@ -74,6 +74,7 @@ locals {
 }
 
 
-# output "deployments" {
-#   value = data.kubectl_file_documents.cert_manager_crds.manifests
-# }
+output "deployments" {
+  value = module.deployment
+
+}

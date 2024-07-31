@@ -29,8 +29,19 @@ module "eks" {
     Environment = "${terraform.workspace}"
   }
 
-  depends_on = [ module.vpc ]
+  depends_on = [module.vpc]
 
+}
+
+resource "null_resource" "readcontentfile" {
+
+  provisioner "local-exec" {
+    command = "aws eks update-kubeconfig --name ${module.eks.cluster_name} --region ${var.AWS_REGION}"
+
+  }
+  triggers = {
+    always_run = "${timestamp()}"
+  }
 }
 
 
@@ -46,7 +57,7 @@ module "eks-terraform" {
   manifests = var.manifests
 
 
-  depends_on = [ module.eks, module.vpc ]
+  depends_on = [module.eks, module.vpc]
 }
 
 

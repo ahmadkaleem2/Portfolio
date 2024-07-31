@@ -57,31 +57,31 @@ module "cluster_role_bindings" {
 
   cluster_role_binding_name  = each.value.cluster_role_binding_key
   cluster_role_binding_value = each.value.cluster_role_binding_value
-  
 
-  
+
+
 }
 
 module "service_accounts" {
 
   source = "./service_account"
-  
+
   for_each = { for idx, value in local.service_accounts : "${value.project_name}-${value.service_account_key}" => value }
 
   service_account_name  = each.value.service_account_key
   service_account_value = each.value.service_account_value
-  
+
 
 
 
 }
 
 module "secrets" {
-  
+
 
   source = "./secret"
 
-  
+
   for_each = { for idx, value in local.secrets : "${value.project_name}-${value.secret_key}" => value }
 
   secret_name  = each.value.secret_key
@@ -93,3 +93,18 @@ module "secrets" {
 
 
 
+# # We use the for_each or else this kubectl_manifest will only import the first manifest in the file.
+# resource "kubectl_manifest" "cert_manager_crds" {
+#   for_each  = data.kubectl_file_documents.cert_manager_crds.manifests
+#   yaml_body = each.value
+# }
+
+
+
+
+# # We use the for_each or else this kubectl_manifest will only import the first manifest in the file.
+# resource "kubectl_manifest" "gateway_api_crds" {
+#   for_each  = data.kubectl_file_documents.gateway_api_crds.manifests
+#   yaml_body = each.value
+
+# }
