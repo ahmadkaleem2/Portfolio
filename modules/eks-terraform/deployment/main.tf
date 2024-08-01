@@ -1,8 +1,9 @@
 resource "kubernetes_secret_v1" "deployer_sa_secret" {
   for_each = local.sensitive_env_variables
-
+  
   metadata {
     name = each.key
+    namespace = lookup(var.deployment_value, "namespace", "default")
   }
 
   data = each.value.data
@@ -76,15 +77,15 @@ resource "kubernetes_deployment_v1" "deploy_fastapi" {
           content {
 
 
-            dynamic "env_from" {
-              for_each = local.sensitive_env_variables
+            # dynamic "env_from" {
+            #   for_each = local.sensitive_env_variables
 
-              content {
-                secret_ref {
-                  name = env_from.key
-                }
-              }
-            }
+            #   content {
+            #     secret_ref {
+            #       name = env_from.key
+            #     }
+            #   }
+            # }
 
             # dynamic "env" {
 
@@ -113,23 +114,23 @@ resource "kubernetes_deployment_v1" "deploy_fastapi" {
               limits   = container.value.resources.limits
               requests = container.value.resources.requests
             }
-            dynamic "volume_mount" {
-              for_each = lookup(container.value, "volume_mounts", {})
-              # for_each = container.value.volume_mounts
-              content {
-                name       = volume_mount.value.name
-                mount_path = volume_mount.value.mount_path
-              }
-            }
+            # dynamic "volume_mount" {
+            #   for_each = lookup(container.value, "volume_mounts", {})
+            #   # for_each = container.value.volume_mounts
+            #   content {
+            #     name       = volume_mount.value.name
+            #     mount_path = volume_mount.value.mount_path
+            #   }
+            # }
 
-            dynamic "port" {
-              for_each = lookup(container.value, "ports", {})
-              content {
-                name           = port.value.name
-                container_port = port.value.container_port
-              }
+            # dynamic "port" {
+            #   for_each = lookup(container.value, "ports", {})
+            #   content {
+            #     name           = port.value.name
+            #     container_port = port.value.container_port
+            #   }
 
-            }
+            # }
           }
         }
       }

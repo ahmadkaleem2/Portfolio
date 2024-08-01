@@ -481,7 +481,7 @@ manifests = {
     services = {
 
       fastapi-helloworld = {
-
+        namespace = "app"
         selector = {
           test = "fastapi-helloworld"
         }
@@ -503,7 +503,7 @@ manifests = {
 
     Deployments = {
       fastapi-helloworld-deployment = {
-
+        namespace = "app"
         labels = {
           test = "fastapi-helloworld"
         }
