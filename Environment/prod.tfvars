@@ -531,8 +531,8 @@ manifests = {
             ]
             container = [
               {
-                image = "680688655542.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project"
-                # image = "489994096722.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project:latest"
+                # image = "680688655542.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project"
+                image = "489994096722.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project:latest"
                 name  = "fastapi-helloworld"
 
                 ports = [

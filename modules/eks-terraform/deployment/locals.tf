@@ -1,10 +1,10 @@
-data "aws_secretsmanager_secret" "example" {
-  name = "ahmad-testing"
-}
+# data "aws_secretsmanager_secret" "example" {
+#   name = "ahmad-testing"
+# }
 
-data "aws_secretsmanager_secret_version" "example" {
-  secret_id = data.aws_secretsmanager_secret.example.id
-}
+# data "aws_secretsmanager_secret_version" "example" {
+#   secret_id = data.aws_secretsmanager_secret.example.id
+# }
 
 
 locals {
@@ -23,7 +23,7 @@ locals {
       type = "Opaque"
       data = {  
       "username" = "user"
-      "password" = jsondecode(data.aws_secretsmanager_secret_version.example.secret_string)["password"]
+      "password" = "password"#jsondecode(data.aws_secretsmanager_secret_version.example.secret_string)["password"]
       #jsonencode(data.aws_secretsmanager_secret_version.example.secret_string.)
       }
     }

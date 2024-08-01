@@ -7,6 +7,6 @@ variable "manifests" {
 
 # }
 
-variable "eks_module" {
+# variable "eks_module" {
 
-}
+# }
