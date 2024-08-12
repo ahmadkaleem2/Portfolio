@@ -358,34 +358,31 @@ eks_configuration = {
         max_unavailable = 1
       }
     }
-    "ng2" = {
-      node_group_name = "ng2"
-      node_role_arn = null
-      capacity_type = "SPOT"
-      instance_types = ["t3.small"]
-      disk_size = 20
+    # "ng2" = {
+    #   node_group_name = "ng2"
+    #   node_role_arn = null
+    #   capacity_type = "SPOT"
+    #   instance_types = ["t3.small"]
+    #   disk_size = 20
 
-      labels = {
-        "node": "ng2"
-        "arch": "amd64"
-      }
-      taints = {
-        "mospel" = {
-          value = "mosquito"
-          effect = "PREFER_NO_SCHEDULE"
-        }
-      }
+    #   labels = {
+    #     "node": "ng2"
+    #     "arch": "amd64"
+    #   }
+    #   taints = {
 
-      scaling_config = {
-        desired_size = 1
-        max_size = 1
-        min_size = 1
+    #   }
 
-      }
-      update_config = {
-        max_unavailable = 1
-      }
-    }
+    #   scaling_config = {
+    #     desired_size = 1
+    #     max_size = 1
+    #     min_size = 1
+
+    #   }
+    #   update_config = {
+    #     max_unavailable = 1
+    #   }
+    # }
   }
 }
 
@@ -432,9 +429,9 @@ manifests = {
       roleToSaBinder = {
         role_ref = [
           {
-          api_group = "rbac.authorization.k8s.io"
-          kind      = "ClusterRole"
-          name      = "deploymentRole"
+            api_group = "rbac.authorization.k8s.io"
+            kind      = "ClusterRole"
+            name      = "deploymentRole"
           }
         ]
         subject = [
@@ -484,7 +481,7 @@ manifests = {
     services = {
 
       fastapi-helloworld = {
-
+        namespace = "app"
         selector = {
           test = "fastapi-helloworld"
         }
@@ -506,7 +503,7 @@ manifests = {
 
     Deployments = {
       fastapi-helloworld-deployment = {
-
+        namespace = "app"
         labels = {
           test = "fastapi-helloworld"
         }
@@ -526,28 +523,28 @@ manifests = {
           spec = {
             volume = [
               {
-              name = "app-data"
-              config_map = {
-                name = "data-for-app"
-              }
+                name = "app-data"
+                config_map = {
+                  name = "data-for-app"
+                }
               }
             ]
             container = [
               {
-                image = "680688655542.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project"
-                # image = "489994096722.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project:latest"
+                # image = "680688655542.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project"
+                image = "489994096722.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project:latest"
                 name  = "fastapi-helloworld"
 
                 ports = [
                   {
                     container_port = 80
-                    name = "http"
+                    name           = "http"
                   }
                 ]
 
                 volume_mounts = [
                   {
-                    name = "app-data"
+                    name       = "app-data"
                     mount_path = "/etc/data123"
                   }
                 ]
@@ -595,134 +592,134 @@ manifests = {
         }
       }
 
-      fastapi-helloworld-1 = {
+      # fastapi-helloworld-1 = {
 
-        labels = {
-          test = "fastapi-helloworld-1"
-        }
-        replicas = 1
-        selector = {
-          match_labels = {
-            test = "fastapi-helloworld-1"
-            }
-        }
-        template = {
+      #   labels = {
+      #     test = "fastapi-helloworld-1"
+      #   }
+      #   replicas = 1
+      #   selector = {
+      #     match_labels = {
+      #       test = "fastapi-helloworld-1"
+      #       }
+      #   }
+      #   template = {
 
-          metadata = {
-            labels = {
-              test = "fastapi-helloworld-1"
-            }
-          }
-          spec = {
+      #     metadata = {
+      #       labels = {
+      #         test = "fastapi-helloworld-1"
+      #       }
+      #     }
+      #     spec = {
 
-          container = [
-            {
-              image = "redis"
-              name  = "fastapi-helloworld"
+      #     container = [
+      #       {
+      #         image = "redis"
+      #         name  = "fastapi-helloworld"
 
-              resources = {
-                limits = {
-                  cpu    = "0.125"
-                  memory = "50Mi"
-                }
-                requests = {
-                  cpu    = "100m"
-                  memory = "50Mi"
-                }
-              }
-              # liveness_probe = {
-              #   http_get = {
-              #     path = "/"
-              #     port = "80"
-              #   }
-              #   initial_delay_seconds = 5
-              #   period_seconds = 3
-              # }
-            }
-          ]
-          }
-        }
-      }
+      #         resources = {
+      #           limits = {
+      #             cpu    = "0.125"
+      #             memory = "50Mi"
+      #           }
+      #           requests = {
+      #             cpu    = "100m"
+      #             memory = "50Mi"
+      #           }
+      #         }
+      #         # liveness_probe = {
+      #         #   http_get = {
+      #         #     path = "/"
+      #         #     port = "80"
+      #         #   }
+      #         #   initial_delay_seconds = 5
+      #         #   period_seconds = 3
+      #         # }
+      #       }
+      #     ]
+      #     }
+      #   }
+      # }
     }
   }
 
   #### Project 2
-  
+
   hello-world-2 = {
 
-      services = {
+    services = {
 
-        # fastapi_helloworld-2 = {
+      # fastapi_helloworld-2 = {
 
-        #   selector = {
-        #     test = "fastapi-helloworld"
-        #   }
+      #   selector = {
+      #     test = "fastapi-helloworld"
+      #   }
 
-        #   port = [
-        #     {
-        #       port = 80
-        #       target_port = 80
-        #     }
-        #   ]
+      #   port = [
+      #     {
+      #       port = 80
+      #       target_port = 80
+      #     }
+      #   ]
 
-        #   type = "LoadBalancer"
+      #   type = "LoadBalancer"
 
-        # }
+      # }
 
-      }
-
-      Deployments = {
-
-        fastapi-helloworld-2 = {
-
-          labels = {
-            test = "fastapi-helloworld-2"
-          }
-          replicas = 1
-          selector = {
-            match_labels = {
-              test = "fastapi-helloworld-2"
-              }
-          }
-          template = {
-
-            metadata = {
-              labels = {
-                test = "fastapi-helloworld-2"
-              }
-            }
-            spec = {
-
-            container = [
-              {
-                image = "680688655542.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project"
-                name  = "fastapi-helloworld"
-
-                resources = {
-                  limits = {
-                    cpu    = "0.1"
-                    memory = "100Mi"
-                  }
-                  requests = {
-                    cpu    = "50m"
-                    memory = "50Mi"
-                  }
-                }
-                # liveness_probe = {
-                #   http_get = {
-                #     path = "/"
-                #     port = "80"
-                #   }
-                #   initial_delay_seconds = 5
-                #   period_seconds = 3
-                # }
-              }
-            ]
-            }
-          }
-        }
-      }
     }
+
+    # Deployments = {
+
+    #   fastapi-helloworld-2 = {
+
+    #     labels = {
+    #       test = "fastapi-helloworld-2"
+    #     }
+    #     replicas = 1
+    #     selector = {
+    #       match_labels = {
+    #         test = "fastapi-helloworld-2"
+    #         }
+    #     }
+    #     template = {
+
+    #       metadata = {
+    #         labels = {
+    #           test = "fastapi-helloworld-2"
+    #         }
+    #       }
+    #       spec = {
+
+    #       container = [
+    #         {
+    #           image = "489994096722.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project:latest"
+    #           name  = "fastapi-helloworld"
+
+    #           resources = {
+    #             limits = {
+    #               cpu    = "0.1"
+    #               memory = "100Mi"
+    #             }
+    #             requests = {
+    #               cpu    = "50m"
+    #               memory = "50Mi"
+    #             }
+    #           }
+    #           # liveness_probe = {
+    #           #   http_get = {
+    #           #     path = "/"
+    #           #     port = "80"
+    #           #   }
+    #           #   initial_delay_seconds = 5
+    #           #   period_seconds = 3
+    #           # }
+    #         }
+    #       ]
+    #       }
+    #     }
+    #   }
+    # }
+  }
 }
 
 

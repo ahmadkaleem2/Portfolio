@@ -29,7 +29,7 @@ terraform {
 
 
 provider "kubectl" {
-  alias = "gavinbunney_kubectl"
+  alias                  = "gavinbunney_kubectl"
   host                   = module.eks.endpoint
   cluster_ca_certificate = base64decode(module.eks.kubeconfig-certificate-authority-data)
   token                  = module.eks.eks_token
