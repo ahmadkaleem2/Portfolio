@@ -38,17 +38,43 @@ resource "aws_iam_role" "ahmad-eks-node-role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "example-AmazonEKSWorkerNodePolicy" {
+resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.ahmad-eks-node-role.name
 }
 
-resource "aws_iam_role_policy_attachment" "example-AmazonEKS_CNI_Policy" {
+resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.ahmad-eks-node-role.name
 }
 
-resource "aws_iam_role_policy_attachment" "example-AmazonEC2ContainerRegistryReadOnly" {
+resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.ahmad-eks-node-role.name
+}
+
+
+resource "aws_iam_policy" "eks_to_secrets_manager" {
+  name        = "Allow_eks_to_get_value_from_secrets_manager"
+  path        = "/"
+  description = "Allow To Get Value from secret manager"
+  policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
+          ],
+        "Resource": "arn:aws:secretsmanager:us-west-2:680688655542:secret:*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ReadSecretsFromSecretsManager" {
+  policy_arn = aws_iam_policy.eks_to_secrets_manager.arn
+  role       = aws_iam_role.ahmad-eks-node-role.name
+
 }
