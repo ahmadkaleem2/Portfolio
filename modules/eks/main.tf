@@ -18,6 +18,12 @@ resource "aws_eks_cluster" "eks-cluster" {
 }
 
 
+resource "aws_eks_addon" "eks_addons" {
+  count = length(var.eks_configuration.eks_addons)
+  cluster_name = aws_eks_cluster.eks-cluster.name
+  addon_name   = var.eks_configuration.eks_addons[count.index]
+}
+
 resource "aws_eks_node_group" "eks_node_groups" {
 
   for_each = local.nodegroups

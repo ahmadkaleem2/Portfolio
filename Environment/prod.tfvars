@@ -323,6 +323,8 @@ eks_configuration = {
 
   eks_cluster_iam_role_arn = null
 
+  eks_addons = ["eks-pod-identity-agent", "vpc-cni","amazon-cloudwatch-observability","aws-ebs-csi-driver", "aws-mountpoint-s3-csi-driver"]
+
   access_config = {
     # possible value ["CONFIG_MAP", "API_AND_CONFIG_MAP", "API"]
     authentication_mode                         = "API_AND_CONFIG_MAP"
@@ -349,9 +351,9 @@ eks_configuration = {
       }
 
       scaling_config = {
-        desired_size = 1
-        max_size     = 1
-        min_size     = 1
+        desired_size = 2
+        max_size     = 2
+        min_size     = 2
 
       }
       update_config = {
@@ -481,7 +483,7 @@ manifests = {
     services = {
 
       fastapi-helloworld = {
-        namespace = "app"
+        namespace = "default"
         selector = {
           test = "fastapi-helloworld"
         }
@@ -503,7 +505,7 @@ manifests = {
 
     Deployments = {
       fastapi-helloworld-deployment = {
-        namespace = "app"
+        namespace = "default"
         labels = {
           test = "fastapi-helloworld"
         }
