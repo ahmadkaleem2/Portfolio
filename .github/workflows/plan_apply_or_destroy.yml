@@ -14,8 +14,6 @@ on:
         type: choice
         description: 'Select the environment: dev, staging, or prod'
         options:
-          - dev
-          - staging
           - prod
 
 concurrency: single
