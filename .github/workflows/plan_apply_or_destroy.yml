@@ -1,9 +1,6 @@
 name: Terraform Plan, Apply, or Destroy
 
 on:
-  push:
-    branches:
-    - main 
   workflow_dispatch:
     inputs:
       apply_or_destroy:
