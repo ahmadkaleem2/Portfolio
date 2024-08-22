@@ -13,7 +13,6 @@ concurrency: single
 jobs:
   terraform:
     name: Terraform Plan
-    if: github.event.pull_request.base.ref == 'dev'
     runs-on: ubuntu-latest
     permissions:
       id-token: write
