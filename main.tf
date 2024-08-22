@@ -48,9 +48,9 @@ resource "null_resource" "readcontentfile" {
 
 module "eks-terraform" {
 
-  providers = {
-    kubectl = kubectl.gavinbunney_kubectl
-  }
+  # providers = {
+  #   kubectl = kubectl.gavinbunney_kubectl
+  # }
 
   source = "./modules/eks-terraform/"
 
@@ -58,6 +58,14 @@ module "eks-terraform" {
 
 
   depends_on = [module.eks, module.vpc]
+}
+
+module "helm" {
+
+  source = "./modules/helm"
+
+  eks_cluster_name = module.eks.eks_cluster_name
+
 }
 
 
