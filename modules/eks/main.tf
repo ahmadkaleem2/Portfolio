@@ -2,6 +2,7 @@
 resource "aws_eks_cluster" "eks-cluster" {
   name     = lookup(var.eks_configuration, "cluster_name", "${terraform.workspace}-${var.identifier}-EKS")
   role_arn = var.eks_configuration.eks_cluster_iam_role_arn == null ? aws_iam_role.eks-role.arn : aws_iam_role.eks-role.arn
+
   access_config {
     authentication_mode                         = local.access_config.authentication_mode
     bootstrap_cluster_creator_admin_permissions = local.access_config.bootstrap_cluster_creator_admin_permissions
