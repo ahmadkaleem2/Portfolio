@@ -1,9 +1,12 @@
 name: Terraform Plan
 
-on:
-    pull_request:
-      types:
-        - opened  
+on: 
+  push:
+    branches:
+      - main  
+  pull_request:
+    types:
+      - opened  
 
 concurrency: single
 
