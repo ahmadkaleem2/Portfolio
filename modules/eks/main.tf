@@ -22,6 +22,8 @@ resource "aws_eks_addon" "eks_addons" {
   count = length(var.eks_configuration.eks_addons)
   cluster_name = aws_eks_cluster.eks-cluster.name
   addon_name   = var.eks_configuration.eks_addons[count.index]
+
+  depends_on = [ aws_eks_node_group.eks_node_groups ]
 }
 
 resource "aws_eks_node_group" "eks_node_groups" {
