@@ -325,6 +325,7 @@ eks_configuration = {
 
   eks_addons = [
     "eks-pod-identity-agent", 
+    "vpc-cni"
     # "amazon-cloudwatch-observability",
     # "aws-ebs-csi-driver", 
     # "aws-mountpoint-s3-csi-driver"
