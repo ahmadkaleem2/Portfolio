@@ -323,7 +323,12 @@ eks_configuration = {
 
   eks_cluster_iam_role_arn = null
 
-  eks_addons = ["eks-pod-identity-agent", "vpc-cni","amazon-cloudwatch-observability","aws-ebs-csi-driver", "aws-mountpoint-s3-csi-driver"]
+  eks_addons = [
+    "eks-pod-identity-agent", 
+    # "amazon-cloudwatch-observability",
+    # "aws-ebs-csi-driver", 
+    # "aws-mountpoint-s3-csi-driver"
+    ]
 
   access_config = {
     # possible value ["CONFIG_MAP", "API_AND_CONFIG_MAP", "API"]
@@ -464,17 +469,17 @@ manifests = {
 
     config_maps = {
 
-      data-for-app = {
+      # data-for-app = {
 
-        namespace = "default"
+      #   namespace = "default"
 
-        data = {
+      #   data = {
 
-          whatIsThis = "thisisterraform"
+      #     whatIsThis = "thisisterraform"
 
-        }
+      #   }
 
-      }
+      # }
 
     }
 
@@ -482,117 +487,117 @@ manifests = {
 
     services = {
 
-      fastapi-helloworld = {
-        namespace = "default"
-        selector = {
-          test = "fastapi-helloworld"
-        }
+      # fastapi-helloworld = {
+      #   namespace = "default"
+      #   selector = {
+      #     test = "fastapi-helloworld"
+      #   }
 
-        ports = [
-          {
-            port        = 80
-            target_port = 80
-          }
-        ]
+      #   ports = [
+      #     {
+      #       port        = 80
+      #       target_port = 80
+      #     }
+      #   ]
 
-        type = "ClusterIP"
+      #   type = "ClusterIP"
 
 
-      }
+      # }
 
 
     }
 
     Deployments = {
-      fastapi-helloworld-deployment = {
-        namespace = "default"
-        labels = {
-          test = "fastapi-helloworld"
-        }
-        replicas = 1
-        selector = {
-          match_labels = {
-            test = "fastapi-helloworld"
-          }
-        }
-        template = {
+      # fastapi-helloworld-deployment = {
+      #   namespace = "default"
+      #   labels = {
+      #     test = "fastapi-helloworld"
+      #   }
+      #   replicas = 1
+      #   selector = {
+      #     match_labels = {
+      #       test = "fastapi-helloworld"
+      #     }
+      #   }
+      #   template = {
 
-          metadata = {
-            labels = {
-              test = "fastapi-helloworld"
-            }
-          }
-          spec = {
-            volume = [
-              {
-                name = "app-data"
-                config_map = {
-                  name = "data-for-app"
-                }
-              }
-            ]
-            container = [
-              {
-                # image = "680688655542.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project"
-                image = "489994096722.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project:latest"
-                name  = "fastapi-helloworld"
+      #     metadata = {
+      #       labels = {
+      #         test = "fastapi-helloworld"
+      #       }
+      #     }
+      #     spec = {
+      #       volume = [
+      #         {
+      #           name = "app-data"
+      #           config_map = {
+      #             name = "data-for-app"
+      #           }
+      #         }
+      #       ]
+      #       container = [
+      #         {
+      #           image = "680688655542.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project"
+      #           # image = "489994096722.dkr.ecr.us-west-2.amazonaws.com/fastapi-helloworld-project:latest"
+      #           name  = "fastapi-helloworld"
 
-                ports = [
-                  {
-                    container_port = 80
-                    name           = "http"
-                  }
-                ]
+      #           ports = [
+      #             {
+      #               container_port = 80
+      #               name           = "http"
+      #             }
+      #           ]
 
-                volume_mounts = [
-                  {
-                    name       = "app-data"
-                    mount_path = "/etc/data123"
-                  }
-                ]
-                resources = {
-                  limits = {
-                    cpu    = "100"
-                    memory = "100Mi"
-                  }
-                  requests = {
-                    cpu    = "50m"
-                    memory = "25Mi"
-                  }
-                }
-                # liveness_probe = {
-                #   http_get = {
-                #     path = "/"
-                #     port = "80"
-                #   }
-                #   initial_delay_seconds = 5
-                #   period_seconds        = 3
-                # }
-              },
-              # {
-              #   image = "redis"
-              #   name  = "fastapi-helloworld1"
+      #           volume_mounts = [
+      #             {
+      #               name       = "app-data"
+      #               mount_path = "/etc/data123"
+      #             }
+      #           ]
+      #           resources = {
+      #             limits = {
+      #               cpu    = "100"
+      #               memory = "100Mi"
+      #             }
+      #             requests = {
+      #               cpu    = "50m"
+      #               memory = "25Mi"
+      #             }
+      #           }
+      #           # liveness_probe = {
+      #           #   http_get = {
+      #           #     path = "/"
+      #           #     port = "80"
+      #           #   }
+      #           #   initial_delay_seconds = 5
+      #           #   period_seconds        = 3
+      #           # }
+      #         },
+      #         # {
+      #         #   image = "redis"
+      #         #   name  = "fastapi-helloworld1"
 
-              #   resources = {
-              #     limits = {
-              #       cpu    = "0.25"
-              #       memory = "256Mi"
-              #     }
-              #     requests = {
-              #       cpu    = "125m"
-              #       memory = "50Mi"
-              #     }
-              #   }
+      #         #   resources = {
+      #         #     limits = {
+      #         #       cpu    = "0.25"
+      #         #       memory = "256Mi"
+      #         #     }
+      #         #     requests = {
+      #         #       cpu    = "125m"
+      #         #       memory = "50Mi"
+      #         #     }
+      #         #   }
 
-              # }
+      #         # }
 
 
 
-            ]
-          }
+      #       ]
+      #     }
 
-        }
-      }
+      #   }
+      # }
 
       # fastapi-helloworld-1 = {
 
