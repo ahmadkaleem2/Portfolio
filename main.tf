@@ -53,6 +53,7 @@ module "helm" {
 
   eks_cluster_name = module.eks.eks_cluster_name
 
+  aws_region = var.AWS_REGION
 }
 
 

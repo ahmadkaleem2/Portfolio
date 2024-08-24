@@ -21,12 +21,70 @@ resource "helm_release" "aws_load_balancer_controller" {
   }
   set {
     name = "region"
-    value = "us-west-2"
+    value = var.aws_region
   }
   set {
     name = "vpcId"
-    value = "vpc-02295c3d9c3e944f2"
+    value = "vpc-0bb63223ba82279ae"
   }
+}
+
+
+resource "helm_release" "external_dns" {
+  name       = "external-dns"
+  repository = "https://kubernetes-sigs.github.io/external-dns/"
+  chart      = "external-dns"
+  namespace = "aws-load-balancer-controller"
+  # version = "1.14.5"
+  create_namespace = false
+  cleanup_on_fail = true
+  set {
+    name  = "source"
+    value = "ingress"
+  }
+
+  set {
+    name  = "domain-filter"
+    value = "ahmadkaleem2.link"
+  }
+
+  set {
+    name = "provider"
+    value = "aws"
+  }
+  set {
+    name = "policy"
+    value = "upsert-only"
+  }
+  set {
+    name = "aws-zone-type"
+    value = "public"
+  }
+  set {
+    name = "registry"
+    value = "txt"
+  }
+  set {
+    name = "txt-owner-id"
+    value = "asdasd"
+  }
+}
+
+resource "helm_release" "cert-manager" {
+  name       = "cert-manager"
+  repository = "https://charts.jetstack.io/"
+  chart      = "cert-manager"
+  namespace = "cert-manager"
+  version = "1.15.3"
+  create_namespace = true
+  cleanup_on_fail = true
+
+  set {
+    name = "crds.enabled"
+    value = true
+  }
+
+
 }
 
 

@@ -15,13 +15,7 @@ data "tls_certificate" "oidc_issuer" {
   url = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
 }
 
-resource "aws_iam_openid_connect_provider" "oidc_eks" {
-  client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = [data.tls_certificate.oidc_issuer.certificates[0].sha1_fingerprint]
-  url             = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
-}
-
-data "aws_iam_policy_document" "example_assume_role_policy" {
+data "aws_iam_policy_document" "oidc_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
@@ -39,14 +33,27 @@ data "aws_iam_policy_document" "example_assume_role_policy" {
   }
 }
 
-resource "aws_iam_role" "example" {
-  assume_role_policy = data.aws_iam_policy_document.example_assume_role_policy.json
-  name               = "example-vpc-cni-role"
+
+resource "aws_iam_openid_connect_provider" "oidc_eks" {
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.oidc_issuer.certificates[0].sha1_fingerprint]
+  url             = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
 }
 
-resource "aws_iam_role_policy_attachment" "example" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.example.name
+resource "aws_iam_role" "oidc_lbc_role" {
+  assume_role_policy = data.aws_iam_policy_document.oidc_assume_role_policy.json
+  name               = "oidc_lbc_role"
+}
+
+resource "aws_iam_policy" "load_balancer_controller" {                                                                                                       
+  policy = file("modules/eks/custom_policies/load_balancer_controller.json")
+  name = "load_balancer_controller_policy"        
+}
+
+resource "aws_iam_role_policy_attachment" "oidc_lbc_role_attachment" {
+  policy_arn = aws_iam_policy.load_balancer_controller.arn
+  role = aws_iam_role.oidc_lbc_role.name
+
 }
 
 resource "kubernetes_namespace" "aws-load-balancer-controller" {
@@ -68,7 +75,7 @@ resource "kubernetes_service_account" "aws_load_balancer_controller" {
     name      = "aws-load-balancer-controller"
     namespace = "aws-load-balancer-controller"
     annotations = {
-      "eks.amazonaws.com/role-arn" = aws_iam_role.example.arn
+      "eks.amazonaws.com/role-arn" = aws_iam_role.oidc_lbc_role.arn
     }
   }
   depends_on = [ kubernetes_namespace.aws-load-balancer-controller ]
