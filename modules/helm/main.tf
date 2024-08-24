@@ -135,5 +135,60 @@ resource "kubernetes_service_account" "karpenter" {
   depends_on = [ kubernetes_namespace.karpenter_ns ]
 }
 
+resource "helm_release" "external_dns" {
+  name       = "external-dns"
+  repository = "https://kubernetes-sigs.github.io/external-dns/"
+  chart      = "external-dns"
+  namespace = "aws-load-balancer-controller"
+  # version = "1.14.5"
+  create_namespace = false
+  cleanup_on_fail = true
+  set {
+    name  = "source"
+    value = "ingress"
+  }
 
+  set {
+    name  = "domain-filter"
+    value = "ahmadkaleem2.link"
+  }
+
+  set {
+    name = "provider"
+    value = "aws"
+  }
+  set {
+    name = "policy"
+    value = "upsert-only"
+  }
+  set {
+    name = "aws-zone-type"
+    value = "public"
+  }
+  set {
+    name = "registry"
+    value = "txt"
+  }
+  set {
+    name = "txt-owner-id"
+    value = "asdasd"
+  }
+}
+
+resource "helm_release" "cert-manager" {
+  name       = "cert-manager"
+  repository = "https://charts.jetstack.io/"
+  chart      = "cert-manager"
+  namespace = "cert-manager"
+  version = "1.15.3"
+  create_namespace = true
+  cleanup_on_fail = true
+
+  set {
+    name = "crds.enabled"
+    value = true
+  }
+
+
+}
 
