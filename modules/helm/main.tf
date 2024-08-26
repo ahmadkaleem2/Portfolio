@@ -25,7 +25,7 @@ resource "helm_release" "aws_load_balancer_controller" {
   }
   set {
     name = "vpcId"
-    value = "vpc-0bb63223ba82279ae"
+    value = "vpc-041c511ab8e1b2b9d"
   }
 }
 
@@ -38,6 +38,15 @@ resource "helm_release" "external_dns" {
   # version = "1.14.5"
   create_namespace = false
   cleanup_on_fail = true
+  set {
+    name  = "serviceAccount.name"
+    value = "external-dns"
+  }
+
+  set {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = "arn:aws:iam::680688655542:role/AllowExternalDNSUpdates"
+  }
   set {
     name  = "source"
     value = "ingress"
@@ -68,6 +77,8 @@ resource "helm_release" "external_dns" {
     name = "txt-owner-id"
     value = "asdasd"
   }
+
+
 }
 
 resource "helm_release" "cert-manager" {
