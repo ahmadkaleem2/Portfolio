@@ -5,13 +5,13 @@ metadata:
   namespace: echoserver
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/subnets: subnet-0771666ee0d8bebec, subnet-080f29b0934d4b1fa
-    external-dns.alpha.kubernetes.io/hostname: api.ahmadkaleem2.link
+    alb.ingress.kubernetes.io/subnets: subnet-060e9cc627a6c0548, subnet-02077d0dc5108c9ab
+    external-dns.alpha.kubernetes.io/hostname: dev.ahmadkaleem2.link
     # external-dns.alpha.kubernetes.io/hostname: my-app.test-dns.com
 spec:
   ingressClassName: alb
   rules:
-    - host: api.ahmadkaleem2.link
+    - host: dev.ahmadkaleem2.link
       http:
         paths:
           - path: /
