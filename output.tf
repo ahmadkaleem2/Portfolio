@@ -37,3 +37,7 @@ output "deployments" {
 # output "va" {
 #   value = module.eks-terraform.va
 # }
+
+output "update_kubeconfig" {
+  value = "aws eks update-kubeconfig --name ${module.eks.eks_cluster_name} --region ${var.AWS_REGION}"
+}

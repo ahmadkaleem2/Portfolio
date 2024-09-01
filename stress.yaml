@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: stress-test
+spec:
+  parallelism: 2
+  completions: 2
+  template:
+    spec:
+      containers:
+      - name: stress
+        image: polinux/stress
+        resources:
+          requests:
+            cpu: "1000m"
+            memory: "256Mi"
+        command: ["stress"]
+        args: ["--cpu", "4", "--io", "2", "--vm", "2", "--vm-bytes", "128M", "--timeout", "1500s"]
+      restartPolicy: Never
+  backoffLimit: 4
