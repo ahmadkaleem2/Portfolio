@@ -1,9 +1,10 @@
 name: Terraform Plan
 
 on:
-  push:
-    branches:
-    - main  
+  {}
+  # push:
+  #   branches:
+  #   - main  
 
 concurrency: single
 

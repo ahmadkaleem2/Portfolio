@@ -65,6 +65,11 @@ resource "aws_eks_node_group" "eks_node_groups" {
     max_unavailable = each.value.update_config.max_unavailable
   }
 
+  tags = {
+    "k8s.io/cluster-autoscaler/enabled"       = "true"
+    "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks-cluster.name}" = "owned"
+  }
+
   depends_on = [
     aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
