@@ -4,7 +4,7 @@ metadata:
   name: stress-test
 spec:
   parallelism: 2
-  completions: 2
+  completions: 4
   template:
     spec:
       containers:

@@ -11,6 +11,27 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
+data "aws_iam_policy_document" "example_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.oidc_eks.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:aws-load-balancer-controller:aws-load-balancer-controller"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.oidc_eks.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+
+
+
 data "tls_certificate" "oidc_issuer" {
   url = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
 }
@@ -199,7 +220,7 @@ resource "aws_iam_policy" "cluster_karpenter_policy" {
         {
             "Effect": "Allow",
             "Action": "eks:DescribeCluster",
-            "Resource": "arn:aws:eks:us-west-2:489994096722:cluster/prod-Ahmad-EKS",
+            "Resource": "arn:aws:eks:us-west-2:680688655542:cluster/prod-Ahmad-EKS",
             "Sid": "EKSClusterEndpointLookup"
         }
     ],

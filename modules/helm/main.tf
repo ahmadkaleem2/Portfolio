@@ -111,7 +111,7 @@ resource "helm_release" "karpenter" {
   }
   set {
     name = "controller.clusterEndpoint"
-    value = "https://11444CBBECEB8B4E47B5F48607359428.gr7.us-west-2.eks.amazonaws.com"
+    value = "https://1F143759928D3B66B8156F39DDA9BBCB.gr7.us-west-2.eks.amazonaws.com"
   }
 
   wait = true
@@ -129,7 +129,7 @@ resource "kubernetes_service_account" "karpenter" {
     name      = "karpenter-sa"
     namespace = "karpenter"
     annotations = {
-      "eks.amazonaws.com/role-arn" = "arn:aws:iam::489994096722:role/cluster_karpenter"
+      "eks.amazonaws.com/role-arn" = "arn:aws:iam::680688655542:role/cluster_karpenter"
     }
   }
   depends_on = [ kubernetes_namespace.karpenter_ns ]
