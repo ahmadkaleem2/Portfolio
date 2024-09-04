@@ -1,33 +1,34 @@
-# resource "helm_release" "aws_load_balancer_controller" {
-#   name       = "aws-load-balancer-controller"
-#   repository = "https://aws.github.io/eks-charts"
-#   chart      = "aws-load-balancer-controller"
-#   namespace = "aws-load-balancer-controller"
-#   create_namespace = false
-#   cleanup_on_fail = true
-#   set {
-#     name  = "serviceAccount.create"
-#     value = "false"
-#   }
+resource "helm_release" "aws_load_balancer_controller" {
+  name       = "aws-load-balancer-controller"
+  repository = "https://aws.github.io/eks-charts"
+  chart      = "aws-load-balancer-controller"
+  namespace = "aws-load-balancer-controller"
+  create_namespace = false
+  cleanup_on_fail = true
+  set {
+    name  = "serviceAccount.create"
+    value = "false"
+  }
 
-#   set {
-#     name  = "serviceAccount.name"
-#     value = "aws-load-balancer-controller"
-#   }
+  set {
+    name  = "serviceAccount.name"
+    value = "aws-load-balancer-controller"
+  }
 
-#   set {
-#     name = "clusterName"
-#     value = var.eks_cluster_name
-#   }
-#   set {
-#     name = "region"
-#     value = "us-west-2"
-#   }
-#   set {
-#     name = "vpcId"
-#     value = "vpc-02295c3d9c3e944f2"
-#   }
-# }
+  set {
+    name = "clusterName"
+    value = var.eks_cluster_name
+  }
+  set {
+    name = "region"
+    value = var.AWS_REGION
+  }
+  set {
+    name = "vpcId"
+    value = var.vpc_id
+  }
+  depends_on = [ kubernetes_service_account.aws_load_balancer_controller ]
+}
 
 # resource "helm_release" "cluster_autoscaler" {
 #   name       = "cluster-autoscaler"
@@ -42,12 +43,12 @@
 
 #   set {
 #     name  = "awsRegion"
-#     value = "us-west-2"  # Assuming you have this variable defined
+#     value = var.AWS_REGION
 #   }
 
 #   set {
 #     name  = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-#     value = "arn:aws:iam::489994096722:role/cluster_autoscaler"
+#     value = aws_iam_role.cluster_autoscaler_iam_role.arn
 #   }
 
 #   set {
@@ -111,38 +112,46 @@ resource "helm_release" "karpenter" {
   }
   set {
     name = "controller.clusterEndpoint"
-    value = "https://1F143759928D3B66B8156F39DDA9BBCB.gr7.us-west-2.eks.amazonaws.com"
+    value = var.eks_cluster_endpoint
   }
 
   wait = true
+
+  depends_on = [ kubernetes_namespace.karpenter_ns, kubernetes_service_account.karpenter ]
 }
 
-resource "kubernetes_namespace" "karpenter_ns" {
-  metadata {
-    name = "karpenter"
-  }
+# resource "kubernetes_namespace" "karpenter_ns" {
+#   metadata {
+#     name = "karpenter"
+#   }
   
-}
+# }
 
-resource "kubernetes_service_account" "karpenter" {
-  metadata {
-    name      = "karpenter-sa"
-    namespace = "karpenter"
-    annotations = {
-      "eks.amazonaws.com/role-arn" = "arn:aws:iam::680688655542:role/cluster_karpenter"
-    }
-  }
-  depends_on = [ kubernetes_namespace.karpenter_ns ]
-}
+# resource "kubernetes_service_account" "karpenter" {
+#   metadata {
+#     name      = "karpenter-sa"
+#     namespace = "karpenter"
+#     annotations = {
+#       "eks.amazonaws.com/role-arn" = "arn:aws:iam::680688655542:role/cluster_karpenter"
+#     }
+#   }
+#   depends_on = [ kubernetes_namespace.karpenter_ns ]
+# }
 
 resource "helm_release" "external_dns" {
   name       = "external-dns"
   repository = "https://kubernetes-sigs.github.io/external-dns/"
   chart      = "external-dns"
-  namespace = "aws-load-balancer-controller"
+  namespace = "external-dns"
   # version = "1.14.5"
   create_namespace = false
   cleanup_on_fail = true
+
+  set {
+    name = "serviceAccount.create"
+    value = "false"
+  }
+
   set {
     name  = "serviceAccount.name"
     value = "external-dns"
@@ -150,7 +159,7 @@ resource "helm_release" "external_dns" {
 
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = "arn:aws:iam::680688655542:role/AllowExternalDNSUpdates"
+    value = aws_iam_role.external_dns_iam_role.arn
   }
   set {
     name  = "source"
@@ -183,7 +192,7 @@ resource "helm_release" "external_dns" {
     value = "asdasd"
   }
 
-
+  depends_on = [ kubernetes_namespace.external-dns ]
 }
 
 resource "helm_release" "cert-manager" {
@@ -192,7 +201,7 @@ resource "helm_release" "cert-manager" {
   chart      = "cert-manager"
   namespace = "cert-manager"
   version = "1.15.3"
-  create_namespace = true
+  create_namespace = false
   cleanup_on_fail = true
 
   set {
@@ -201,5 +210,17 @@ resource "helm_release" "cert-manager" {
   }
 
 
+  depends_on = [ kubernetes_namespace.cert-manager ]
+
 }
 
+
+
+
+resource "helm_release" "metrics_server" {
+  name       = "metrics-server"
+  namespace  = "kube-system"
+  chart      = "metrics-server"
+  repository = "https://kubernetes-sigs.github.io/metrics-server/"
+
+}

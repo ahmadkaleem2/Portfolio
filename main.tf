@@ -22,6 +22,8 @@ module "eks" {
 
   subnets = module.vpc["vpc-prod"].subnets
 
+  vpc_id = module.vpc["vpc-prod"].vpc_id
+
   eks_configuration = var.eks_configuration
 
   tags_all = {
@@ -33,28 +35,28 @@ module "eks" {
 
 }
 
-module "eks-terraform" {
+# module "eks-terraform" {
 
-  # providers = {
-  #   kubectl = kubectl.gavinbunney_kubectl
-  # }
+#   # providers = {
+#   #   kubectl = kubectl.gavinbunney_kubectl
+#   # }
 
-  source = "./modules/eks-terraform/"
+#   source = "./modules/eks-terraform/"
 
-  manifests = var.manifests
+#   manifests = var.manifests
 
 
-  depends_on = [module.eks, module.vpc]
-}
+#   depends_on = [module.eks, module.vpc]
+# }
 
-module "helm" {
+# module "helm" {
 
-  source = "./modules/helm"
+#   source = "./modules/helm"
 
-  eks_cluster_name = module.eks.eks_cluster_name
+#   eks_cluster_name = module.eks.eks_cluster_name
 
-  aws_region = var.AWS_REGION
-}
+#   aws_region = var.AWS_REGION
+# }
 
 
 
