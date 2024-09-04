@@ -47,14 +47,14 @@ module "eks-terraform" {
   depends_on = [module.eks, module.vpc]
 }
 
-module "helm" {
+# module "helm" {
 
-  source = "./modules/helm"
+#   source = "./modules/helm"
 
-  eks_cluster_name = module.eks.eks_cluster_name
+#   eks_cluster_name = module.eks.eks_cluster_name
 
-  aws_region = var.AWS_REGION
-}
+#   aws_region = var.AWS_REGION
+# }
 
 
 

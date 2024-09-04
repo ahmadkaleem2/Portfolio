@@ -76,3 +76,18 @@ resource "aws_eks_node_group" "eks_node_groups" {
     aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
   ]
 }
+
+
+module "helm" {
+
+  source = "./helm"
+
+  eks_cluster_name = aws_eks_cluster.eks-cluster.name
+
+  eks_cluster_endpoint = aws_eks_cluster.eks-cluster.endpoint
+
+  AWS_REGION = "us-west-2"
+
+  cluster_oidc_issuer = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
+  
+}
