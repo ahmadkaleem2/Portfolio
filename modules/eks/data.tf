@@ -159,100 +159,100 @@ data "aws_iam_policy_document" "assume_role" {
 
 
 
-data "aws_iam_policy_document" "cluster_karpenter" {
-  statement {
-    actions = ["sts:AssumeRoleWithWebIdentity"]
-    effect  = "Allow"
+# data "aws_iam_policy_document" "cluster_karpenter" {
+#   statement {
+#     actions = ["sts:AssumeRoleWithWebIdentity"]
+#     effect  = "Allow"
 
-    condition {
-      test     = "StringEquals"
-      variable = "${replace(aws_iam_openid_connect_provider.oidc_eks.url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:karpenter:karpenter-sa"]
-    }
+#     condition {
+#       test     = "StringEquals"
+#       variable = "${replace(aws_iam_openid_connect_provider.oidc_eks.url, "https://", "")}:sub"
+#       values   = ["system:serviceaccount:karpenter:karpenter-sa"]
+#     }
 
-    principals {
-      identifiers = [aws_iam_openid_connect_provider.oidc_eks.arn]
-      type        = "Federated"
-    }
-  }
-}
+#     principals {
+#       identifiers = [aws_iam_openid_connect_provider.oidc_eks.arn]
+#       type        = "Federated"
+#     }
+#   }
+# }
 
-resource "aws_iam_policy" "cluster_karpenter_policy" {
-  name        = "eks-cluster-karpenter-policy"
-  description = "IAM policy for EKS Cluster Autoscaler"
-  policy      = <<EOF
-{
-    "Statement": [
-        {
-            "Action": [
-                "iam:RemoveRoleFromInstanceProfile",
-                "ec2:TerminateInstances",
-                "iam:DeleteInstanceProfile",
-                "iam:PassRole",
-                "iam:AddRoleToInstanceProfile",
-                "iam:TagInstanceProfile",
-                "iam:GetInstanceProfile",
-                "iam:CreateInstanceProfile",
-                "ssm:GetParameter",
-                "ec2:DescribeImages",
-                "ec2:RunInstances",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeSecurityGroups",
-                "ec2:DescribeLaunchTemplates",
-                "ec2:DescribeInstances",
-                "ec2:DescribeInstanceTypes",
-                "ec2:DescribeInstanceTypeOfferings",
-                "ec2:DescribeAvailabilityZones",
-                "ec2:DeleteLaunchTemplate",
-                "ec2:CreateTags",
-                "ec2:CreateLaunchTemplate",
-                "ec2:CreateFleet",
-                "ec2:DescribeSpotPriceHistory",
-                "pricing:GetProducts"
-            ],
-            "Effect": "Allow",
-            "Resource": "*",
-            "Sid": "Karpenter"
-        },
+# resource "aws_iam_policy" "cluster_karpenter_policy" {
+#   name        = "eks-cluster-karpenter-policy"
+#   description = "IAM policy for EKS Cluster Autoscaler"
+#   policy      = <<EOF
+# {
+#     "Statement": [
+#         {
+#             "Action": [
+#                 "iam:RemoveRoleFromInstanceProfile",
+#                 "ec2:TerminateInstances",
+#                 "iam:DeleteInstanceProfile",
+#                 "iam:PassRole",
+#                 "iam:AddRoleToInstanceProfile",
+#                 "iam:TagInstanceProfile",
+#                 "iam:GetInstanceProfile",
+#                 "iam:CreateInstanceProfile",
+#                 "ssm:GetParameter",
+#                 "ec2:DescribeImages",
+#                 "ec2:RunInstances",
+#                 "ec2:DescribeSubnets",
+#                 "ec2:DescribeSecurityGroups",
+#                 "ec2:DescribeLaunchTemplates",
+#                 "ec2:DescribeInstances",
+#                 "ec2:DescribeInstanceTypes",
+#                 "ec2:DescribeInstanceTypeOfferings",
+#                 "ec2:DescribeAvailabilityZones",
+#                 "ec2:DeleteLaunchTemplate",
+#                 "ec2:CreateTags",
+#                 "ec2:CreateLaunchTemplate",
+#                 "ec2:CreateFleet",
+#                 "ec2:DescribeSpotPriceHistory",
+#                 "pricing:GetProducts"
+#             ],
+#             "Effect": "Allow",
+#             "Resource": "*",
+#             "Sid": "Karpenter"
+#         },
 
-        {
-            "Effect": "Allow",
-            "Action": "eks:DescribeCluster",
-            "Resource": "arn:aws:eks:us-west-2:680688655542:cluster/prod-Ahmad-EKS",
-            "Sid": "EKSClusterEndpointLookup"
-        }
-    ],
-    "Version": "2012-10-17"
-}
-EOF
-}
+#         {
+#             "Effect": "Allow",
+#             "Action": "eks:DescribeCluster",
+#             "Resource": "arn:aws:eks:us-west-2:680688655542:cluster/prod-Ahmad-EKS",
+#             "Sid": "EKSClusterEndpointLookup"
+#         }
+#     ],
+#     "Version": "2012-10-17"
+# }
+# EOF
+# }
 
-resource "aws_iam_role_policy_attachment" "cluster_karpenter_policy_attachment" {
-  policy_arn = aws_iam_policy.cluster_karpenter_policy.arn
-  role       = aws_iam_role.cluster_karpenter_iam_role.name
-}
+# resource "aws_iam_role_policy_attachment" "cluster_karpenter_policy_attachment" {
+#   policy_arn = aws_iam_policy.cluster_karpenter_policy.arn
+#   role       = aws_iam_role.cluster_karpenter_iam_role.name
+# }
 
-resource "aws_iam_role" "cluster_karpenter_iam_role" {
-  assume_role_policy = data.aws_iam_policy_document.cluster_karpenter.json
-  name               = "cluster_karpenter"
-}
-
-
+# resource "aws_iam_role" "cluster_karpenter_iam_role" {
+#   assume_role_policy = data.aws_iam_policy_document.cluster_karpenter.json
+#   name               = "cluster_karpenter"
+# }
 
 
 
 
 
 
-data "tls_certificate" "oidc_issuer" {
-  url = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
-}
 
-resource "aws_iam_openid_connect_provider" "oidc_eks" {
-  client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = [data.tls_certificate.oidc_issuer.certificates[0].sha1_fingerprint]
-  url             = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
-}
+
+# data "tls_certificate" "oidc_issuer" {
+#   url = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
+# }
+
+# resource "aws_iam_openid_connect_provider" "oidc_eks" {
+#   client_id_list  = ["sts.amazonaws.com"]
+#   thumbprint_list = [data.tls_certificate.oidc_issuer.certificates[0].sha1_fingerprint]
+#   url             = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
+# }
 
 # resource "aws_iam_role" "oidc_lbc_role" {
 #   assume_role_policy = data.aws_iam_policy_document.oidc_assume_role_policy.json

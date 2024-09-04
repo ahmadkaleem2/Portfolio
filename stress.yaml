@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: stress-test
 spec:
-  parallelism: 2
+  parallelism: 4
   completions: 4
   template:
     spec:

@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "example_assume_role_policy" {
+data "aws_iam_policy_document" "external_dns_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
@@ -6,7 +6,7 @@ data "aws_iam_policy_document" "example_assume_role_policy" {
     condition {
       test     = "StringEquals"
       variable = "${replace(aws_iam_openid_connect_provider.oidc_eks.url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:aws-load-balancer-controller:aws-load-balancer-controller"]
+      values   = ["system:serviceaccount:external-dns:external-dns"]
     }
 
     principals {
@@ -15,6 +15,26 @@ data "aws_iam_policy_document" "example_assume_role_policy" {
     }
   }
 }
+data "aws_caller_identity" "current" {}
+
+resource "aws_iam_role" "external_dns_iam_role" {
+  assume_role_policy = data.aws_iam_policy_document.external_dns_assume_role_policy.json
+  name               = "external-dns"
+}
+
+resource "aws_iam_policy" "external_dns_iam_policy" {                                                                                                       
+  policy = file("modules/eks/custom_policies/external_dns.json")
+  name = "external_dns_iam_policy"        
+}
+
+resource "aws_iam_role_policy_attachment" "external_dns_role_attachment" {
+  policy_arn = aws_iam_policy.external_dns_iam_policy.arn
+  role = aws_iam_role.external_dns_iam_role.name
+}
+
+
+
+
 
 
 
@@ -105,15 +125,15 @@ resource "aws_iam_role" "cluster_autoscaler_iam_role" {
   name               = "cluster_autoscaler"
 }
 
-resource "aws_iam_role" "example" {
-  assume_role_policy = data.aws_iam_policy_document.example_assume_role_policy.json
-  name               = "example-vpc-cni-role"
-}
+# resource "aws_iam_role" "example" {
+#   assume_role_policy = data.aws_iam_policy_document.example_assume_role_policy.json
+#   name               = "example-vpc-cni-role"
+# }
 
-resource "aws_iam_role_policy_attachment" "example" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.example.name
-}
+# resource "aws_iam_role_policy_attachment" "example" {
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+#   role       = aws_iam_role.example.name
+# }
 
 # resource "kubernetes_namespace" "aws-load-balancer-controller" {
 #   metadata {
@@ -207,7 +227,7 @@ resource "aws_iam_policy" "cluster_karpenter_policy" {
         {
             "Effect": "Allow",
             "Action": "eks:DescribeCluster",
-            "Resource": "arn:aws:eks:us-west-2:680688655542:cluster/*",
+            "Resource": "arn:aws:eks:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:cluster/${var.eks_cluster_name}",
             "Sid": "EKSClusterEndpointLookup"
         }
     ],
@@ -218,16 +238,13 @@ EOF
 
 resource "aws_iam_role_policy_attachment" "cluster_karpenter_policy_attachment" {
   policy_arn = aws_iam_policy.cluster_karpenter_policy.arn
-  role       = aws_iam_role.cluster_karpenter_iam_role.name
+  role       = aws_iam_role.karpenter_iam_role.name
 }
 
-resource "aws_iam_role" "cluster_karpenter_iam_role" {
+resource "aws_iam_role" "karpenter_iam_role" {
   assume_role_policy = data.aws_iam_policy_document.cluster_karpenter.json
   name               = "cluster_karpenter"
 }
-
-
-
 
 
 

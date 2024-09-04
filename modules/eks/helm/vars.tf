@@ -13,3 +13,7 @@ variable "cluster_oidc_issuer" {
 variable "eks_cluster_endpoint" {
   
 }
+
+variable "vpc_id" {
+  
+}

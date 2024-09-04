@@ -47,11 +47,11 @@ spec:
     podsPerCore: 2
     maxPods: 20
     systemReserved:
-        cpu: 100m
+        cpu: 50m
         memory: 100Mi
         ephemeral-storage: 1Gi
     kubeReserved:
-        cpu: 200m
+        cpu: 50m
         memory: 100Mi
         ephemeral-storage: 3Gi
     evictionHard:
@@ -83,8 +83,8 @@ spec:
     # - tags:
     #     karpenter.sh/discovery: "${CLUSTER_NAME}"
     #     environment: test
-    - id: subnet-0ab121a5251d8bc3a
-    - id: subnet-05b7d940093d16b73
+    - id: subnet-0e0353c1309170a10
+    - id: subnet-0261dc6db13ebeee6
 
   # Required, discovers security groups to attach to instances
   # Each term in the array of securityGroupSelectorTerms is ORed together
@@ -97,7 +97,7 @@ spec:
     #     karpenter.sh/discovery: "prod-Ahmad-EKS"
     #     environment: test
     # - name: my-security-group
-    - id: sg-03156189d4895de4e
+    - id: sg-06b56d3a711148d0b
 
   # Optional, IAM role to use for the node identity.
   # The "role" field is immutable after EC2NodeClass creation. This may change in the

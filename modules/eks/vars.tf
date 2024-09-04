@@ -17,3 +17,7 @@ locals {
 variable "eks_configuration" {
 
 }
+
+variable "vpc_id" {
+  
+}

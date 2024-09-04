@@ -21,45 +21,46 @@ resource "helm_release" "aws_load_balancer_controller" {
   }
   set {
     name = "region"
-    value = "us-west-2"
+    value = var.AWS_REGION
   }
   set {
     name = "vpcId"
-    value = "vpc-02295c3d9c3e944f2"
+    value = var.vpc_id
   }
+  depends_on = [ kubernetes_service_account.aws_load_balancer_controller ]
 }
 
-resource "helm_release" "cluster_autoscaler" {
-  name       = "cluster-autoscaler"
-  repository = "https://kubernetes.github.io/autoscaler"
-  chart      = "cluster-autoscaler"
-  namespace  = "kube-system"
+# resource "helm_release" "cluster_autoscaler" {
+#   name       = "cluster-autoscaler"
+#   repository = "https://kubernetes.github.io/autoscaler"
+#   chart      = "cluster-autoscaler"
+#   namespace  = "kube-system"
 
-  set {
-    name  = "autoDiscovery.clusterName"
-    value = var.eks_cluster_name
-  }
+#   set {
+#     name  = "autoDiscovery.clusterName"
+#     value = var.eks_cluster_name
+#   }
 
-  set {
-    name  = "awsRegion"
-    value = "us-west-2"  # Assuming you have this variable defined
-  }
+#   set {
+#     name  = "awsRegion"
+#     value = var.AWS_REGION
+#   }
 
-  set {
-    name  = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = "arn:aws:iam::489994096722:role/cluster_autoscaler"
-  }
+#   set {
+#     name  = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+#     value = aws_iam_role.cluster_autoscaler_iam_role.arn
+#   }
 
-  set {
-    name  = "rbac.serviceAccount.create"
-    value = "true"
-  }
+#   set {
+#     name  = "rbac.serviceAccount.create"
+#     value = "true"
+#   }
 
-  set {
-    name  = "rbac.serviceAccount.name"
-    value = "cluster-autoscaler"
-  }
-}
+#   set {
+#     name  = "rbac.serviceAccount.name"
+#     value = "cluster-autoscaler"
+#   }
+# }
 
 resource "helm_release" "karpenter" {
   name       = "karpenter"
@@ -145,6 +146,12 @@ resource "helm_release" "external_dns" {
   # version = "1.14.5"
   create_namespace = false
   cleanup_on_fail = true
+
+  set {
+    name = "serviceAccount.create"
+    value = "false"
+  }
+
   set {
     name  = "serviceAccount.name"
     value = "external-dns"
@@ -152,7 +159,7 @@ resource "helm_release" "external_dns" {
 
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = "arn:aws:iam::680688655542:role/AllowExternalDNSUpdates"
+    value = aws_iam_role.external_dns_iam_role.arn
   }
   set {
     name  = "source"
@@ -207,3 +214,13 @@ resource "helm_release" "cert-manager" {
 
 }
 
+
+
+
+resource "helm_release" "metrics_server" {
+  name       = "metrics-server"
+  namespace  = "kube-system"
+  chart      = "metrics-server"
+  repository = "https://kubernetes-sigs.github.io/metrics-server/"
+
+}
