@@ -26,7 +26,7 @@ resource "kubernetes_service_account" "external_dns" {
     name      = "external-dns"
     namespace = "external-dns"
     annotations = {
-      # "eks.amazonaws.com/role-arn" = aws_iam_role.oidc_lbc_role.arn
+      "eks.amazonaws.com/role-arn" = aws_iam_role.external_dns_iam_role.arn
     }
   }
   depends_on = [ kubernetes_namespace.external-dns]

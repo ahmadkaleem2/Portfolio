@@ -69,7 +69,7 @@ resource "helm_release" "karpenter" {
 
   chart      = "oci://public.ecr.aws/karpenter/karpenter"
   # version    = var.karpenter_version
-
+  timeout = 600
   set {
     name  = "settings.clusterName"
     value = var.eks_cluster_name

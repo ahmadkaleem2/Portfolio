@@ -8,5 +8,5 @@ spec:
     kind: Issuer
     group: cert-manager.io
   dnsNames:
-    - dev.ahmadkaleem2.link # ✅ Copied from the `hostname` field.
-  secretName: letsencrypt-prod-certificates
+    - test.ahmadkaleem2.link # ✅ Copied from the `hostname` field.
+  secretName: letsencrypt-prod
