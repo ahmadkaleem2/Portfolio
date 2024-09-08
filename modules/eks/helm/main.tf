@@ -169,7 +169,7 @@ resource "helm_release" "external_dns" {
   set {
     name  = "domain-filter"
     # value = "ahmadkaleem2.link"
-    value = "groveops.net"
+    value = "ahmadkaleem2.link"
 
   }
 
@@ -211,9 +211,31 @@ resource "helm_release" "cert-manager" {
     value = true
   }
 
+  set {
+    name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = aws_iam_role.cert_manager_iam_role.arn
+  }
+
 
   depends_on = [ kubernetes_namespace.cert-manager ]
 
+}
+
+
+
+
+resource "kubernetes_manifest" "certmanager_cluster_issuer" {
+  manifest = yamldecode(data.template_file.init.rendered)
+  depends_on = [ helm_release.cert-manager ]
+}
+
+data "template_file" "init" {
+  template = "${file("./kubernetes/certificate_manager.tpl")}"
+  vars = {
+    role = "arn:aws:iam::680688655542:role/cert-manager"
+    hostedZoneID = "Z06136533TBVAXK89FVB5"
+
+  }
 }
 
 
