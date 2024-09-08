@@ -9,7 +9,7 @@
 
 # Must Apply
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/aws/deploy.yaml
-
+# kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/aws/deploy.yaml
 ---
 
 # apiVersion: networking.k8s.io/v1
@@ -45,7 +45,7 @@ kind: Ingress
 metadata:
   name: minimal-ingress
   annotations:
-    cert-manager.io/issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
     # nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     service.beta.kubernetes.io/aws-load-balancer-type: nlb
@@ -54,10 +54,12 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - prod.ahmadkaleem2.link
+    # - prod.ahmadkaleem2.link
+    - ahmad.groveops.net
     secretName: letsencrypt-prod-ingress-certificates
   rules:
-  - host: prod.ahmadkaleem2.link
+  # - host: prod.ahmadkaleem2.link
+  - host: ahmad.groveops.net
     http:
       paths:
       - path: /

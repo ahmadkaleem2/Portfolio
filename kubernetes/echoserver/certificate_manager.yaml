@@ -1,18 +1,58 @@
+# apiVersion: cert-manager.io/v1
+# kind: Issuer
+# metadata:
+#   name: letsencrypt-prod
+# spec:
+#   acme:
+#     # The ACME server URL
+#     server: https://acme-v02.api.letsencrypt.org/directory
+#     # Email address used for ACME registration
+#     # email: ahmad.kaleem2.123@gmail.com
+#     # Name of a secret used to store the ACME account private key
+#     privateKeySecretRef:
+#       name: letsencrypt-prod
+#     # Enable the HTTP-01 challenge provider
+#     solvers:
+#       - http01:
+#           ingress:
+#             ingressClassName: alb
+---
+
+# apiVersion: cert-manager.io/v1
+# kind: ClusterIssuer
+# metadata:
+#   name: letsencrypt-prod
+# spec:
+#   acme:
+#     server: https://acme-v02.api.letsencrypt.org/directory
+#     privateKeySecretRef:
+#       name: letsencrypt-prod
+#     solvers:
+#       - dns01:
+#           route53:
+#             region: us-east-1 # Specify your AWS region
+#             hostedZoneID: Z074130239BXW7W2J0TY9 # The Route 53 hosted zone ID for your domain
+---
+
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: letsencrypt-prod
 spec:
   acme:
-    # The ACME server URL
     server: https://acme-v02.api.letsencrypt.org/directory
-    # Email address used for ACME registration
-    email: ahmad.kaleem2.123@gmail.com
-    # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
       name: letsencrypt-prod
-    # Enable the HTTP-01 challenge provider
     solvers:
-      - http01:
-          ingress:
-            ingressClassName: alb
+      - selector:
+          dnsZones:
+          - "groveops.net"
+        dns01:
+          route53:
+            region: us-east-1 # Specify your AWS region
+            hostedZoneID: Z074130239BXW7W2J0TY9 # The Route 53 hosted zone ID for your domain
+            role: arn:aws:iam::489994096722:role/cert-manager
+            auth:
+              kubernetes:
+                serviceAccountRef: 
+                  name: cert-manager # The name of the service account created

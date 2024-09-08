@@ -168,7 +168,9 @@ resource "helm_release" "external_dns" {
 
   set {
     name  = "domain-filter"
-    value = "ahmadkaleem2.link"
+    # value = "ahmadkaleem2.link"
+    value = "groveops.net"
+
   }
 
   set {
