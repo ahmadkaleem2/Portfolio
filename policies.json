@@ -1,0 +1,101 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Deny",
+            "Action": [
+                "iam:DeleteGroup",
+                "iam:GenerateServiceLastAccessedDetails",
+                "iam:UpdateOpenIDConnectProviderThumbprint",
+                "iam:UpdateGroup",
+                "iam:CreateLoginProfile",
+                "iam:SimulateCustomPolicy",
+                "iam:SimulatePrincipalPolicy",
+                "iam:CreateAccountAlias",
+                "iam:DeleteServerCertificate",
+                "iam:UploadSSHPublicKey",
+                "iam:DetachGroupPolicy",
+                "iam:DetachUserPolicy",
+                "iam:PutGroupPolicy",
+                "iam:UpdateLoginProfile",
+                "iam:UpdateServiceSpecificCredential",
+                "iam:CreateGroup",
+                "iam:RemoveClientIDFromOpenIDConnectProvider",
+                "iam:UpdateUser",
+                "iam:DeleteUserPolicy",
+                "iam:AttachUserPolicy",
+                "iam:UpdateSSHPublicKey",
+                "iam:UpdateServerCertificate",
+                "iam:DeleteSigningCertificate",
+                "iam:UpdateAccountPasswordPolicy",
+                "iam:DeleteServiceLinkedRole",
+                "organizations:*",
+                "iam:GenerateCredentialReport",
+                "iam:DeleteSSHPublicKey",
+                "iam:CreateUser",
+                "sso-directory:*",
+                "iam:AddUserToGroup",
+                "iam:RemoveUserFromGroup",
+                "iam:DeleteAccountAlias",
+                "iam:UpdateSAMLProvider",
+                "iam:DeleteLoginProfile",
+                "iam:UploadSigningCertificate",
+                "iam:DeleteAccountPasswordPolicy",
+                "iam:PutUserPermissionsBoundary",
+                "iam:DeleteUser",
+                "iam:DeleteUserPermissionsBoundary",
+                "iam:UploadServerCertificate",
+                "trustedadvisor:*",
+                "iam:UntagUser",
+                "sso:*",
+                "iam:AttachGroupPolicy",
+                "iam:PutUserPolicy",
+                "iam:UpdateSigningCertificate",
+                "iam:DeleteGroupPolicy",
+                "iam:DeleteServiceSpecificCredential",
+                "iam:SetDefaultPolicyVersion",
+                "iam:DeleteSAMLProvider"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "limitedSizeEc2",
+            "Effect": "Deny",
+            "Action": "ec2:RunInstances",
+            "Resource": "arn:aws:ec2:*:*:instance/*",
+            "Condition": {
+                "ForAnyValue:StringNotLike": {
+                    "ec2:InstanceType": [
+                        "*.nano",
+                        "*.small",
+                        "*.micro",
+                        "*.medium",
+                        "t3.large"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "VisualEditor3",
+            "Effect": "Allow",
+            "Action": "rds:*",
+            "Resource": "*",
+            "Condition": {
+                "ForAnyValue:StringNotLike": {
+                    "rds:DatabaseClass": [
+                        "db.*.micro",
+                        "db.*.small",
+                        "db.*.medium"
+                    ]
+                }
+            }
+        }
+    ]
+}

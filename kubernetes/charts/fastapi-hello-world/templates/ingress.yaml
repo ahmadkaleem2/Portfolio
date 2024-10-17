@@ -1,25 +1,57 @@
-{{- if .Values.ingress.enabled }}
+# {{- if .Values.ingress.enabled }}
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: minimal-ingress
+#   annotations:
+# {{- range $key, $value := .Values.ingress.annotations }}
+#     {{ $key }}: {{ $value | quote }}
+# {{- end }}
+# spec:
+#   ingressClassName: {{ .Values.ingress.ingressClass }}
+#   rules:
+#     - host: {{ .Values.ingress.host.fqdn }}
+#       http:
+#         paths:
+# {{- range $path := .Values.ingress.host.paths }}
+#           - path: {{ $path.path }}
+#             pathType: {{ $path.pathType }}
+#             backend:
+#               service:
+#                 name: {{ $.Release.Name }}-fastapi-hello-world-svc
+#                 port:
+#                   number: {{ $.Values.service.port }}
+# {{- end }}
+# {{- end }}
+
+
+
+
+
+
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: minimal-ingress
+
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    alb.ingress.kubernetes.io/subnets: subnet-09642a6334b01c193, subnet-04ae5986180db2944
+# {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
-  ingressClassName: nginx-example
+  ingressClassName: alb
   rules:
-{{- range $index, $path := .Values.ingress.paths }}
-    - http:
+    - host: ahmad123456.ahmad.groveops.net
+      http:
         paths:
-          - path: {{ $path.path }}
-            pathType: {{ $path.pathType }}
+          - path: /
+            pathType: Prefix
             backend:
               service:
-                name: {{ $.Release.Name }}-fastapi-hello-world-svc
+                name: fastapi-hello-world-svc
                 port:
-                  number: {{ $.Values.service.port }}
-{{- end }}
-{{- end }}
+                  number: 80
+
 
 
 # apiVersion: networking.k8s.io/v1

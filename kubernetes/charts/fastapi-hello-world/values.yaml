@@ -1,6 +1,8 @@
 
 replicaCount: 1
-
+namespace:
+  name: "default"
+  create: false
 image:
   repository: 489994096722.dkr.ecr.us-west-1.amazonaws.com/fastapi-helloworld-project
   tag: latest
@@ -13,8 +15,34 @@ service:
 
 ingress:
   enabled: true  # Enable ingress
-  annotations: {}
-  ingressClass: nginx-example
-  paths:
-    - path: /
-      pathType: Prefix
+  annotations: 
+    # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-2:489994096722:certificate/82e4563c-2ae6-4d84-8b08-aeb6fb967a59
+    # alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/subnets: subnet-09642a6334b01c193, subnet-04ae5986180db2944
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    kubernetes.io/ingress.class: alb
+    external-dns.alpha.kubernetes.io/hostname: ahmad1234.ahmad.groveops.net
+    # external-dns.alpha.kubernetes.io/hostname: ahmad123456.ahmad.groveops.net
+    # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    # service.beta.kubernetes.io/aws-load-balancer-type: alb
+    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    # alb.ingress.kubernetes.io/ssl-redirect: '443'
+    # kubernetes.io/ingress.class: alb
+  ingressClass: alb
+  host:
+    fqdn: ahmad123456.ahmad.groveops.net
+    paths:
+      - path: /
+        pathType: Prefix
+
+  rules:
+    - host: ahmad123456.ahmad.groveops.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fastapi-hello-world-svc
+                port:
+                  number: 80
