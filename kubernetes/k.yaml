@@ -55,11 +55,11 @@ spec:
   tls:
   - hosts:
     # - prod.ahmadkaleem2.link
-    - ahmad.groveops.net
+    - ahmad.ahmadkaleem2.link
     secretName: letsencrypt-prod-ingress-certificates
   rules:
   # - host: prod.ahmadkaleem2.link
-  - host: ahmad.groveops.net
+  - host: ahmad.ahmadkaleem2.link
     http:
       paths:
       - path: /

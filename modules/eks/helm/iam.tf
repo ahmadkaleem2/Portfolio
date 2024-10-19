@@ -272,3 +272,59 @@ resource "aws_iam_role_policy_attachment" "oidc_lbc_role_attachment" {
   policy_arn = aws_iam_policy.load_balancer_controller.arn
   role = aws_iam_role.oidc_lbc_role.name
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+data "aws_iam_policy_document" "cert_manager_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.oidc_eks.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:cert-manager:cert-manager"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.oidc_eks.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+resource "aws_iam_role" "cert_manager_iam_role" {
+  assume_role_policy = data.aws_iam_policy_document.cert_manager_assume_role_policy.json
+  name               = "cert-manager"
+}
+
+resource "aws_iam_policy" "cert_manager_iam_policy" {                                                                                                       
+  policy = file("modules/eks/custom_policies/cert_manager.json")
+  name = "cert_manager_iam_policy"        
+}
+
+resource "aws_iam_role_policy_attachment" "cert_manager_role_attachment" {
+  policy_arn = aws_iam_policy.cert_manager_iam_policy.arn
+  role = aws_iam_role.cert_manager_iam_role.name
+}
