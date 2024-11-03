@@ -197,37 +197,37 @@ resource "helm_release" "external_dns" {
   depends_on = [ kubernetes_namespace.external-dns ]
 }
 
-resource "helm_release" "cert-manager" {
-  name       = "cert-manager"
-  repository = "https://charts.jetstack.io/"
-  chart      = "cert-manager"
-  namespace = "cert-manager"
-  version = "1.15.3"
-  create_namespace = false
-  cleanup_on_fail = true
+# resource "helm_release" "cert-manager" {
+#   name       = "cert-manager"
+#   repository = "https://charts.jetstack.io/"
+#   chart      = "cert-manager"
+#   namespace = "cert-manager"
+#   version = "1.15.3"
+#   create_namespace = false
+#   cleanup_on_fail = true
 
-  set {
-    name = "crds.enabled"
-    value = true
-  }
+#   set {
+#     name = "crds.enabled"
+#     value = true
+#   }
 
-  set {
-    name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = aws_iam_role.cert_manager_iam_role.arn
-  }
-
-
-  depends_on = [ kubernetes_namespace.cert-manager ]
-
-}
+#   set {
+#     name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+#     value = aws_iam_role.cert_manager_iam_role.arn
+#   }
 
 
+#   depends_on = [ kubernetes_namespace.cert-manager ]
+
+# }
 
 
-resource "kubernetes_manifest" "certmanager_cluster_issuer" {
-  manifest = yamldecode(data.template_file.init.rendered)
-  depends_on = [ helm_release.cert-manager ]
-}
+
+
+# resource "kubernetes_manifest" "certmanager_cluster_issuer" {
+#   manifest = yamldecode(data.template_file.init.rendered)
+#   depends_on = [ helm_release.cert-manager ]
+# }
 
 data "template_file" "init" {
   template = "${file("./kubernetes/certificate_manager.tpl")}"
