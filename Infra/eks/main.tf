@@ -1,0 +1,44 @@
+module "eks" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "21.6.0"
+
+  name               = "Ahmad-EKS"
+  kubernetes_version = "1.34"
+
+  addons = {
+    coredns                = {}
+    kube-proxy             = {}
+    vpc-cni                = {
+      before_compute = true
+    }
+    cert-manager = {}
+    metrics-server = {}
+  }
+  
+  # Optional
+  endpoint_public_access = true
+
+  # Optional: Adds the current caller identity as an administrator via cluster access entry
+  enable_cluster_creator_admin_permissions = true
+
+  vpc_id                   = data.terraform_remote_state.vpc.outputs.vpc_id
+  subnet_ids               = data.terraform_remote_state.vpc.outputs.vpc_private_subnets
+  control_plane_subnet_ids = concat(data.terraform_remote_state.vpc.outputs.vpc_public_subnets, data.terraform_remote_state.vpc.outputs.vpc_private_subnets)
+
+  # EKS Managed Node Group(s)
+  eks_managed_node_groups = {
+    eks-spot = {
+      # Starting on 1.30, AL2023 is the default AMI type for EKS managed node groups
+      ami_type       = "AL2023_x86_64_STANDARD"
+      instance_types = ["t3.medium"]
+      capacity_type  = "SPOT"
+      min_size     = 1
+      max_size     = 1
+      desired_size = 1
+      iam_role_additional_policies = {
+        "ssm_agent": "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+     }
+    }
+  }
+  create_cloudwatch_log_group = false
+}
