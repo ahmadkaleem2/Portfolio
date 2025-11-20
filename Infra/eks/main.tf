@@ -3,7 +3,7 @@ module "eks" {
   version = "21.6.0"
 
   name               = "Ahmad-EKS"
-  kubernetes_version = "1.34"
+  kubernetes_version = "1.33"
 
   addons = {
     coredns                = {}

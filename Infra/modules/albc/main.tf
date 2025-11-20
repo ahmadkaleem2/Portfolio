@@ -2,7 +2,7 @@
 
 
 
-resource "helm_release" "aws_load_balancer_controller" {
+resource "helm_release" "this" {
   name       = "aws-load-balancer-controller"
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
@@ -10,7 +10,7 @@ resource "helm_release" "aws_load_balancer_controller" {
   create_namespace = true
   cleanup_on_fail = true
 
-  set = [for k,v in var.albc_values : {
+  set = [for k,v in merge(var.albc_values,local.helm_set) : {
     name  = k
     value = v
   }]

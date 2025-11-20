@@ -12,3 +12,8 @@ variable "namespace" {
     default     = "aws-load-balancer-controller"
   
 }
+
+variable "cluster_oidc_issuer_url" {
+    type        = string
+    description = "The OIDC issuer URL for the EKS cluster."
+}
