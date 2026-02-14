@@ -31,6 +31,10 @@ resource "aws_eks_node_group" "eks_node_groups" {
   lifecycle {
     ignore_changes = [ scaling_config ]
   }
+  remote_access {
+    ec2_ssh_key = "laptop-windows"
+    # source_security_group_ids = ["sg-0dd69d8f94436c472"]
+  }
 
   for_each = local.nodegroups
 
@@ -72,6 +76,7 @@ resource "aws_eks_node_group" "eks_node_groups" {
   tags = {
     "k8s.io/cluster-autoscaler/enabled"       = "true"
     "k8s.io/cluster-autoscaler/${aws_eks_cluster.eks-cluster.name}" = "owned"
+    "testing"         = "12345"
   }
 
   depends_on = [
@@ -90,10 +95,47 @@ module "helm" {
 
   eks_cluster_endpoint = aws_eks_cluster.eks-cluster.endpoint
 
-  AWS_REGION = "us-west-2"
+  AWS_REGION = "us-east-1"
 
   cluster_oidc_issuer = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
 
   vpc_id = var.vpc_id
+  
+  identifier = var.identifier
+
+  depends_on = [ aws_eks_node_group.eks_node_groups ]
+}
+
+resource "helm_release" "name" {
+
+  name = "aws-for-fluent-bit"
+  repository = "https://aws.github.io/eks-charts"
+  chart = "aws-for-fluent-bit"
+  namespace = "kube-system"
+
+
+  set = [ {
+    name  = "cloudwatch.enabled"
+    value = "true"
+  }, {
+    name  = "cloudwatch.region"
+    value = "us-east-1"
+  }, {
+    name  = "cloudwatch.log_group_name"
+    value = "/aws/eks/${aws_eks_cluster.eks-cluster.name}/cluster"
+  } ]
+
+  # dynamic "set" {
+  #   for_each = {
+  #     "cloudwatch.enabled" = "true"
+  #     "cloudwatch.region"  = "us-east-1"
+  #     "cloudwatch.log_group_name" = "/aws/eks/${aws_eks_cluster.eks-cluster.name}/cluster"
+  #   }
+
+  #   content {
+  #     name  = set.key
+  #     value = set.value
+  #   }
+  # }
   
 }

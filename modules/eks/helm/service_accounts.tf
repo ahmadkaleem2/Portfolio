@@ -1,13 +1,13 @@
-resource "kubernetes_service_account" "karpenter" {
-  metadata {
-    name      = "karpenter-sa"
-    namespace = "karpenter"
-    annotations = {
-      "eks.amazonaws.com/role-arn" = aws_iam_role.karpenter_iam_role.arn
-    }
-  }
-  depends_on = [ kubernetes_namespace.karpenter_ns ]
-}
+# resource "kubernetes_service_account" "karpenter" {
+#   metadata {
+#     name      = "karpenter-sa"
+#     namespace = "karpenter"
+#     annotations = {
+#       "eks.amazonaws.com/role-arn" = aws_iam_role.karpenter_iam_role.arn
+#     }
+#   }
+#   depends_on = [ kubernetes_namespace.karpenter_ns ]
+# }
 
 resource "kubernetes_service_account" "aws_load_balancer_controller" {
   metadata {
@@ -21,13 +21,13 @@ resource "kubernetes_service_account" "aws_load_balancer_controller" {
 }
 
 
-resource "kubernetes_service_account" "external_dns" {
-  metadata {
-    name      = "external-dns"
-    namespace = "external-dns"
-    annotations = {
-      "eks.amazonaws.com/role-arn" = aws_iam_role.external_dns_iam_role.arn
-    }
-  }
-  depends_on = [ kubernetes_namespace.external-dns]
-}
+# resource "kubernetes_service_account" "external_dns" {
+#   metadata {
+#     name      = "external-dns"
+#     namespace = "external-dns"
+#     annotations = {
+#       "eks.amazonaws.com/role-arn" = aws_iam_role.external_dns_iam_role.arn
+#     }
+#   }
+#   depends_on = [ kubernetes_namespace.external-dns]
+# }

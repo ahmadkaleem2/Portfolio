@@ -8,9 +8,9 @@ output "terraform_workspace" {
 #   value = module.vpc
 # }
 
-output "vpc_id" {
-  value = module.vpc["vpc-prod"].vpc_id
-}
+# output "vpc_id" {
+#   value = module.vpc["vpc-prod"].vpc_id
+# }
 
 # output "vpc_config" {
 
@@ -22,9 +22,9 @@ output "vpc_id" {
 #   value = module.alb.load_balancer.dns_name
 # }
 
-output "list_of_azs" {
-  value = data.aws_availability_zones.example.names
-}
+# output "list_of_azs" {
+#   value = data.aws_availability_zones.example.names
+# }
 
 # output "ecr_object" {
 #   value = module.ecr
@@ -38,6 +38,6 @@ output "list_of_azs" {
 #   value = module.eks-terraform.va
 # }
 
-output "update_kubeconfig" {
-  value = "aws eks update-kubeconfig --name ${module.eks.eks_cluster_name} --region ${var.AWS_REGION}"
-}
+# output "update_kubeconfig" {
+#   value = "aws eks update-kubeconfig --name ${module.eks.eks_cluster_name} --region ${var.AWS_REGION}"
+# }

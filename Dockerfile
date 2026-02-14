@@ -1,0 +1,1 @@
+RUN mvn clean deploy -s settings.xml

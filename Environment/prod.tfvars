@@ -1,9 +1,9 @@
-AWS_REGION = "us-west-2"
+AWS_REGION = "us-east-1"
 identifier = "Ahmad"
 vpcs = {
   vpc-dev = {
     enabled        = false
-    VPC_CIDR_BLOCK = "10.0.0.0/16"
+    VPC_CIDR_BLOCK = "10.0.0.0/8"
     public_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 
     private_subnets = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
@@ -324,8 +324,8 @@ eks_configuration = {
   eks_cluster_iam_role_arn = null
 
   eks_addons = [
-    "eks-pod-identity-agent", 
-    "vpc-cni"
+    # "eks-pod-identity-agent", 
+    # "vpc-cni"
     # "amazon-cloudwatch-observability",
     # "aws-ebs-csi-driver", 
     # "aws-mountpoint-s3-csi-driver"
@@ -333,7 +333,8 @@ eks_configuration = {
 
   access_config = {
     # possible value ["CONFIG_MAP", "API_AND_CONFIG_MAP", "API"]
-    authentication_mode                         = "API_AND_CONFIG_MAP"
+    # authentication_mode                         = "API_AND_CONFIG_MAP"
+    authentication_mode                         = "API"
     bootstrap_cluster_creator_admin_permissions = true
   }
 

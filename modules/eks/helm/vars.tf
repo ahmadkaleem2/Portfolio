@@ -17,3 +17,7 @@ variable "eks_cluster_endpoint" {
 variable "vpc_id" {
   
 }
+
+variable "identifier" {
+
+}

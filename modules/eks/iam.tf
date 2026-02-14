@@ -53,28 +53,7 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
   role       = aws_iam_role.ahmad-eks-node-role.name
 }
 
-
-resource "aws_iam_policy" "eks_to_secrets_manager" {
-  name        = "Allow_eks_to_get_value_from_secrets_manager"
-  path        = "/"
-  description = "Allow To Get Value from secret manager"
-  policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Action": [
-          "secretsmanager:GetSecretValue",
-          "secretsmanager:DescribeSecret"
-          ],
-        "Resource": "arn:aws:secretsmanager:us-west-2:680688655542:secret:*"
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "ReadSecretsFromSecretsManager" {
-  policy_arn = aws_iam_policy.eks_to_secrets_manager.arn
+resource "aws_iam_role_policy_attachment" "AmazonSSMManagedInstanceCore" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   role       = aws_iam_role.ahmad-eks-node-role.name
-
 }

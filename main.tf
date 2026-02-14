@@ -31,9 +31,31 @@ module "eks" {
     Environment = "${terraform.workspace}"
   }
 
-  depends_on = [module.vpc]
+  # depends_on = [module.vpc]
 
 }
+
+
+# module "eksNEW" {
+
+#   source = "./modules/eks"
+
+#   identifier = "NEWEKS"
+
+#   subnets = module.vpc["vpc-prod"].subnets
+
+#   vpc_id = module.vpc["vpc-prod"].vpc_id
+
+#   eks_configuration = var.eks_configuration
+
+#   tags_all = {
+#     Created_by  = var.identifier
+#     Environment = "${terraform.workspace}"
+#   }
+
+#   # depends_on = [module.vpc]
+
+# }
 
 # module "eks-terraform" {
 

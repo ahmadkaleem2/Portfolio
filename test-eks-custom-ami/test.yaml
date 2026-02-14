@@ -1,0 +1,42 @@
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: node162
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echoserver
+  namespace: node162
+spec:
+  selector:
+    matchLabels:
+      app: echoserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: echoserver
+    spec:
+      nodeName: ip-10-0-2-162.ec2.internal
+      containers:
+      - image: k8s.gcr.io/e2e-test-images/echoserver:2.5
+        imagePullPolicy: Always
+        name: echoserver
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echoserver
+  namespace: node162
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app: echoserver
