@@ -19,6 +19,7 @@ spec:
   - repoURL: git@github.com:ahmadkaleem2/EKS-GitOps-Platform.git
     targetRevision: main
     ref: values
+    path: .
 
   destination:
     server: https://kubernetes.default.svc
