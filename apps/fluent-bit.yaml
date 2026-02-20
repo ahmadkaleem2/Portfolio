@@ -9,7 +9,7 @@ spec:
 
   # Helm chart source
   - repoURL: https://aws.github.io/eks-charts
-    chart: aws/aws-for-fluent-bit
+    chart: aws-for-fluent-bit
     targetRevision: 0.2.0
     # createNamespace: true
     helm:
