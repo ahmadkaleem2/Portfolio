@@ -10,7 +10,7 @@ spec:
   # Helm chart source
   - repoURL: https://aws.github.io/eks-charts
     chart: aws-load-balancer-controller
-    targetRevision: 1.7.1
+    targetRevision: 3.0.0
     # createNamespace: true
     helm:
       # values: |
