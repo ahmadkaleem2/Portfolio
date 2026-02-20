@@ -1,0 +1,8 @@
+settings:
+  clusterName: Ahmad-EKS
+  clusterEndpoint: https://2385B5B289F15128AE6BE9EBBD499385.gr7.us-east-1.eks.amazonaws.com
+serviceAccount:
+  create: true
+  name: karpenter
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::387867038403:role/karpenter-role-Ahmad-EKS
