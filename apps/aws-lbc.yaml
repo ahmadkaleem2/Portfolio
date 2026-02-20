@@ -20,7 +20,7 @@ spec:
           create: true
           name: aws-load-balancer-controller
           annotations:
-            eks.amazonaws.com/role-arn: arn:aws:iam::387867038403/role/aws-load-balancer-controller-role
+            eks.amazonaws.com/role-arn: arn:aws:iam::387867038403/role/albc-role-Ahmad-EKS
       # valueFiles:
       #   - $values/apps/values/aws-lbc.yaml
 
