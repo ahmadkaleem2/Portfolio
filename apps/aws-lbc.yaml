@@ -14,6 +14,7 @@ spec:
     createNamespace: true
     helm:
       values: |
+        vpcId: vpc-08b8891aea7cec453
         clusterName: Ahmad-EKS
         region: us-east-1
         serviceAccount:
