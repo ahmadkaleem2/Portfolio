@@ -10,7 +10,7 @@ spec:
   # Helm chart source
   - repoURL: https://charts.karpenter.sh
     chart: karpenter
-    targetRevision: 0.37.0
+    targetRevision: 0.16.3
     # createNamespace: true
     helm:
       valueFiles:
