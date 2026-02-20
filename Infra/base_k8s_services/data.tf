@@ -2,9 +2,9 @@ data "terraform_remote_state" "vpc" {
   backend = "s3"
 
   config = {
-    bucket = "ahmad-terraform-backend"
+    bucket = "ahmad-terraform-backend1"
     key    = "Infra/networking.tfstate"
-    region = "us-west-2"
+    region = "us-east-1"
   }
 }
 
@@ -12,9 +12,9 @@ data "terraform_remote_state" "eks" {
   backend = "s3"
 
   config = {
-    bucket = "ahmad-terraform-backend"
+    bucket = "ahmad-terraform-backend1"
     key    = "Infra/EKS.tfstate"
-    region = "us-west-2"
+    region = "us-east-1"
   }
 }
 

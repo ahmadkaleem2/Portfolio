@@ -1,9 +1,9 @@
 terraform {
   
   backend "s3" {
-    bucket = "ahmad-terraform-backend"
+    bucket = "ahmad-terraform-backend1"
     key    = "Infra/argocd.tfstate"
-    region = "us-west-2"
+    region = "us-east-1"
   }
   required_providers {
       helm = {
@@ -20,7 +20,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      created_by = local.created_by
+      # created_by = local.created_by
       
     }
   }

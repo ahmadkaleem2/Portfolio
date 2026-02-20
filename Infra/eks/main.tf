@@ -32,12 +32,13 @@ module "eks" {
         "map-mig" = "mig000000000"
       }
       # Starting on 1.30, AL2023 is the default AMI type for EKS managed node groups
-      ami_type       = "AL2023_ARM_64_STANDARD"
-      instance_types = ["t4g.small"]
+      ami_type       = "AL2023_x86_64_STANDARD"
+      # ami_type       = "AL2023_ARM_64_STANDARD"
+      instance_types = ["t3.medium"]
       capacity_type  = "SPOT"
-      min_size     = 1
+      min_size     = 2
       max_size     = 2
-      desired_size = 1
+      desired_size = 2
       iam_role_additional_policies = {
         "ssm_agent": "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
      }

@@ -4,7 +4,7 @@ locals {
     "serviceAccount.create" = "true",
     "serviceAccount.name"   = "aws-load-balancer-controller",
     "clusterName"           = data.terraform_remote_state.eks.outputs.cluster_name,
-    "region"                = "us-west-2",
+    "region"                = "us-east-1",
     "vpcId"                 = data.terraform_remote_state.vpc.outputs.vpc_id
   }
 
