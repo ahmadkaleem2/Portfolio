@@ -12,8 +12,16 @@ spec:
     chart: aws-load-balancer-controller
     targetRevision: 1.7.1
     helm:
-      valueFiles:
-        - $values/apps/values/aws-lbc.yaml
+      values: |
+        clusterName: Ahmad-EKS
+        region: us-east-1
+        serviceAccount:
+          create: true
+          name: aws-load-balancer-controller
+          annotations:
+            eks.amazonaws.com/role-arn: arn:aws:iam::387867038403/role/aws-load-balancer-controller-role
+      # valueFiles:
+      #   - $values/apps/values/aws-lbc.yaml
 
   # Git repo source for values
   - repoURL: git@github.com:ahmadkaleem2/EKS-GitOps-Platform.git
