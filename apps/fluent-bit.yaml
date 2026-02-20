@@ -13,15 +13,6 @@ spec:
     targetRevision: 0.2.0
     # createNamespace: true
     helm:
-      # values: |
-      #   vpcId: vpc-08b8891aea7cec453
-      #   clusterName: Ahmad-EKS
-      #   region: us-east-1
-      #   serviceAccount:
-      #     create: true
-      #     name: aws-load-balancer-controller
-      #     annotations:
-      #       eks.amazonaws.com/role-arn: arn:aws:iam::387867038403/role/albc-role-Ahmad-EKS
       valueFiles:
         - $values/apps/values/fluent-bit.yaml
 
