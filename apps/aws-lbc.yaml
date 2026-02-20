@@ -5,20 +5,26 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://aws.github.io/eks-charts
+  sources:
+
+  # Helm chart source
+  - repoURL: https://aws.github.io/eks-charts
     chart: aws-load-balancer-controller
     targetRevision: 1.7.1
-    # path: apps/aws-lbc/aws-lbc
     helm:
       valueFiles:
-        - values/values.yaml
+        - $values/apps/values/aws-lbc.yaml
+
+  # Git repo source for values
+  - repoURL: git@github.com:ahmadkaleem2/EKS-GitOps-Platform.git
+    targetRevision: main
+    ref: values
+
   destination:
     server: https://kubernetes.default.svc
     namespace: aws-load-balancer-controller
+
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
