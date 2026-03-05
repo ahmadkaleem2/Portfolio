@@ -10,9 +10,9 @@ spec:
   sources:
 
   # Helm chart source
-  - repoURL: https://charts.karpenter.sh
+  - repoURL: oci://public.ecr.aws/karpenter/karpenter
     chart: karpenter
-    targetRevision: 0.16.3
+    targetRevision: 1.9
     # createNamespace: true
     helm:
       valueFiles:
