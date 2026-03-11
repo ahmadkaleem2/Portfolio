@@ -11,7 +11,7 @@ spec:
 
   # Helm chart source
   - repoURL: https://istio-release.storage.googleapis.com/charts
-    chart: istio
+    chart: base
     targetRevision: "1.29.1"
 
   destination:
