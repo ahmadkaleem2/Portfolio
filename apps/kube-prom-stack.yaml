@@ -15,7 +15,7 @@ spec:
     targetRevision: "82.10.1"
     helm:
       valueFiles:
-        - $values/apps/values/karpenter.yaml
+        - $values/apps/values/kube-prom-stack.yaml
 
   # Git repo source for values
   - repoURL: git@github.com:ahmadkaleem2/EKS-GitOps-Platform.git
