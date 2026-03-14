@@ -12,9 +12,9 @@ prometheus:
             - key: karpenter.sh/nodepool
               operator: DoesNotExist
 
-prometheusOperator:
-  admissionWebhooks:
-    enabled: true
+# prometheusOperator:
+#   admissionWebhooks:
+#     enabled: true
 
 alertmanager:
   enabled: false
