@@ -1,4 +1,5 @@
 prometheus:
+  enabled: true
   prometheusSpec:
     scrapeInterval: 30s
     evaluationInterval: 30s
