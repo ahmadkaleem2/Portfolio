@@ -132,7 +132,7 @@ spec:
   # future, but this restriction is currently in place today to ensure that Karpenter
   # avoids leaking managed instance profiles in your account.
   # Must specify one of "role" or "instanceProfile" for Karpenter to launch nodes
-  role: eks-spot-eks-node-group-20260306052030807200000002
+  role: eks-spot-eks-node-group-20260317093109603300000001
 
   # Optional, IAM instance profile to use for the node identity.
   # Must specify one of "role" or "instanceProfile" for Karpenter to launch nodes
